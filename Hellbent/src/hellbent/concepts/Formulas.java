@@ -11,17 +11,17 @@ public static final int MALE = 0;
 public static Random r = new Random();
 
 
-	int calculateToHit(Entity e)
+	static int calculateToHit(Entity e)
 	{
 		return e.get("TO_HIT");
 		
 	}
-	int calculateToEvade(Entity e)
+	static int calculateToEvade(Entity e)
 	{
 		return e.get("EVADE");
 		
 	}
-	boolean hit(Entity hitting, Entity hit)
+	public static boolean hit(Entity hitting, Entity hit)
 	{
 		
 		int toHit = calculateToHit(hitting);
@@ -38,9 +38,7 @@ public static Random r = new Random();
 	
 	int damage(Entity hitting, Entity hit)
 	{
-		
-		
-		return 0;
+		return 1;
 	}
 	
 

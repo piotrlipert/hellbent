@@ -19,7 +19,7 @@ public class GiantRat extends Monster {
 		this.setAwake(true);
 		this.sSet("NAME","giant rat");
 		this.set("SEX",Formulas.MALE);
-		this.set("Speed",100);
+		this.set("Speed",0);
 		this.set("HPGROWTH",10);
 		this.set("LEVEL",1);
 		this.set("DAMAGE",5);

@@ -20,9 +20,26 @@ public class Entity {
 	private Action action = null;
 	private String type;
 	private Profession profession;
+	private String message;
+	private boolean newmess;
 	
+	public String getMessage() {
+		return message;
+	}
+
+	public void resetMessage()
+	{
+		this.message = "";
+		this.newmess = false;
+	}
 	
-	
+	public void addMessage(String message) {
+		if (this.getType() == "Player")
+			{
+		this.message = this.message + " "+message;
+		this.newmess = true;
+			}
+	}
 	
 	
 	public void sSet(String name, String value) 

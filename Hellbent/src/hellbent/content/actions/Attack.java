@@ -1,5 +1,6 @@
 package hellbent.content.actions;
 
+import hellbent.concepts.Formulas;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import hellbent.world.Map;
@@ -15,19 +16,29 @@ public class Attack extends hellbent.concepts.Action {
 
 	public void process(Map m)
 	{
-		if (en.getType() == "Player")
-		{
-			Player tmp = (Player) en;
+		boolean hit = false;
+		if (Formulas.hit(en,victim))
+			hit = true;
+		
+		
+		
 			String attacked = victim.sGet("NAME");
-			tmp.addMessage("You attack "+ attacked + ".");
+			if(hit)
+				en.addMessage("You hit "+ attacked + ".");
+			else
+				en.addMessage("You miss "+ attacked + ".");
+
 			
-		}
-		if (victim.getType() == "Player")
-		{
-			Player tmp = (Player) victim;
-			tmp.addMessage("You are attacked "+ en.sGet("NAME"));
-			
-		}
+		
+		
+			if(hit)
+				victim.addMessage(en.sGet("NAME") + " hits you!");
+			else
+				victim.addMessage(en.sGet("NAME") + " misses you.");
+
+		
+	
+	
 	}
 	
 }

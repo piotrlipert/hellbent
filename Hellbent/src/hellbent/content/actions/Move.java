@@ -13,6 +13,7 @@ public class Move extends Action
 	public int x,y;
 	public boolean attack = false;
 	public Entity attacked = null;
+	public Map current; 
 	public Move(Entity e, int dir) {
 		super(e);
 		int timetobecalculated = 0;
@@ -49,6 +50,7 @@ public class Move extends Action
 	public void process(Map m)
 	{
 	
+		
 		 if (attack)
 		 {
 			 System.out.println("ATTACK");
@@ -58,25 +60,35 @@ public class Move extends Action
 			
 		 else
 		 {
-			if (x < 0 || x > m.getSizeX() || y < 0 || y > m.getSizeX())
+			if (x < 0 || x > m.getSizeX() -1  || y < 0 || y > m.getSizeX() -1 )
 			{
 				System.out.println("Exit");
 				m.Exit(x,y,en);
 				return;
 			}
-			if (Background.IsWalkable(m.background[x][y]))		
-					en.setPos(x, y);
+			if (Background.IsWalkable(m.background[x][y]))	
+			{
+			attacked = m.entityAtCoord(x, y);
+			if (attacked!= null && attacked != this.en)
+			{
+			
+					en.addMessage("You bump into someone");
+				
+			}
+			else
+				en.setPos(x, y);
+			}
 			else
 			{
 				
+					en.addMessage("You stumble.");
+
 			}
 			
-		if (en.getType() == "Player")
-		{
-			Player tmp = (Player) en;
-			tmp.addMessage("You arrived on "+Integer.toString(en.getX()) + " " + Integer.toString(en.getY()));
+		
+			en.addMessage("You arrived on "+Integer.toString(en.getX()) + " " + Integer.toString(en.getY()));
 			
-		}
+		
 	}
 	}
 

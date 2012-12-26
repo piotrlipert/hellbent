@@ -24,12 +24,13 @@ public class GoblinTowerMap extends Map {
 		background[11][11] = Background.WOODFLOOR;
 		background[21][21] = Background.WOODFLOOR;
 
-
-		GiantRat test = new GiantRat();
-		test.setPos(30, 20);
-		test.setMap(this);
-		entities.add(test);
-
+		for(int x=0;x<60;x++)
+		{
+			GiantRat test = new GiantRat();
+			test.setPos(30+x, 20);
+			test.setMap(this);
+			entities.add(test);
+		}
 		
 	}
 

@@ -95,9 +95,9 @@ public void renderMAP(HellbentGame hg, Map m)
 		for(int y=centerY-10;y<centerY+11;y++)
 		{
 			r = false;
-			if (x < 0 || x > m.getSizeX())
+			if (x < 0 || x > m.getSizeX()-1)
 				r = true;
-			if (y < 0 || y > m.getSizeX())
+			if (y < 0 || y > m.getSizeY()-1)
 				r = true;
 			if (!r)
 				i = (hg.bal.BackgroundTiles.get(m.background[x][y]));

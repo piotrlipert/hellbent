@@ -1,8 +1,7 @@
 package hellbent.entity;
 
 public class Player extends Entity {
-	private String message;
-	private boolean newmess = false;
+	
 	
 	public Player()
 	{
@@ -13,18 +12,5 @@ public class Player extends Entity {
 	}
 
 
-	public String getMessage() {
-		return message;
-	}
-
-	public void resetMessage()
-	{
-		this.message = "";
-		this.newmess = false;
-	}
 	
-	public void addMessage(String message) {
-		this.message = this.message + " "+message;
-		this.newmess = true;
-	}
 }

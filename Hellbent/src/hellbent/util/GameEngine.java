@@ -70,6 +70,8 @@ public class GameEngine {
 					i.setAction(n);
 					ActionQ.add(n);
 				}
+			
+			
 			}
 			
 		for (Action a : ActionQ)
@@ -77,11 +79,12 @@ public class GameEngine {
 			
 			if (a.time < 0)
 			{	
-
-			a.process(current);
+			
 			a.setProcessed(1);
+			a.process(current);
 			a.en.setAction(null);
-			if (a.en == this.pl)
+			
+				if (a.en == this.pl)
 				{
 				break;
 				}
@@ -101,7 +104,7 @@ public class GameEngine {
 			
 		}
 
-		ActionQ =  (Vector<Action>) ActionQHelp.clone();
+		ActionQ = (Vector<Action>) ActionQHelp.clone();
 		ActionQHelp.clear();
 
 		

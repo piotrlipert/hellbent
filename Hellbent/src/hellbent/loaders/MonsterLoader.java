@@ -2,7 +2,6 @@ package hellbent.loaders;
 
 import hellbent.content.monsters.GiantRat;
 import hellbent.entity.Monster;
-import hellbent.world.Map;
 
 import java.util.HashMap;
 

@@ -41,7 +41,7 @@ public class CharGenState extends HBGameState {
 		tmp.setMapID("GoblinTower");
 		tmp.setX(10);
 		tmp.setY(10);
-		tmp.set("Speed",100);
+		tmp.set("Speed",500);
 		tmp.setSprite(new Image("resources/entities/goblin.png"));
 		ge.setPlayer(tmp);
 		System.out.println("Chargenready!");
