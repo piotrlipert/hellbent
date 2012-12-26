@@ -1,5 +1,6 @@
 package hellbent.util;
 import hellbent.concepts.Action;
+import hellbent.content.actions.Wait;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import java.util.HashMap;
@@ -58,6 +59,12 @@ public class GameEngine {
 	
 		
 		ActionQ.add(pl.getAction());
+		if (pl.getAction().isInstant())
+		{
+			int actiontime = pl.getAction().time;
+			pl.getAction().process(current);
+			pl.setAction(new Wait(actiontime, pl));
+		}
 		
 	while (pl.getAction() != null)
 	{

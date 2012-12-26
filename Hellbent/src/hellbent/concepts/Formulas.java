@@ -1,6 +1,7 @@
 package hellbent.concepts;
 
 import java.util.Random;
+import java.util.Vector;
 
 import hellbent.entity.Entity;
 import hellbent.concepts.Profession;
@@ -36,7 +37,7 @@ public static Random r = new Random();
 			return false;
 	}
 	
-	int damage(Entity hitting, Entity hit)
+	public static int damage(Entity hitting, Entity hit)
 	{
 		return 1;
 	}
@@ -47,6 +48,7 @@ public static Random r = new Random();
 		recalculateSpeed(e);
 		recalculateHP(e);
 		recalculateMP(e);
+		recalculateSightRange(e);
 	}
 
 	void recalculateSpeed(Entity e)
@@ -54,14 +56,25 @@ public static Random r = new Random();
 		
 	}
 
+
+	public static void recalculateSightRange(Entity e)
+	{
+	e.set("SIGHT",5);
+	if (e.getType() == "Player")
+		e.getMap().discover(e);
+		
+	
+	}
+	
 	public static void recalculateHP(Entity e)
 	{
+		int HPMax = 0;
 		if (e.getType() == "Player" || e.getType() == "Hero")
 		{
 			int Lvld = diff(e,"LEVEL");
 			int Vd = diff(e,"VIGOR");
 			int Rd = diff(e,"RESOLVE");
-			int HPMax = e.get("HP_MAX");
+			HPMax = e.get("HP_MAX");
 			int HPperLVL=  (e.getProfession()).HPperLevel();
 			int HPperV=  (e.getProfession()).HPperV();
 			int HPperR=  (e.getProfession()).HPperR();
@@ -73,8 +86,7 @@ public static Random r = new Random();
 			
 			
 			HPMax = HPMax + change;
-			e.set("HP_MAX", HPMax);
-			
+			e.set("HPMax",HPMax);
 			
 		}
 		else 
@@ -82,13 +94,14 @@ public static Random r = new Random();
 			int LVLd = diff(e,"LEVEL");
 			int HPperLVL = e.get("HPGROWTH");
 			int change = dice(LVLd,HPperLVL);
-			int HPMax = e.get("HP_MAX");
+			HPMax = e.get("HP_MAX");
 			HPMax = HPMax + change;
-			e.set("HP_MAX", HPMax);
+			e.set("HP_MAX",HPMax);
+
 		}
 		
 		
-		
+
 		
 	}
 	
@@ -136,14 +149,25 @@ public static Random r = new Random();
 		return ret;
 	}
 	
+	
+	
+	Vector<Entity> getCreaturesInSight(Entity e)
+	{
+		Vector<Entity> creatures = new Vector<Entity>();
+		
+		
+		return creatures;
+		
+	}
 	void recalculateMP(Entity e)
 	{
+		int MPMax;
 		if (e.getType() == "Player" || e.getType() == "Hero")
 		{
 			int Lvld = diff(e,"LEVEL");
 			int Md = diff(e,"Mana");
 			int Rd = diff(e,"RESOLVE");
-			int MPMax = e.get("MP_MAX");
+			 MPMax = e.get("MP_MAX");
 			int MPperLVL=  (e.getProfession()).MPperLevel();
 			int MPperM=  (e.getProfession()).MPperM();
 			int MPperR=  (e.getProfession()).MPperR();
@@ -164,23 +188,24 @@ public static Random r = new Random();
 			int LVLd = diff(e,"LEVEL");
 			int MPperLVL = e.get("MPGROWTH");
 			int change = dice(LVLd,MPperLVL);
-			int MPMax = e.get("MP_MAX");
+			 MPMax = e.get("MP_MAX");
 			MPMax = MPMax + change;
 			e.set("MP_MAX", MPMax);
 		}
 		
 		
 		
+	}
+	
+	int recalculateEv(Entity e)
+	{
+		return 0;
 		
 	}
 	
-	void recalculateEv(Entity e)
+	int recalculateAr(Entity e)
 	{
-		
-	}
-	
-	void recalculateAr(Entity e)
-	{
+		return 0;
 		
 	}
 	
@@ -198,6 +223,20 @@ public static Random r = new Random();
 		
 		return sum;
 		
+	}
+	public static String missReason(Entity victim) {
+		return null;
+	}
+	public static int EXPValue(Entity victim) {
+		return 0;
+	}
+	public static int distance(int xx, int yy, int x, int y) {
+		double xd = (double) x;
+		double yd = (double) y;
+		double xxd = (double) xx;
+		double yyd = (double) yy;
+
+		return (int) Math.sqrt(Math.pow(xxd-xd,2) + Math.pow(yyd-yd, 2));
 	}
 	
 

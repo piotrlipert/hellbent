@@ -23,7 +23,10 @@ public class GiantRat extends Monster {
 		this.set("HPGROWTH",10);
 		this.set("LEVEL",1);
 		this.set("DAMAGE",5);
+		this.set("SIGHTRANGE",5);
 		Formulas.recalculateHP(this);
+		this.set("CURR_HP", this.get("HP_MAX"));
+
 
  
 	}

@@ -1,16 +1,19 @@
 package hellbent.entity;
 import hellbent.concepts.Action;
+import hellbent.concepts.Effect;
+import hellbent.concepts.Formulas;
 import hellbent.concepts.Profession;
 import hellbent.content.actions.Wait;
 import hellbent.world.Map;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 import org.newdawn.slick.Image;
 public class Entity {
 	public HashMap<String, Integer> data = new HashMap<String, Integer>();
 	public HashMap<String, String> sdata = new HashMap<String, String>();
-
+	public Vector<Effect> effects = new Vector<Effect>();
 	private int x;
 	private int y;
 	private String mapID;
@@ -22,6 +25,7 @@ public class Entity {
 	private Profession profession;
 	private String message;
 	private boolean newmess;
+	
 	
 	public String getMessage() {
 		return message;
@@ -80,6 +84,16 @@ void load(String data)
 	
 }
 
+public void add(String name, int value)
+{
+	this.set(name, this.get(name)+value);
+}
+
+public void sub(String name, int value)
+{
+	this.set(name, this.get(name)-value);
+
+}
 public void setPos(int x,int y)
 {
 	this.setX(x);
@@ -92,16 +106,16 @@ public void setMapID(String mapID) {
 	this.mapID = mapID;
 }
 public int getY() {
-	return y;
+	return get("Y");
 }
 public void setY(int y) {
-	this.y = y;
+	set("Y",y);
 }
 public int getX() {
-	return x;
+	return get("X");
 }
 public void setX(int x) {
-	this.x = x;
+	set("X",x);
 }
 public Image getSprite() {
 	return sprite;
@@ -148,5 +162,20 @@ public Profession getProfession() {
 }
 public void setProfession(Profession profession) {
 	this.profession = profession;
+}
+
+public void die(Entity killer) 
+	{
+	Map m = this.getMap();
+	m.entities.remove(this);
+	this.drop();
+	killer.add("EXP", Formulas.EXPValue(this));
+	
+
+	
+	}
+
+private void drop() {
+	
 }
 }

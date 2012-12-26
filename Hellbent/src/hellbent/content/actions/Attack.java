@@ -16,28 +16,39 @@ public class Attack extends hellbent.concepts.Action {
 
 	public void process(Map m)
 	{
+		String Reason = "";
 		boolean hit = false;
 		if (Formulas.hit(en,victim))
 			hit = true;
-		
-		
+		else
+			Reason = Formulas.missReason(victim);
+			
 		
 			String attacked = victim.sGet("NAME");
 			if(hit)
+			{
 				en.addMessage("You hit "+ attacked + ".");
-			else
-				en.addMessage("You miss "+ attacked + ".");
-
-			
-		
-		
-			if(hit)
 				victim.addMessage(en.sGet("NAME") + " hits you!");
-			else
-				victim.addMessage(en.sGet("NAME") + " misses you.");
+				int damage = Formulas.damage(en,victim);
+				
+				victim.sub("CURR_HP", damage);
 
-		
-	
+				if (victim.get("CURR_HP") <= 0)
+				{
+					victim.die(en);
+					en.addMessage("You killed "+ attacked + ".");
+
+				}
+			}
+			else
+			{
+				en.addMessage("You miss "+ attacked + ".");
+				victim.addMessage(en.sGet("NAME") + " misses you.");
+				
+			
+			
+			}
+			
 	
 	}
 	

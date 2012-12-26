@@ -60,6 +60,8 @@ public class Move extends Action
 			
 		 else
 		 {
+			
+			
 			if (x < 0 || x > m.getSizeX() -1  || y < 0 || y > m.getSizeX() -1 )
 			{
 				System.out.println("Exit");
@@ -76,7 +78,13 @@ public class Move extends Action
 				
 			}
 			else
-				en.setPos(x, y);
+			{
+				
+				if (en.getType() == "Player")
+					m.discover(en);
+					en.setPos(x, y);
+			}
+			
 			}
 			else
 			{

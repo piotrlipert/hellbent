@@ -8,6 +8,7 @@ public abstract class Action {
 	public int time;
 	public Entity en;
 	private int processed = 0;
+	private boolean instant = false;
 
 	public Action(Entity e)
 	{
@@ -27,6 +28,14 @@ public abstract class Action {
 
 	public void setProcessed(int processed) {
 		this.processed = processed;
+	}
+
+	public boolean isInstant() {
+		return instant;
+	}
+
+	public void setInstant(boolean instant) {
+		this.instant = instant;
 	}
 	
 

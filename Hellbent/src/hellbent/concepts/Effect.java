@@ -10,9 +10,14 @@ public class Effect
 	
 	public void apply(Entity e)
 	{
+		e.effects.add(this);
 		
 	}
 	
+	public void on(Entity e)
+	{
+		
+	}
 	public void process(Entity e)
 	{
 		

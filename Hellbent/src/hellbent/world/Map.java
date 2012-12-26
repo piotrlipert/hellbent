@@ -2,6 +2,7 @@ package hellbent.world;
 import java.util.Vector;
 
 import hellbent.concepts.Background;
+import hellbent.concepts.Formulas;
 import hellbent.entity.Entity;
 
 
@@ -12,13 +13,21 @@ public class Map {
 	public int[][] background;
 	private boolean in;
 	public Vector<Entity> entities = new Vector<Entity>();
+	public int[][] visited;
+	
 	
 	public Map(int sizeX,int sizeY,boolean in,int terrain)
 	{
 	this.background = new int[sizeX][sizeY];
+	this.visited = new int[sizeX][sizeY];
 	setIn(in);
 	setSizeX(sizeX);
 	setSizeY(sizeY);
+	
+	for(int x=0;x<this.getSizeX();x++)
+		for(int y=0;y<this.getSizeY();y++)
+			this.visited[x][y] = 0;
+	
 	
 	if (in == false)
 	{
@@ -79,6 +88,26 @@ public class Map {
 
 	public void Exit(int x, int y, Entity entity) 
 	{
+		
+	}
+
+
+	public void discover(Entity e) 
+	{
+		int x = e.getX();
+		int y = e.getY();
+		int sight = e.get("SIGHT");
+		
+		for(int xx = 0; xx<getSizeX();xx++)
+		{
+			for(int yy = 0; yy<getSizeY();yy++)
+			{
+				if (Formulas.distance(xx,yy,x,y) < sight)
+				{
+					this.visited[xx][yy] = 1;
+				}
+			}
+		}
 		
 	}
 

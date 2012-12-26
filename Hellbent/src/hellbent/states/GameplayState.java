@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import hellbent.HellbentGame;
 import hellbent.content.actions.Move;
+import hellbent.content.actions.Wait;
 import hellbent.content.maps.GoblinTowerMap;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
@@ -100,7 +101,10 @@ public void renderMAP(HellbentGame hg, Map m)
 			if (y < 0 || y > m.getSizeY()-1)
 				r = true;
 			if (!r)
+			{
 				i = (hg.bal.BackgroundTiles.get(m.background[x][y]));
+
+			}
 			else
 			{
 			 i = (hg.bal.BackgroundTiles.get(m.background[0][0]));
@@ -108,7 +112,19 @@ public void renderMAP(HellbentGame hg, Map m)
 			}
 			
 			Image d = i.get(0);
-			d.draw(LEFTBORDER + xx*TILESIZE,UPBORDER + yy*TILESIZE);
+			
+			
+			if (!r)
+			{
+				if (m.visited[x][y] == 1)
+				d.draw(LEFTBORDER + xx*TILESIZE,UPBORDER + yy*TILESIZE);
+			}
+			else
+			{
+				d.draw(LEFTBORDER + xx*TILESIZE,UPBORDER + yy*TILESIZE);
+
+			}
+				
 			yy++;
 		}
 	xx++;
@@ -174,9 +190,14 @@ public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 
 	if (diff > 100)
 	{
-		if (this.moveflag != 0)
+		if (this.moveflag != 0 && this.moveflag != 5)
 		{
 			tmp.setAction(new Move(tmp,moveflag));
+			input = 1;
+		}
+		if (this.moveflag == 5)
+		{
+			tmp.setAction(new Wait(1000,tmp));
 			input = 1;
 		}
 		oldtime = now;
