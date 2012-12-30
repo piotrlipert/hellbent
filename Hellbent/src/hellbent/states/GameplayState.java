@@ -4,14 +4,17 @@ import java.util.Random;
 import java.util.Vector;
 
 import hellbent.HellbentGame;
+import hellbent.concepts.Background;
 import hellbent.content.actions.Move;
 import hellbent.content.actions.Wait;
 import hellbent.content.maps.GoblinTowerMap;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import hellbent.util.GameEngine;
+import hellbent.util.Utilities;
 import hellbent.world.Map;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -38,7 +41,7 @@ public class GameplayState extends HBGameState {
     public static final int UPBORDER = 30;
     public static final int MIDDLEX = 13;
     public static final int MIDDLEY = 10;
-    public static final int TILESIZE = 30;
+    public static final int TILESIZE = 32;
     
     
 
@@ -64,6 +67,16 @@ public void drawOnScreen(int x, int y, Image z)
 	z.draw(LEFTBORDER+TILESIZE*(x+MIDDLEX),UPBORDER + TILESIZE * (y+MIDDLEY));
 }
 
+public int[] translateCoord(int x, int y,int centerx, int centery)
+{
+	int coord[] = new int[2];
+	
+	coord[0] = (x+MIDDLEX-centerx)*TILESIZE + LEFTBORDER;
+	coord[1] = (y+MIDDLEY-centery)*TILESIZE + UPBORDER;
+		
+			return coord;
+	
+}
 
 public void rendermessegeBox()
 {
@@ -107,6 +120,7 @@ public void renderMAP(HellbentGame hg, Map m)
 			}
 			else
 			{
+			
 			 i = (hg.bal.BackgroundTiles.get(m.background[0][0]));
 
 			}
@@ -117,7 +131,8 @@ public void renderMAP(HellbentGame hg, Map m)
 			if (!r)
 			{
 				if (m.visited[x][y] == 1)
-				d.draw(LEFTBORDER + xx*TILESIZE,UPBORDER + yy*TILESIZE);
+					d.draw(LEFTBORDER + xx*TILESIZE,UPBORDER + yy*TILESIZE);
+		
 			}
 			else
 			{
@@ -152,9 +167,10 @@ public void renderEntities(HellbentGame hg)
 
 	centerX = tmp.getX();
 	centerY = tmp.getY();
-	Map curr = tmp.getMap();
 	
-	for (Entity e : curr.entities)
+	
+	
+	for (Entity e : Utilities.getVisibleEntities(tmp))
 	{
 		drawOnScreen(e.getX()-centerX,e.getY()-centerY,e.getSprite());
 	}
@@ -170,9 +186,31 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 	renderPlayer(hg);
 	renderEntities(hg);
 	rendermessage(hg);
+	/* TEST
+	 * renderlines(hg,arg2);
+	 */
+	
+	
+	
+}
+
+
+
+private void renderlines(HellbentGame hg, Graphics g) 
+{
+Player tmp = hg.ge.pl;
+int x = tmp.getX();
+int y = tmp.getY();
+Vector<int[]> obstacles = new Vector<int[]>();
+obstacles = Utilities.linePath(x, y, 5, 5);
+
+for (int[] point : obstacles)
+{
+	point = translateCoord(point[0],point[1],x,y);
+	g.drawString("A",point[0],point[1]);
+}
 	
 
-	
 	
 }
 

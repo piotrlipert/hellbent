@@ -79,10 +79,10 @@ public class Move extends Action
 			}
 			else
 			{
-				
+				en.setPos(x, y);
+
 				if (en.getType() == "Player")
 					m.discover(en);
-					en.setPos(x, y);
 			}
 			
 			}

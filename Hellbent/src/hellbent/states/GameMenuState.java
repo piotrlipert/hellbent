@@ -17,6 +17,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
+
+import java.io.IOException;
 import java.util.Vector;
 
 
@@ -36,8 +38,7 @@ public class GameMenuState extends HBGameState {
 	}
 
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 
 		HellbentGame hg = (HellbentGame) arg1;
 			

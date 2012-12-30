@@ -27,6 +27,7 @@ public class Entity {
 	private boolean newmess;
 	
 	
+	
 	public String getMessage() {
 		return message;
 	}
@@ -79,7 +80,7 @@ void save(String filename)
 	
 }
 
-void load(String data)
+void load(String filename)
 {
 	
 }

@@ -3,7 +3,11 @@ package hellbent.concepts;
 import java.util.Random;
 import java.util.Vector;
 
+import org.newdawn.slick.Color;
+
 import hellbent.entity.Entity;
+import hellbent.entity.Player;
+import hellbent.world.Map;
 import hellbent.concepts.Profession;
 
 public class Formulas 
@@ -230,15 +234,12 @@ public static Random r = new Random();
 	public static int EXPValue(Entity victim) {
 		return 0;
 	}
-	public static int distance(int xx, int yy, int x, int y) {
-		double xd = (double) x;
-		double yd = (double) y;
-		double xxd = (double) xx;
-		double yyd = (double) yy;
-
-		return (int) Math.sqrt(Math.pow(xxd-xd,2) + Math.pow(yyd-yd, 2));
+	public static boolean canSee(Player tmp, Entity e) {
+		return true;
 	}
 	
-
+	
+	
+	
 	
 }

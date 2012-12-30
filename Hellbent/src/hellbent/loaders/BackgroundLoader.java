@@ -14,8 +14,16 @@ public class BackgroundLoader {
 	{
 	Vector<Image> Grass = new Vector<Image>();
 	Grass.add(new Image("resources/tiles/grass.png"));
-	Grass.add(new Image("resources/tiles/grass1.jpg"));
 	
+	Vector<Image> GrassA = new Vector<Image>();
+	GrassA.add(new Image("resources/tiles/grass1.png"));
+	
+	Vector<Image> GrassB = new Vector<Image>();
+	GrassB.add(new Image("resources/tiles/grass2.png"));
+	
+	Vector<Image> GrassC = new Vector<Image>();
+	GrassC.add(new Image("resources/tiles/grass3.png"));
+
 	
 	Vector<Image> Rock = new Vector<Image>();
 	Rock.add(new Image("resources/tiles/rock.png"));
@@ -26,6 +34,11 @@ public class BackgroundLoader {
 
 	
 	BackgroundTiles.put(Background.GRASS,Grass);
+	BackgroundTiles.put(Background.GRASSA,GrassA);
+
+	BackgroundTiles.put(Background.GRASSB,GrassB);
+	BackgroundTiles.put(Background.GRASSC,GrassC);
+
 	BackgroundTiles.put(Background.ROCK,Rock);
 	BackgroundTiles.put(Background.WOODFLOOR,WFloor);
 

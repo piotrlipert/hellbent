@@ -1,5 +1,13 @@
 package hellbent.content.maps;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 import org.newdawn.slick.SlickException;
 
 import hellbent.concepts.Background;
@@ -8,22 +16,9 @@ import hellbent.world.Map;
 
 public class GoblinTowerMap extends Map {
 
-	public GoblinTowerMap() throws SlickException {
+	public GoblinTowerMap() throws Exception {
 		super(100, 100, false, 0);
-		background[5][5] = Background.ROCK;
-		background[5][6] = Background.ROCK;
-		background[5][7] = Background.ROCK;
-		background[5][8] = Background.ROCK;
-		background[6][5] = Background.ROCK;
-		background[6][6] = Background.ROCK;
-		background[6][7] = Background.ROCK;
-		background[6][8] = Background.ROCK;
-		background[10][11] = Background.WOODFLOOR;
-		background[10][10] = Background.WOODFLOOR;
-		background[11][10] = Background.WOODFLOOR;
-		background[11][11] = Background.WOODFLOOR;
-		background[21][21] = Background.WOODFLOOR;
-
+		
 		for(int x=0;x<60;x++)
 		{
 			GiantRat test = new GiantRat();
@@ -31,6 +26,19 @@ public class GoblinTowerMap extends Map {
 			test.setMap(this);
 			entities.add(test);
 		}
+		
+		File a = new File("C:\\test.txt");
+		Scanner b = new Scanner(a);
+	    String text = b.useDelimiter("\\A").next();
+	    b.close();
+	    
+	    loadBackground(text);
+		
+
+	    String zz = this.saveString("");
+		BufferedWriter out = new BufferedWriter(new FileWriter("C:\\test.txt"));
+		out.write(zz);
+		out.close();
 		
 	}
 
