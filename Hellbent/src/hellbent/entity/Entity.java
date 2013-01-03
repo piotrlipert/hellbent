@@ -25,6 +25,8 @@ public class Entity {
 	private Profession profession;
 	private String message;
 	private boolean newmess;
+	private String name;
+	
 	
 	
 	
@@ -75,15 +77,7 @@ public class Entity {
 	
 	}
 	
-void save(String filename)
-{
-	
-}
 
-void load(String filename)
-{
-	
-}
 
 public void add(String name, int value)
 {
@@ -179,4 +173,108 @@ public void die(Entity killer)
 private void drop() {
 	
 }
+
+public String getName() {
+	return name;
 }
+
+public void setName(String name) {
+	this.name = name;
+}
+
+
+public String save()
+{
+	String savestr = "<ENTITY>\n";
+	savestr += this.saveTypeAndName();
+	savestr += this.saveAttributes();
+	savestr += this.saveEffects();
+	savestr += this.saveItems();
+	
+	return savestr+"</ENTITY>\n";
+}
+
+
+private String saveItems() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+private String saveEffects() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+private String saveAttributes() 
+{
+	String ret = "<ATR>\n";
+for(String i : this.data.keySet())
+	{
+	ret = ret + i + "::" + Integer.toString(this.get(i)) + "\n";
+	}
+	ret = ret + "<ATR>\n";
+
+	ret = ret + "<sATR>\n";
+	
+	for(String i : this.sdata.keySet())
+	{
+	ret = ret + i + "::" + this.sGet(i) + "\n";
+	}
+	
+	
+	return ret+"</sATR>\n";
+	
+	
+}
+
+private String saveTypeAndName() {
+
+	String ret = "TYPE:"+this.getType() + "\n";
+	ret = ret + "NAME:"+this.getName() + "\n";
+	
+	return ret;
+}
+
+public void load(String savestr)
+{
+	this.loadAttributes(savestr);
+	this.loadItems(savestr);
+	this.loadEffects(savestr);
+	
+}
+
+private void loadEffects(String savestr) {
+	// TODO Auto-generated method stub
+	
+}
+
+private void loadItems(String savestr) {
+	// TODO Auto-generated method stub
+	
+}
+
+private void loadAttributes(String savestr) 
+{
+String atr = savestr.substring(savestr.indexOf("<ATR>\n")+6,savestr.indexOf("<ATR>\n"));
+String satr = savestr.substring(savestr.indexOf("<sATR>\n")+8,atr.indexOf("</sATR>\n"));
+
+String[] aS = atr.split("\n");
+String[] SaS = satr.split("\n");
+
+for (String i : aS)
+{
+	 this.set(i.split("::")[0],Integer.parseInt(i.split("::")[1]));
+}
+	
+for (String i : SaS)
+{
+	 this.sSet(i.split("::")[0],i.split("::")[1]);
+}
+
+}
+
+
+
+}
+
+

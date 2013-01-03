@@ -14,14 +14,22 @@ public class MapLoader {
 	
 	public MapLoader()
 	{
-		try {
-			maps.put("GoblinTower", new GoblinTowerMap());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try {
+				maps.put("GoblinTower", new GoblinTowerMap());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 		
 	}
+	
+	
+	public Map getMap(String name)
+	{
+	 return maps.get(name).clone();		
+	}	
+	
 	
 
 }

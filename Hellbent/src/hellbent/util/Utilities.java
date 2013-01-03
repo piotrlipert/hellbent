@@ -140,5 +140,12 @@ public class Utilities {
 	}
 	
 	
+	public static String substring(String begString, String str)  
+	{
+
+		return str.substring(str.indexOf("<"+begString+">")+begString.length()+2,str.indexOf("</"+begString+">"));	
+	
+	}
+	
 
 }

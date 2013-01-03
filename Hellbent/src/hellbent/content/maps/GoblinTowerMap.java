@@ -1,16 +1,10 @@
 package hellbent.content.maps;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
 
-import org.newdawn.slick.SlickException;
-
-import hellbent.concepts.Background;
 import hellbent.content.monsters.GiantRat;
 import hellbent.world.Map;
 
@@ -39,6 +33,18 @@ public class GoblinTowerMap extends Map {
 		BufferedWriter out = new BufferedWriter(new FileWriter("C:\\test.txt"));
 		out.write(zz);
 		out.close();
+		
+	}
+	
+	public GoblinTowerMap clone()
+	{
+		try {
+			return new GoblinTowerMap();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 		
 	}
 

@@ -17,7 +17,8 @@ public class Map {
 	public Vector<Entity> entities = new Vector<Entity>();
 	public int[][] visited;
 	public Random r = new Random();
-	
+	private String name;
+	private int terrain;
 	public Map(String file)
 	{
 		
@@ -27,6 +28,7 @@ public class Map {
 	{
 	this.background = new int[sizeX][sizeY];
 	this.visited = new int[sizeX][sizeY];
+	this.terrain = terrain;
 	setIn(in);
 	setSizeX(sizeX);
 	setSizeY(sizeY);
@@ -143,6 +145,7 @@ public class Map {
 	public String saveString(String file)
 	{
 		String savefile = "";
+		savefile += saveName();
 		savefile += saveBackground();
 		savefile += saveEntities();
 		savefile += saveAttributes();
@@ -151,6 +154,10 @@ public class Map {
 		
 		return savefile;
 	
+	}
+
+	private String saveName() {
+		return this.getName();
 	}
 
 	private String saveItems() {
@@ -165,14 +172,14 @@ public class Map {
 
 	private String saveBackground() 
 	{
-		String ret = "";
+		String ret = "<BGDATA>";
 		for(int x=0;x<this.getSizeX();x++)
 		{
 			for(int y=0;y<this.getSizeY();y++)
-				ret = ret + Character.toString(Character.toChars(background[x][y]+100)[0]);
+				ret = ret + Character.toString(Character.toChars(background[y][x]+100)[0]);
 		ret = ret + '|';
 		}
-		ret = ret + "BACKGROUND_DATA_END";
+		ret = ret + "</BGDATA>";
 		return ret;
 				
 	}
@@ -200,7 +207,7 @@ public class Map {
 
 	protected void loadBackground(String savestring) 
 	{
-	String bgdata = savestring.substring(0,savestring.indexOf("BACKGROUND_DATA_END"));
+	String bgdata = Utilities.substring("BGDATA", savestring);
 	int y = 0;
 	int x = 0;
 	for(int z=0;z<bgdata.length()-1;z++)
@@ -217,7 +224,6 @@ public class Map {
 		x++;
 		}
 	}
-	savestring = savestring.substring(savestring.indexOf("BACKGROUND_DATA_END")+19);
 	
 	}
 
@@ -238,6 +244,20 @@ public class Map {
 
 	private void loadItems(String savestring) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public Map clone()
+	{
+		return new Map(sizeX, sizeY, in, terrain);
 		
 	}
 }

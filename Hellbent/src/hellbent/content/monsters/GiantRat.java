@@ -17,7 +17,7 @@ public class GiantRat extends Monster {
 	{
 		this.setSprite(new Image("resources/entities/rat.png"));
 		this.setAwake(true);
-		this.sSet("NAME","giant rat");
+		this.setName("giant rat");
 		this.set("SEX",Formulas.MALE);
 		this.set("Speed",0);
 		this.set("HPGROWTH",10);
@@ -26,7 +26,7 @@ public class GiantRat extends Monster {
 		this.set("SIGHTRANGE",5);
 		Formulas.recalculateHP(this);
 		this.set("CURR_HP", this.get("HP_MAX"));
-
+		
 
  
 	}
