@@ -51,6 +51,8 @@ public class GameMenuState extends HBGameState {
 		
 		StateButton charGen = new StateButton(500,60,200,50,2,s);
 		buttons.add(charGen);
+		StateButton load = new StateButton(100,100,200,50,3,s);
+		buttons.add(load);
 		background = new Image("resources/back.jpg");
 		
 		
@@ -127,7 +129,7 @@ public class GameMenuState extends HBGameState {
 			if (b.isInBox(x, y))
 			{
 				this.statechange = b.stateID;
-				System.out.println(this.statechange);
+				b.Clicked();
 			}
 			}
 		}

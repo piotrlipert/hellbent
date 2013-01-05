@@ -1,7 +1,5 @@
 package hellbent.states;
 
-import hellbent.HellbentGame;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -15,6 +13,7 @@ public class HBGameState extends BasicGameState {
 	boolean ALT = false;
 	boolean CTRL = false;
 	public int statechange = -1;
+	private int stateID;
     
 	
 	@Override
@@ -44,10 +43,9 @@ public class HBGameState extends BasicGameState {
 		
 	}
 
-	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
-		return 0;
+		return stateID;
 	}
 
 	

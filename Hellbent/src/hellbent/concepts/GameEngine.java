@@ -1,5 +1,4 @@
-package hellbent.util;
-import hellbent.concepts.Action;
+package hellbent.concepts;
 import hellbent.content.actions.Wait;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;

@@ -22,8 +22,11 @@ public class Button {
 		return false;
 		
 	}
-	void Clicked() 
+	public void Clicked() 
 	{
 	}
+	
+	
+	
 	
 }

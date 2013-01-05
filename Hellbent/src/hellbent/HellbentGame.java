@@ -2,6 +2,7 @@ package hellbent;
 
 
 import hellbent.concepts.Formulas;
+import hellbent.concepts.GameEngine;
 import hellbent.loaders.BackgroundLoader;
 import hellbent.loaders.ItemLoader;
 import hellbent.loaders.MapLoader;
@@ -10,8 +11,8 @@ import hellbent.loaders.RaceLoader;
 import hellbent.states.CharGenState;
 import hellbent.states.GameMenuState;
 import hellbent.states.GameplayState;
+import hellbent.states.LoadGameState;
 import hellbent.loaders.ClassLoader;
-import hellbent.util.GameEngine;
 
 
 import org.newdawn.slick.GameContainer;
@@ -37,6 +38,7 @@ public class HellbentGame extends StateBasedGame
 	private static final int MAINMENUSTATE = 0;
 	private static final int GAMEPLAYSTATE = 1;
 	private static final int CHARGENSTATE = 2;
+	private static final int LOADGAMESTATE = 3;
 	
 	public int TILESIZE;
 	public int XWINDOW;
@@ -61,6 +63,7 @@ public class HellbentGame extends StateBasedGame
 		this.addState(new GameMenuState(MAINMENUSTATE,this));
 		this.addState(new GameplayState(GAMEPLAYSTATE,this));
         this.addState(new CharGenState(CHARGENSTATE,this));
+        this.addState(new LoadGameState(LOADGAMESTATE,this));
 
         
         

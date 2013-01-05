@@ -5,12 +5,12 @@ import java.util.Vector;
 
 import hellbent.HellbentGame;
 import hellbent.concepts.Background;
+import hellbent.concepts.GameEngine;
 import hellbent.content.actions.Move;
 import hellbent.content.actions.Wait;
 import hellbent.content.maps.GoblinTowerMap;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
-import hellbent.util.GameEngine;
 import hellbent.util.Utilities;
 import hellbent.world.Map;
 
