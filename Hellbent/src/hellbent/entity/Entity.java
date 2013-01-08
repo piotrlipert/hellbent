@@ -4,6 +4,7 @@ import hellbent.concepts.Effect;
 import hellbent.concepts.Formulas;
 import hellbent.concepts.Profession;
 import hellbent.content.actions.Wait;
+import hellbent.util.Utilities;
 import hellbent.world.Map;
 
 import java.util.HashMap;
@@ -65,6 +66,7 @@ public class Entity {
 	
 	public void set(String name, int value) 
 	{
+	if (name.indexOf("_OLD") == -1)
 	data.put(name+"_OLD",this.get(name));
 	data.put(name,value);
 	}
@@ -195,24 +197,24 @@ public String save()
 }
 
 
-private String saveItems() {
+protected String saveItems() {
 	// TODO Auto-generated method stub
-	return null;
+	return "";
 }
 
-private String saveEffects() {
+protected String saveEffects() {
 	// TODO Auto-generated method stub
-	return null;
+	return "";
 }
 
-private String saveAttributes() 
+protected String saveAttributes() 
 {
 	String ret = "<ATR>\n";
 for(String i : this.data.keySet())
 	{
 	ret = ret + i + "::" + Integer.toString(this.get(i)) + "\n";
 	}
-	ret = ret + "<ATR>\n";
+	ret = ret + "</ATR>\n";
 
 	ret = ret + "<sATR>\n";
 	
@@ -227,10 +229,11 @@ for(String i : this.data.keySet())
 	
 }
 
-private String saveTypeAndName() {
+protected String saveTypeAndName() {
 
-	String ret = "TYPE:"+this.getType() + "\n";
-	ret = ret + "NAME:"+this.getName() + "\n";
+	String ret = "<TYPE>"+this.getType()+"</TYPE>\n";
+	ret = ret + "<NAME>"+this.getName() + "</NAME>\n";
+	ret = ret + "<MNAME>"+this.getMapID() + "</MNAME>\n";
 	
 	return ret;
 }
@@ -255,19 +258,21 @@ private void loadItems(String savestr) {
 
 private void loadAttributes(String savestr) 
 {
-String atr = savestr.substring(savestr.indexOf("<ATR>\n")+6,savestr.indexOf("<ATR>\n"));
-String satr = savestr.substring(savestr.indexOf("<sATR>\n")+8,atr.indexOf("</sATR>\n"));
+String atr = Utilities.substring("ATR", savestr);
+String satr = Utilities.substring("sATR", savestr);
 
-String[] aS = atr.split("\n");
-String[] SaS = satr.split("\n");
+String[] aS = atr.split("[\r\n]+");
+String[] SaS = satr.split("[\r\n]+");
 
 for (String i : aS)
 {
+	if (i.length() > 3)
 	 this.set(i.split("::")[0],Integer.parseInt(i.split("::")[1]));
 }
 	
 for (String i : SaS)
 {
+	if (i.length() > 3)
 	 this.sSet(i.split("::")[0],i.split("::")[1]);
 }
 

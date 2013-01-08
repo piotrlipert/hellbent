@@ -1,11 +1,14 @@
 package hellbent.states;
 
+import hellbent.concepts.GameEngine;
 import hellbent.loaders.BackgroundLoader;
 import hellbent.loaders.ClassLoader;
 import hellbent.loaders.ItemLoader;
 import hellbent.loaders.MapLoader;
 import hellbent.loaders.MonsterLoader;
 import hellbent.loaders.RaceLoader;
+import hellbent.loaders.SaveLoader;
+import hellbent.loaders.Saver;
 import hellbent.util.StateButton;
 import hellbent.HellbentGame;
 
@@ -37,6 +40,7 @@ public class GameMenuState extends HBGameState {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 
@@ -48,17 +52,25 @@ public class GameMenuState extends HBGameState {
 		  hg.mol = new MonsterLoader();
 		  hg.ral = new RaceLoader();
 		  hg.bal= new BackgroundLoader();
-		
-		StateButton charGen = new StateButton(500,60,200,50,2,s);
+		  hg.svg = new Saver(hg);
+		  hg.load = new SaveLoader(hg);
+		  hg.in = hg.getContainer().getInput();
+
+		  
+		Image menubutton = new Image("resources/graphics/menus/mainmenubutton.jpg");
+		StateButton charGen = new StateButton(500,60,200,50,2,s,menubutton);
+		charGen.setText("Generate new character");
 		buttons.add(charGen);
-		StateButton load = new StateButton(100,100,200,50,3,s);
+		
+		StateButton load = new StateButton(100,100,200,50,3,s,menubutton);
+		load.setText("Load game");
 		buttons.add(load);
-		background = new Image("resources/back.jpg");
+		background = new Image("resources/graphics/menus/mainmenu.jpg");
 		
 		
 		
-		  fontNITE = new UnicodeFont("resources/NITEMARE.ttf",24, false, false);
-		  fontDAY = new UnicodeFont("resources/dc_s.ttf",24, false, false);
+		  fontNITE = new UnicodeFont("resources/graphics/NITEMARE.ttf",24, false, false);
+		  fontDAY = new UnicodeFont("resources/graphics/dc_s.ttf",24, false, false);
 
 		
 		 fontNITE.addAsciiGlyphs();   
@@ -83,7 +95,10 @@ public class GameMenuState extends HBGameState {
 		HellbentGame hg = (HellbentGame) s;
 		
 		
-		
+		for (StateButton b : this.buttons)
+		{
+		b.getButtonImage().draw(b.x,b.y);
+		}
 	
 		fontDAY.drawString(300, 300, "FONTY kurcze");
 		fontNITE.drawString(500, 500, "LOL rotflmao");

@@ -53,7 +53,6 @@ public class Move extends Action
 		
 		 if (attack)
 		 {
-			 System.out.println("ATTACK");
 			 Attack a = new Attack(this.en, attacked);
 			 a.process(this.en.getMap());
 		 }
@@ -81,8 +80,12 @@ public class Move extends Action
 			{
 				en.setPos(x, y);
 
+				System.out.println(en.getType().length());
 				if (en.getType() == "Player")
+				{
 					m.discover(en);
+				}
+				
 			}
 			
 			}

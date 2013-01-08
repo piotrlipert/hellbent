@@ -15,9 +15,10 @@ public class GiantRat extends Monster {
 	
 	public GiantRat() throws SlickException
 	{
-		this.setSprite(new Image("resources/entities/rat.png"));
+		this.setSprite(new Image("resources/graphics/entities/rat.png"));
 		this.setAwake(true);
 		this.setName("giant rat");
+		this.setType("GIANT_RAT");
 		this.set("SEX",Formulas.MALE);
 		this.set("Speed",0);
 		this.set("HPGROWTH",10);
@@ -39,4 +40,17 @@ public class GiantRat extends Monster {
 
 	return new Move(this, R.nextInt(8)+1);
 	}
+
+	public GiantRat clone()
+	{
+		try {
+			return new GiantRat();
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
 }

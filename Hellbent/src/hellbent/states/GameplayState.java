@@ -1,5 +1,7 @@
 package hellbent.states;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Vector;
 
@@ -56,7 +58,7 @@ public GameplayState(int gameplaystate,HellbentGame s) {
 public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 	hg = (HellbentGame) arg1;
 	ge = hg.ge;
-	background = new Image("resources/backgrounds/back.png");
+	background = new Image("resources/graphics/backgrounds/back.png");
 	
 	
 }
@@ -124,7 +126,7 @@ public void renderMAP(HellbentGame hg, Map m)
 			 i = (hg.bal.BackgroundTiles.get(m.background[0][0]));
 
 			}
-			
+			System.out.println(m.background[0][0]);
 			Image d = i.get(0);
 			
 			
@@ -182,7 +184,7 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 	HellbentGame hg = (HellbentGame) arg1;
 	background.draw(0,0);
 
-	renderMAP(hg,hg.mal.maps.get("GoblinTower"));
+	renderMAP(hg,hg.ge.w.getMap(hg.ge.pl.getMapID()));
 	renderPlayer(hg);
 	renderEntities(hg);
 	rendermessage(hg);
@@ -196,29 +198,11 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 
 
 
-private void renderlines(HellbentGame hg, Graphics g) 
-{
-Player tmp = hg.ge.pl;
-int x = tmp.getX();
-int y = tmp.getY();
-Vector<int[]> obstacles = new Vector<int[]>();
-obstacles = Utilities.linePath(x, y, 5, 5);
-
-for (int[] point : obstacles)
-{
-	point = translateCoord(point[0],point[1],x,y);
-	g.drawString("A",point[0],point[1]);
-}
-	
-
-	
-}
-
 @Override
 public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 		throws SlickException {
 	
-	int input = 0;
+	int inputACTION = 0;
 	Player tmp = ge.getPlayer();
 	this.message = tmp.getMessage();
 	if (moving != 0)
@@ -231,19 +215,19 @@ public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 		if (this.moveflag != 0 && this.moveflag != 5)
 		{
 			tmp.setAction(new Move(tmp,moveflag));
-			input = 1;
+			inputACTION = 1;
 		}
 		if (this.moveflag == 5)
 		{
 			tmp.setAction(new Wait(1000,tmp));
-			input = 1;
+			inputACTION = 1;
 		}
 		oldtime = now;
 	
 		}
 		
 
-	if (input == 1)
+	if (inputACTION == 1)
 			{
 		ge.TURN();
 
@@ -274,6 +258,22 @@ public void mouseReleased(int button, int x, int y)
 
 public void keyPressed(int key, char c)
 {
+	
+	if (key == Input.KEY_S)
+	{
+		if (hg.in.isKeyDown(Input.KEY_LSHIFT))
+		{
+			System.out.println("SAVING");
+			try {
+				hg.svg.saveGame("saves/"+hg.ge.pl.getName()+".svg");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.toString());
+			}
+		}
+		
+		
+	}
 	
 	if (key == Input.KEY_NUMPAD1)
 	{

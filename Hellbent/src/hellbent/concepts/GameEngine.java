@@ -14,8 +14,9 @@ public class GameEngine {
 	Vector<Action> ActionQ = new Vector<Action>(); 
 
 	public int turncount = 0;
-	private World w;
+	public World w = new World();
 	public Player pl;
+
 
 	public World getWorld() {
 		return w;
@@ -42,8 +43,6 @@ public class GameEngine {
 	@SuppressWarnings("unchecked")
 	public void TURN()
 	{
-		System.out.println("Pozycja gracza to :");
-		System.out.println(Integer.toString(pl.getX())+","+Integer.toString(pl.getY()));
 		
 		Vector<Action> ActionQHelp = new Vector<Action>();
 		pl.resetMessage();

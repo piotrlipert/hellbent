@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class World {
 	
-	private HashMap<String,Map> maps = new HashMap<String,Map>();
+	public HashMap<String,Map> maps = new HashMap<String,Map>();
 
 	public HashMap<String,Map> getMaps() {
 		return maps;
@@ -16,5 +16,14 @@ public class World {
 	}
 	
 
+	public void addMap(Map i)
+	{
+		maps.put(i.getName(), i);
+	}
+	
+	public Map getMap(String i)
+	{
+		return maps.get(i); 
+	}
 	
 }

@@ -6,6 +6,7 @@ import hellbent.HellbentGame;
 import hellbent.concepts.GameEngine;
 import hellbent.entity.Player;
 import hellbent.util.StateButton;
+import hellbent.world.Map;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -32,8 +33,9 @@ public class CharGenState extends HBGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame s)
 			throws SlickException {
-		background = new Image("resources/back1.jpg");
-		StateButton charGen = new StateButton(500,60,200,50,1,hg);
+		background = new Image("resources/graphics/menus/chargen.jpg");
+		Image button = new Image("resources/graphics/menus/mainmenubutton.jpg");
+		StateButton charGen = new StateButton(500,60,200,50,1,hg,button);
 		buttons.add(charGen);
 		Player tmp = new Player();
 		
@@ -42,11 +44,15 @@ public class CharGenState extends HBGameState {
 		tmp.setY(10);
 		tmp.set("SIGHT",5);
 		tmp.set("Speed",500);
-		tmp.setSprite(new Image("resources/entities/goblin.png"));
+		tmp.setSprite(new Image("resources/graphics/entities/goblin.png"));
+		tmp.sSet("SPRITEPATH","resources/graphics/entities/goblin.png");
 		ge.setPlayer(tmp);
-		System.out.println("Chargenready!");
-		tmp.setMap(hg.mal.maps.get("GoblinTower"));
-		hg.mal.maps.get("GoblinTower").entities.add(tmp);
+
+		Map i = hg.mal.getMap("GoblinTower");
+		tmp.setMap(i);
+		hg.ge.w.addMap(i);
+		
+		hg.ge.w.getMap("GoblinTower").entities.add(tmp);
 
 		
 		

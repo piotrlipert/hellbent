@@ -13,24 +13,24 @@ public class BackgroundLoader {
 	public BackgroundLoader() throws SlickException
 	{
 	Vector<Image> Grass = new Vector<Image>();
-	Grass.add(new Image("resources/tiles/grass.png"));
+	Grass.add(new Image("resources/graphics/tiles/grass.png"));
 	
 	Vector<Image> GrassA = new Vector<Image>();
-	GrassA.add(new Image("resources/tiles/grass1.png"));
+	GrassA.add(new Image("resources/graphics/tiles/grass1.png"));
 	
 	Vector<Image> GrassB = new Vector<Image>();
-	GrassB.add(new Image("resources/tiles/grass2.png"));
+	GrassB.add(new Image("resources/graphics/tiles/grass2.png"));
 	
 	Vector<Image> GrassC = new Vector<Image>();
-	GrassC.add(new Image("resources/tiles/grass3.png"));
+	GrassC.add(new Image("resources/graphics/tiles/grass3.png"));
 
 	
 	Vector<Image> Rock = new Vector<Image>();
-	Rock.add(new Image("resources/tiles/rock.png"));
+	Rock.add(new Image("resources/graphics/tiles/rock.png"));
 	
 	
 	Vector<Image> WFloor = new Vector<Image>();
-	WFloor.add(new Image("resources/tiles/podloga.png"));
+	WFloor.add(new Image("resources/graphics/tiles/podloga.png"));
 
 	
 	BackgroundTiles.put(Background.GRASS,Grass);

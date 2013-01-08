@@ -16,4 +16,9 @@ public class Monster extends Entity {
 		
 	}
 	
+	
+	public Monster clone()
+	{
+		return new Monster();
+	}
 }

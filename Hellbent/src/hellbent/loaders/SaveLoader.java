@@ -3,10 +3,15 @@ package hellbent.loaders;
 import hellbent.HellbentGame;
 import hellbent.entity.Player;
 import hellbent.util.Utilities;
+import hellbent.world.Map;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.Scanner;
+
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 public class SaveLoader {
 	HellbentGame h;
@@ -24,9 +29,10 @@ public class SaveLoader {
 	}
 	
 	
-	void loadGame(String path) throws FileNotFoundException
+	public void loadGame(Path p) throws FileNotFoundException
 	{
-		String savestr = getFileAsString(path);
+		
+		String savestr = getFileAsString(p.toString());
 		
 		loadPlayer(savestr);
 		loadMaps(savestr);
@@ -46,33 +52,50 @@ public class SaveLoader {
 	{
 
 		String mapsStr = Utilities.substring("MAPS",savestr);
-		String[] maps = mapsStr.split("<ENDMAP>");
+		String[] maps = mapsStr.split("</MAPDATA>");
 		for (String i : maps)
 		{
+			String name = Utilities.substring("MAPNAME", i);
+			Map newmap = h.mal.getMap(name);
+			newmap.load(i,h.mol);
+			h.ge.w.addMap(newmap);
 			
 		}
-		
+		h.ge.w.getMap(h.ge.pl.getMapID()).entities.add(h.ge.pl);
+		h.ge.pl.setMap(h.ge.w.getMap(h.ge.pl.getMapID()));
+	
 	}
 
 
 	private void loadPlayer(String savestr) 
 	{
 		String player = Utilities.substring("PLAYER",savestr);
+		
 		String typeName[] = EntityloadTypeAndName(player);
 		Player p = new Player();
-		p.setType(typeName[0]);
-		p.setName(typeName[1]);
+		p.setName(typeName[0]);
+		p.setMapID(typeName[2]);
 		p.load(savestr);
 		
+		try {
+			p.setSprite(new Image(p.sGet("SPRITEPATH")));
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		h.ge.pl = p;
 	}
 
 
 	private String[] EntityloadTypeAndName(String savestr) 
 	{
-	String[] ret = new String[2];
-	String[] lines = savestr.split("\n");
-	ret[0] = (lines[0].substring(lines[0].indexOf("TYPE:")+5));
-	ret[1] = (lines[1].substring(lines[1].indexOf("NAME:")+5));
+	String[] ret = new String[3];
+	ret[0] = Utilities.substring("NAME", savestr);
+	ret[1] = Utilities.substring("TYPE", savestr);
+	ret[2] = Utilities.substring("MNAME", savestr);
+	
+
 	return ret;
 	}
 

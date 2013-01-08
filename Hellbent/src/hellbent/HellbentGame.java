@@ -8,6 +8,8 @@ import hellbent.loaders.ItemLoader;
 import hellbent.loaders.MapLoader;
 import hellbent.loaders.MonsterLoader;
 import hellbent.loaders.RaceLoader;
+import hellbent.loaders.SaveLoader;
+import hellbent.loaders.Saver;
 import hellbent.states.CharGenState;
 import hellbent.states.GameMenuState;
 import hellbent.states.GameplayState;
@@ -16,6 +18,7 @@ import hellbent.loaders.ClassLoader;
 
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -36,7 +39,7 @@ public class HellbentGame extends StateBasedGame
     public Formulas f = new Formulas();
     
 	private static final int MAINMENUSTATE = 0;
-	private static final int GAMEPLAYSTATE = 1;
+	public static final int GAMEPLAYSTATE = 1;
 	private static final int CHARGENSTATE = 2;
 	private static final int LOADGAMESTATE = 3;
 	
@@ -47,14 +50,15 @@ public class HellbentGame extends StateBasedGame
 	public UnicodeFont fontNITE;
     public UnicodeFont fontDAY;
     UnicodeFont fontNORM;
+	public SaveLoader load;
+	public Saver svg;
+	public Input in;
     
-	public UnicodeFont font;
 
 	public HellbentGame() throws SlickException {
 		super("Hellbent");
-
-
-	ge = new GameEngine();
+		  ge = new GameEngine();
+		
 	}
 
 	@Override

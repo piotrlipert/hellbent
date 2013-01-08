@@ -5,6 +5,7 @@ import java.util.Vector;
 import hellbent.concepts.Background;
 import hellbent.concepts.Formulas;
 import hellbent.entity.Entity;
+import hellbent.loaders.MonsterLoader;
 import hellbent.util.Utilities;
 
 
@@ -19,6 +20,12 @@ public class Map {
 	public Random r = new Random();
 	private String name;
 	private int terrain;
+	
+	public void onEntry(Entity e)
+	{
+		
+	}
+
 	public Map(String file)
 	{
 		
@@ -142,32 +149,46 @@ public class Map {
 	}
 
 
-	public String saveString(String file)
+	public String saveString()
 	{
-		String savefile = "";
+		String savefile = "<MAPDATA>";
 		savefile += saveName();
 		savefile += saveBackground();
+		savefile += saveDiscovered();
 		savefile += saveEntities();
 		savefile += saveAttributes();
 		savefile += saveItems();
 		savefile += saveSpecial();
 		
-		return savefile;
+		return savefile + "</MAPDATA>";
 	
 	}
 
+	private String saveDiscovered() {
+			String savestr = "<DISCOVERED>";
+			for(int y=0;y<this.getSizeY();y++)
+			{
+				for(int x=0;x<this.getSizeX();x++)
+				{
+					savestr = savestr + Integer.toString(this.visited[x][y]);
+				}
+			savestr = savestr + "|";
+			}		
+		return savestr + "</DISCOVERED>";
+	}
+
 	private String saveName() {
-		return this.getName();
+		return "<MAPNAME>"+this.getName()+"</MAPNAME>";
 	}
 
 	private String saveItems() {
 		// TODO Auto-generated method stub
-		return null;
+		return "<ITEMS></ITEMS>";
 	}
 
 	private String saveSpecial() {
 		// TODO Auto-generated method stub
-		return null;
+		return "<SPECIAL></SPECIAL>";
 	}
 
 	private String saveBackground() 
@@ -179,29 +200,61 @@ public class Map {
 				ret = ret + Character.toString(Character.toChars(background[y][x]+100)[0]);
 		ret = ret + '|';
 		}
-		ret = ret + "</BGDATA>";
+		ret = ret + "</BGDATA>\n";
 		return ret;
 				
 	}
 
 	private String saveEntities() {
-		// TODO Auto-generated method stub
-		return null;
+		String savestr = "<ENTITIES>";
+		
+		for(Entity i : entities)
+		{
+			if (i.getType()!="Player")
+			{
+				savestr = savestr + i.save();
+			}
+			
+		}
+		
+		return savestr + "</ENTITIES>";
 	}
 
 	private String saveAttributes() {
 		// TODO Auto-generated method stub
-		return null;
+		return "<ATTRIBUTES></ATTRIBUTES>";
 	}
 	
 	
-	public void load(String savestring)
+	public void load(String savestring,MonsterLoader m)
 	{
 		loadBackground(savestring);
-		loadEntities(savestring);
+		loadDiscovered(savestring);
+		loadEntities(savestring,m);
 		loadAttributes(savestring);
 		loadItems(savestring);
 		loadSpecial(savestring);
+		
+	}
+
+	private void loadDiscovered(String savestring) 
+	{
+		String disdata = Utilities.substring("DISCOVERED", savestring);
+		int y = 0;
+		int x = 0;
+		for(int z=0;z<disdata.length()-1;z++)
+		{
+			if (disdata.charAt(z) == '|')
+			{
+				x=0;
+				y++;
+			}
+			else
+			{
+			this.visited[x][y] = Integer.parseInt(String.valueOf(disdata.charAt(z)));
+			x++;
+			}
+		}
 		
 	}
 
@@ -219,7 +272,6 @@ public class Map {
 		}
 		else
 		{
-			System.out.println(bgdata.charAt(z));
 		this.background[x][y] = bgdata.charAt(z)-100;
 		x++;
 		}
@@ -227,9 +279,22 @@ public class Map {
 	
 	}
 
-	private void loadEntities(String savestring) 
+	private void loadEntities(String savestring, MonsterLoader m) 
 	{
+		savestring = Utilities.substring("ENTITIES", savestring);
+		String[] entities = savestring.split("</ENTITY>");
 		
+		for(String i : entities)
+		{
+			if (i.indexOf("<TYPE>")!= -1)
+			{
+			String type = Utilities.substring("TYPE", i);
+			Entity e = m.getMonster(type);
+			e.load(i);
+			e.setMap(this);
+			this.entities.add(e);
+			}
+		}
 	}
 
 	private void loadAttributes(String savestring) 

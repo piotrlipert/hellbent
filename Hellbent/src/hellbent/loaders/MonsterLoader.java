@@ -1,6 +1,7 @@
 package hellbent.loaders;
 
 import hellbent.content.monsters.GiantRat;
+import hellbent.entity.Entity;
 import hellbent.entity.Monster;
 
 import java.util.HashMap;
@@ -13,8 +14,15 @@ public class MonsterLoader {
 	
 	public MonsterLoader() throws SlickException
 	{
-		monsters.put("GiantRat",new GiantRat());
+		monsters.put("GIANT_RAT",new GiantRat());
 		
 		
 	}
+
+public Entity getMonster(String type)
+{
+	System.out.println(type);
+	return (monsters.get(type)).clone();
+}
+
 }

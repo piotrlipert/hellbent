@@ -7,10 +7,20 @@ public class Player extends Entity {
 	{
 	this.setAwake(true);
 	this.setType("Player");
-	this.sSet("NAME","Player");
-
+	this.setName("ZIUTAS");
 	}
 
 
+	
+	public String save()
+	{
+		String savestr = "<PLAYER>\n";
+		savestr += this.saveTypeAndName();
+		savestr += this.saveAttributes();
+		savestr += this.saveEffects();
+		savestr += this.saveItems();
+		
+		return savestr+"</PLAYER>\n";
+	}
 	
 }

@@ -6,6 +6,12 @@ import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import hellbent.world.Map;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryIteratorException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Vector;
 
 public class Utilities {
@@ -140,10 +146,29 @@ public class Utilities {
 	}
 	
 	
+	public static Vector<Path> listDir(Path a)
+	{
+		Vector<Path> ret = new Vector<Path>();
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(a)) {
+		    for (Path file: stream) {
+		    	ret.add(file);
+		    }
+		} catch (IOException | DirectoryIteratorException x) {
+		    // IOException can never be thrown by the iteration.
+		    // In this snippet, it can only be thrown by newDirectoryStream.
+		    System.err.println(x);
+		}
+		
+        return ret;
+	}
+	
+	
 	public static String substring(String begString, String str)  
 	{
 
-		return str.substring(str.indexOf("<"+begString+">")+begString.length()+2,str.indexOf("</"+begString+">"));	
+		String ret = "";
+		ret = str.substring(str.indexOf("<"+begString+">")+begString.length()+2,str.indexOf("</"+begString+">"));	
+		return ret;	
 	
 	}
 	

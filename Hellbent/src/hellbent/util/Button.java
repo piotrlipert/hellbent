@@ -1,14 +1,22 @@
 package hellbent.util;
 
+import java.io.FileNotFoundException;
+
+import org.newdawn.slick.Image;
+
 public class Button {
 	
-	int x;
-	int y;
+	public int x;
+	public int y;
 	int width;
 	int height;
+	private Image buttonImage;
+	private String text;
 	
-	Button(int x, int y, int width, int height)
+	
+	Button(int x, int y, int width, int height,Image butI)
 	{
+		setButtonImage(butI);
 	this.x = x;
 	this.y = y;
 	this.width = width;
@@ -22,11 +30,23 @@ public class Button {
 		return false;
 		
 	}
-	public void Clicked() 
+	public void Clicked()  
 	{
 	}
+	public Image getButtonImage() {
+		return buttonImage;
+	}
+	public void setButtonImage(Image buttonImage) {
+		this.buttonImage = buttonImage;
+	}
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
 	
-	
+	 
 	
 	
 }

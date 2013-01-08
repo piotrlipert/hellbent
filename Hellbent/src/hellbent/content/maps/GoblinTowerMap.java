@@ -12,7 +12,7 @@ public class GoblinTowerMap extends Map {
 
 	public GoblinTowerMap() throws Exception {
 		super(100, 100, false, 0);
-		
+		setName("GoblinTower");
 		for(int x=0;x<60;x++)
 		{
 			GiantRat test = new GiantRat();
@@ -21,18 +21,7 @@ public class GoblinTowerMap extends Map {
 			entities.add(test);
 		}
 		
-		File a = new File("C:\\test.txt");
-		Scanner b = new Scanner(a);
-	    String text = b.useDelimiter("\\A").next();
-	    b.close();
-	    
-	    loadBackground(text);
 		
-
-	    String zz = this.saveString("");
-		BufferedWriter out = new BufferedWriter(new FileWriter("C:\\test.txt"));
-		out.write(zz);
-		out.close();
 		
 	}
 	
