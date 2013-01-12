@@ -2,11 +2,14 @@ package hellbent.util;
 
 import hellbent.concepts.Background;
 import hellbent.concepts.Formulas;
+import hellbent.concepts.Item;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import hellbent.world.Map;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
@@ -98,6 +101,16 @@ public class Utilities {
 	}
 	
 	
+	public static void saveStringToFile(String savestr,String path) throws IOException
+	{
+		BufferedWriter out;
+		
+		out = new BufferedWriter(new FileWriter(path));
+		out.write(savestr);
+		out.close();
+		
+	}
+	
 	
 	public static Vector<int[]> getObstacles(Entity tmp)
 	{
@@ -127,7 +140,7 @@ public class Utilities {
 		return obstacles;
 	}
 
-	public static Vector<Entity> getVisibleEntities(Player tmp) 
+	public static Vector<Entity> getVisibleEntities(Entity tmp) 
 	{
 		Vector<Entity> ent = new Vector<Entity>();
 		
@@ -145,6 +158,52 @@ public class Utilities {
 		
 	}
 	
+	public static Vector<Item> getVisibleItems(Entity tmp) 
+	{
+		Vector<Item> ent = new Vector<Item>();
+		
+		for(Item e : tmp.getMap().items)
+		{
+			if(Utilities.distance(e.getX(), e.getY(), tmp.getX(), tmp.getY()) < tmp.get("SIGHT"))
+			{
+				if (Formulas.canSee(tmp,e))
+					if (!(Utilities.isObstructed(e.getX(), e.getY(), tmp.getX(), tmp.getY(), tmp.getMap())))
+						ent.add(e);
+			}
+		}
+		
+	return ent;	
+		
+	}
+	
+	// From x,y to xx,yy
+	public static int[] shortestGreedyPathTo(int x, int y, int xx, int yy, Map m)
+	{
+		int[] ret = new int[2];
+		
+		
+		
+		
+		return ret;
+	}
+	
+	public static int newlocToDir(int x, int y, int xx, int yy)
+	{
+		/* x-1 y+1 1 
+		 * x  y+1 2
+		 * x+1 y+1 3
+		 */
+		
+		int dirx = xx - x + 2;
+		int diry = (yy - y) + 2;
+		
+		
+		
+		return (3-diry)*3 + dirx;
+		
+		
+		
+	}
 	
 	public static Vector<Path> listDir(Path a)
 	{
@@ -171,6 +230,8 @@ public class Utilities {
 		return ret;	
 	
 	}
+
+	
 	
 
 }

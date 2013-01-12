@@ -2,7 +2,6 @@ package hellbent.util;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.newdawn.slick.Image;
 

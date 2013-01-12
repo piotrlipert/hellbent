@@ -12,6 +12,7 @@ public class Move extends Action
 	public int dir;
 	public int x,y;
 	public boolean attack = false;
+	public boolean moveonly = false;
 	public Entity attacked = null;
 	public Map current; 
 	public Move(Entity e, int dir) {
@@ -28,8 +29,8 @@ public class Move extends Action
 	
 		Map m = en.getMap();
 		attacked = m.entityAtCoord(x, y);
-		if (attacked!= null && attacked != this.en)
-			attack = true;
+		if (attacked != null && attacked != this.en)
+				attack = true;
 		else
 			attack = false;
 		
@@ -51,7 +52,7 @@ public class Move extends Action
 	{
 	
 		
-		 if (attack)
+		 if (attack && !moveonly)
 		 {
 			 Attack a = new Attack(this.en, attacked);
 			 a.process(this.en.getMap());
@@ -80,7 +81,6 @@ public class Move extends Action
 			{
 				en.setPos(x, y);
 
-				System.out.println(en.getType().length());
 				if (en.getType() == "Player")
 				{
 					m.discover(en);

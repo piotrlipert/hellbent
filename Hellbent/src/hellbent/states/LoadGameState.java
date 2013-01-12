@@ -34,7 +34,6 @@ public class LoadGameState extends HBGameState
 		for (Path s : paths)
 		{
 			LoadButton n = new LoadButton(100*i,100*i,100,100,hg, s,b);
-			System.out.println(s.toString());
 			n.setText(s.subpath(1,2).toString());
 			
 			loadbuttons.add(n);

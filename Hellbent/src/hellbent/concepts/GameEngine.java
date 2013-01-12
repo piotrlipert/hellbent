@@ -3,6 +3,7 @@ import hellbent.content.actions.Wait;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -69,6 +70,46 @@ public class GameEngine {
 
 			for (Entity i : current.entities)
 			{
+				for (Effect ef : i.effects)
+				{
+					
+					int dur = ef.getDuration();
+					int freq = ef.getFrequency();
+					int freqH = ef.getFreqHELP();
+
+					freqH = freqH - ENERGYQUANT;
+					dur = dur - ENERGYQUANT;
+
+					if (dur > 0)
+					{
+						if (freqH <= 0)
+					{
+						freqH = freq;
+						ef.process(i);
+						
+					}
+					
+					}
+					else
+					{
+						ef.setToDelete(true);
+					}
+					
+				}
+			
+				
+				Iterator<Effect> it = i.effects.iterator();
+				
+				while(it.hasNext())
+				{
+					Effect ef = it.next();
+					
+					if (ef.getToDelete() == true)
+							{
+							it.remove();
+							}
+				}
+				
 				if (i.isAwake() && i.getAction() == null && i != pl)
 				{
 					Action n = i.AI(current);

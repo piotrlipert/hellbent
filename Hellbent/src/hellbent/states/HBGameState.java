@@ -43,10 +43,7 @@ public class HBGameState extends BasicGameState {
 		
 	}
 
-	public int getID() {
-		// TODO Auto-generated method stub
-		return stateID;
-	}
+	
 
 	
 	public void mouseWheelMoved(int change) 
@@ -81,5 +78,19 @@ public class HBGameState extends BasicGameState {
 			throws SlickException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public int getStateID() {
+		return stateID;
+	}
+
+	public void setStateID(int stateID) {
+		this.stateID = stateID;
+	}
+
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return stateID;
 	}
 }

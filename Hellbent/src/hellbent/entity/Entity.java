@@ -2,6 +2,7 @@ package hellbent.entity;
 import hellbent.concepts.Action;
 import hellbent.concepts.Effect;
 import hellbent.concepts.Formulas;
+import hellbent.concepts.Item;
 import hellbent.concepts.Profession;
 import hellbent.content.actions.Wait;
 import hellbent.util.Utilities;
@@ -14,7 +15,11 @@ import org.newdawn.slick.Image;
 public class Entity {
 	public HashMap<String, Integer> data = new HashMap<String, Integer>();
 	public HashMap<String, String> sdata = new HashMap<String, String>();
+	
+	
 	public Vector<Effect> effects = new Vector<Effect>();
+	private Vector<Item> inventory = new Vector<Item>();
+
 	private int x;
 	private int y;
 	private String mapID;
@@ -278,7 +283,25 @@ for (String i : SaS)
 
 }
 
+public Vector<Item> getInventory() {
+	return inventory;
+}
 
+public void setInventory(Vector<Item> inventory) {
+	this.inventory = inventory;
+}
+
+public boolean hasItem(Item e, boolean take)
+{
+	for(Item i : inventory)
+	{
+		if (i.getName() == e.getName())
+			return true;
+		
+	}
+	return false;
+	
+}
 
 }
 

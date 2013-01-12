@@ -21,7 +21,6 @@ public class MonsterLoader {
 
 public Entity getMonster(String type)
 {
-	System.out.println(type);
 	return (monsters.get(type)).clone();
 }
 

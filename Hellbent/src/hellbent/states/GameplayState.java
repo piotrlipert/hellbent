@@ -8,6 +8,7 @@ import java.util.Vector;
 import hellbent.HellbentGame;
 import hellbent.concepts.Background;
 import hellbent.concepts.GameEngine;
+import hellbent.concepts.Item;
 import hellbent.content.actions.Move;
 import hellbent.content.actions.Wait;
 import hellbent.content.maps.GoblinTowerMap;
@@ -29,7 +30,7 @@ public class GameplayState extends HBGameState {
 	
 	private int stateID;
 	public int moveflag = 0;
-	int moving = 0;
+	public int moving = 0;
     HellbentGame hg = null;
     GameEngine ge = null;
     long oldtime = 0;
@@ -59,7 +60,7 @@ public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException 
 	hg = (HellbentGame) arg1;
 	ge = hg.ge;
 	background = new Image("resources/graphics/backgrounds/back.png");
-	
+	hg.keyctrl.setGs(this);
 	
 }
 
@@ -126,7 +127,6 @@ public void renderMAP(HellbentGame hg, Map m)
 			 i = (hg.bal.BackgroundTiles.get(m.background[0][0]));
 
 			}
-			System.out.println(m.background[0][0]);
 			Image d = i.get(0);
 			
 			
@@ -178,6 +178,22 @@ public void renderEntities(HellbentGame hg)
 	}
 	
 }
+
+public void renderItems(HellbentGame hg)
+{
+	Player tmp = hg.ge.getPlayer();
+
+	centerX = tmp.getX();
+	centerY = tmp.getY();
+	
+	
+	
+	for (Item e : Utilities.getVisibleItems(tmp))
+	{
+		drawOnScreen(e.getX()-centerX,e.getY()-centerY,e.getSprite());
+	}
+	
+}
 public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 		throws SlickException {
 	
@@ -185,8 +201,11 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 	background.draw(0,0);
 
 	renderMAP(hg,hg.ge.w.getMap(hg.ge.pl.getMapID()));
-	renderPlayer(hg);
+	renderItems(hg);
 	renderEntities(hg);
+
+	renderPlayer(hg);
+
 	rendermessage(hg);
 	/* TEST
 	 * renderlines(hg,arg2);
@@ -201,7 +220,7 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 @Override
 public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 		throws SlickException {
-	
+	this.statechange(arg1);
 	int inputACTION = 0;
 	Player tmp = ge.getPlayer();
 	this.message = tmp.getMessage();
@@ -259,128 +278,16 @@ public void mouseReleased(int button, int x, int y)
 public void keyPressed(int key, char c)
 {
 	
-	if (key == Input.KEY_S)
-	{
-		if (hg.in.isKeyDown(Input.KEY_LSHIFT))
-		{
-			System.out.println("SAVING");
-			try {
-				hg.svg.saveGame("saves/"+hg.ge.pl.getName()+".svg");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println(e.toString());
-			}
-		}
-		
-		
-	}
+	hg.keyctrl.keyPressed(key, c);
 	
-	if (key == Input.KEY_NUMPAD1)
-	{
-	moveflag = 1;
-	moving++;
-	}
-	if (key == Input.KEY_NUMPAD2)
-	{
-	moveflag = 2;
-	moving++;
 
-	}
-	if (key == Input.KEY_NUMPAD3)
-	{
-	moveflag = 3;
-	moving++;
-
-	}
-	if (key == Input.KEY_NUMPAD4)
-	{
-	moveflag = 4;
-	moving++;
-
-	}
-	if (key == Input.KEY_NUMPAD5)
-	{
-	moveflag = 5;
-	moving++;
-
-	}
-	if (key == Input.KEY_NUMPAD6)
-	{
-	moveflag = 6;
-	moving++;
-
-	}
-	if (key == Input.KEY_NUMPAD7)
-	{
-	moveflag = 7;
-	moving++;
-
-	}
-	if (key == Input.KEY_NUMPAD8)
-	{
-	moveflag = 8;
-	moving++;
-
-	}
-	if (key == Input.KEY_NUMPAD9)
-	{
-	moveflag = 9;
-	moving++;
-
-	}
-	
-{
-	
-}
 }
 
 public void keyReleased(int key, char c)
 {
-	
-	if (key == Input.KEY_NUMPAD1)
-	{
-	moving--;
+	hg.keyctrl.keyReleased(key, c);
 
-	}
-	if (key == Input.KEY_NUMPAD2)
-	{
-	moving--;
-	}
-	if (key == Input.KEY_NUMPAD3)
-	{
-	moving--;
 
-	}
-	if (key == Input.KEY_NUMPAD4)
-	{
-	moving--;
-
-	}
-	if (key == Input.KEY_NUMPAD5)
-	{
-	moving--;
-
-	}
-	if (key == Input.KEY_NUMPAD6)
-	{
-	moving--;
-
-	}
-	if (key == Input.KEY_NUMPAD7)
-	{
-	moving--;
-
-	}
-	if (key == Input.KEY_NUMPAD8)
-	{
-	moving--;
-
-	}
-	if (key == Input.KEY_NUMPAD9)
-	{
-	moving--;
-
-	}
 }
 
 }

@@ -1,10 +1,6 @@
 package hellbent.content.maps;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Scanner;
-
+import hellbent.content.items.Scimitar;
 import hellbent.content.monsters.GiantRat;
 import hellbent.world.Map;
 
@@ -21,7 +17,19 @@ public class GoblinTowerMap extends Map {
 			entities.add(test);
 		}
 		
+		init();
 		
+		
+	}
+	
+	public void init()
+	{
+		Scimitar a = new Scimitar();
+		
+		a.set("X",20);
+		a.set("Y",20);
+		
+		items.add(a);
 		
 	}
 	

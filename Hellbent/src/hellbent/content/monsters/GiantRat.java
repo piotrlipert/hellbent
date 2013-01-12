@@ -1,20 +1,15 @@
 package hellbent.content.monsters;
 
-import java.util.Random;
-
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import hellbent.concepts.Action;
 import hellbent.concepts.Formulas;
-import hellbent.content.actions.Move;
-import hellbent.entity.Monster;
-import hellbent.world.Map;
 
-public class GiantRat extends Monster {
+public class GiantRat extends GenericMonster {
 	
 	public GiantRat() throws SlickException
 	{
+		super();
 		this.setSprite(new Image("resources/graphics/entities/rat.png"));
 		this.setAwake(true);
 		this.setName("giant rat");
@@ -32,6 +27,7 @@ public class GiantRat extends Monster {
  
 	}
 	
+	/*
 	public Action AI(Map m)
 	{
 	if (this.getMap().entityAtCoord(this.getX()+1, this.getY())!= null)
@@ -40,7 +36,7 @@ public class GiantRat extends Monster {
 
 	return new Move(this, R.nextInt(8)+1);
 	}
-
+*/
 	public GiantRat clone()
 	{
 		try {

@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import hellbent.concepts.Background;
 import hellbent.concepts.Formulas;
+import hellbent.concepts.Item;
 import hellbent.entity.Entity;
 import hellbent.loaders.MonsterLoader;
 import hellbent.util.Utilities;
@@ -16,6 +17,8 @@ public class Map {
 	public int[][] background;
 	private boolean in;
 	public Vector<Entity> entities = new Vector<Entity>();
+	public Vector<Item> items = new Vector<Item>();
+
 	public int[][] visited;
 	public Random r = new Random();
 	private String name;
@@ -30,6 +33,17 @@ public class Map {
 	{
 		
 	}
+	
+	public void initMap()
+	{
+		for(int x=0;x<this.getSizeX();x++)
+			for(int y=0;y<this.getSizeY();y++)
+				this.visited[x][y] = 0;
+			
+		
+		
+	}
+	
 	
 	public Map(int sizeX,int sizeY,boolean in,int terrain)
 	{

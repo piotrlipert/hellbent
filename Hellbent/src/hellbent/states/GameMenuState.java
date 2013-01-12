@@ -1,6 +1,5 @@
 package hellbent.states;
 
-import hellbent.concepts.GameEngine;
 import hellbent.loaders.BackgroundLoader;
 import hellbent.loaders.ClassLoader;
 import hellbent.loaders.ItemLoader;
@@ -9,6 +8,8 @@ import hellbent.loaders.MonsterLoader;
 import hellbent.loaders.RaceLoader;
 import hellbent.loaders.SaveLoader;
 import hellbent.loaders.Saver;
+import hellbent.util.GameplayControl;
+import hellbent.util.InventoryControl;
 import hellbent.util.StateButton;
 import hellbent.HellbentGame;
 
@@ -55,6 +56,8 @@ public class GameMenuState extends HBGameState {
 		  hg.svg = new Saver(hg);
 		  hg.load = new SaveLoader(hg);
 		  hg.in = hg.getContainer().getInput();
+		  hg.keyctrl = new GameplayControl(hg);
+		  hg.invkeyctrl = new InventoryControl(hg);
 
 		  
 		Image menubutton = new Image("resources/graphics/menus/mainmenubutton.jpg");

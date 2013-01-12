@@ -13,7 +13,10 @@ import hellbent.loaders.Saver;
 import hellbent.states.CharGenState;
 import hellbent.states.GameMenuState;
 import hellbent.states.GameplayState;
+import hellbent.states.InventoryState;
 import hellbent.states.LoadGameState;
+import hellbent.util.GameplayControl;
+import hellbent.util.InventoryControl;
 import hellbent.loaders.ClassLoader;
 
 
@@ -38,11 +41,12 @@ public class HellbentGame extends StateBasedGame
     public BackgroundLoader bal;
     public Formulas f = new Formulas();
     
-	private static final int MAINMENUSTATE = 0;
+    public static final int MAINMENUSTATE = 0;
 	public static final int GAMEPLAYSTATE = 1;
-	private static final int CHARGENSTATE = 2;
-	private static final int LOADGAMESTATE = 3;
-	
+	public static final int CHARGENSTATE = 2;
+	public static final int LOADGAMESTATE = 3;
+	public static final int INVENTORYSTATE = 4;
+
 	public int TILESIZE;
 	public int XWINDOW;
 	public int YWINDOW;
@@ -53,6 +57,8 @@ public class HellbentGame extends StateBasedGame
 	public SaveLoader load;
 	public Saver svg;
 	public Input in;
+	public GameplayControl keyctrl;
+	public InventoryControl invkeyctrl;
     
 
 	public HellbentGame() throws SlickException {
@@ -68,6 +74,7 @@ public class HellbentGame extends StateBasedGame
 		this.addState(new GameplayState(GAMEPLAYSTATE,this));
         this.addState(new CharGenState(CHARGENSTATE,this));
         this.addState(new LoadGameState(LOADGAMESTATE,this));
+        this.addState(new InventoryState(INVENTORYSTATE,this));
 
         
         

@@ -7,6 +7,19 @@ public class Effect
 	private String name;
 	private int duration;
 	private int frequency;
+	private boolean toDelete;
+
+
+	public int getFreqHELP() {
+		return freqHELP;
+	}
+
+	public void setFreqHELP(int freqHELP) {
+		this.freqHELP = freqHELP;
+	}
+
+	private int freqHELP;
+	
 	
 	public void apply(Entity e)
 	{
@@ -50,7 +63,14 @@ public class Effect
 	public void setFrequency(int frequency) {
 		this.frequency = frequency;
 	}
-	
+
+	public void setToDelete(boolean b) {
+		toDelete = b;
+	}
+	public boolean getToDelete()
+	{
+		return toDelete;
+	}
 	
 	
 }

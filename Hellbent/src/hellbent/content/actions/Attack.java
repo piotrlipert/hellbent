@@ -16,6 +16,7 @@ public class Attack extends hellbent.concepts.Action {
 
 	public void process(Map m)
 	{
+		System.out.println("DSADASDAS");
 		String Reason = "";
 		boolean hit = false;
 		if (Formulas.hit(en,victim))

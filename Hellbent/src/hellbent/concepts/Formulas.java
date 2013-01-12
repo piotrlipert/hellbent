@@ -12,7 +12,29 @@ import hellbent.concepts.Profession;
 
 public class Formulas 
 {
-public static final int MALE = 0;
+public static final int MALE = 1000;
+public static final int FEMALE = 1001;
+
+public static final int RIGHT_HAND = 10101;
+public static final int LEFT_HAND = 10102;
+public static final int TORSO = 10103;
+public static final int BOOTS = 10104;
+public static final int LEGS = 10105;
+public static final int HEAD = 10106;
+public static final int NECK = 10107;
+public static final int RING_1 = 10108;
+public static final int RING_2 = 10109;
+public static final int TOOL = 10110;
+public static final int MISSILE = 10111;
+public static final int MISSILE_WEAPON = 10112;
+public static final int CLOAK = 10113;
+public static final int TAIL = 10114;
+public static final int HANDS = 10115;
+public static final int HAND = 10116;
+// Damage
+public static final int PHYSICAL = 1;
+
+
 public static Random r = new Random();
 
 
@@ -234,7 +256,11 @@ public static Random r = new Random();
 	public static int EXPValue(Entity victim) {
 		return 0;
 	}
-	public static boolean canSee(Player tmp, Entity e) {
+	public static boolean canSee(Entity tmp, Entity e) {
+		return true;
+	}
+	public static boolean canSee(Entity tmp, Item e) {
+		// TODO Auto-generated method stub
 		return true;
 	}
 	
