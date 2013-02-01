@@ -1,6 +1,7 @@
 package hellbent.states;
 
 import hellbent.HellbentGame;
+import hellbent.util.InventoryWidget;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -12,17 +13,18 @@ public class InventoryState extends HBGameState {
 
 	private HellbentGame hg;
 	private Image background;
-
+	public InventoryWidget iw;
+	
 	public InventoryState(int inventorystate, HellbentGame hellbentGame) {
 		this.setStateID(inventorystate);
 		this.hg = hellbentGame;
+		iw = new InventoryWidget(hg);
 	}
-
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		// TODO Auto-generated method stub
-		background = new Image("resources/graphics/menus/inventory.jpg");
+		background = new Image("resources/graphics/menus/inventory.png");
 		hg.invkeyctrl.setIs(this);
 	
 	}
@@ -39,13 +41,13 @@ public class InventoryState extends HBGameState {
 	}
 
 	@Override
-	public void mouseClicked(int button, int x, int y, int count) {
-		// TODO Auto-generated method stub
+	public void mousePressed(int button, int x, int y) {
+		hg.invkeyctrl.mousePressed(button,x,y);
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		// TODO Auto-generated method stub
+		hg.invkeyctrl.mouseReleased(button,x,y);
 	}
 
 	@Override
@@ -62,6 +64,12 @@ public class InventoryState extends HBGameState {
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
 		background.draw(0,0);
+		iw.renderItems(hg);
+		
+	
 	}
+
+	
+
 
 }

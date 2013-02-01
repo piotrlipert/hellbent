@@ -1,5 +1,9 @@
 package hellbent.concepts;
 
+import hellbent.entity.Entity;
+import hellbent.entity.Player;
+import hellbent.util.Utilities;
+
 import java.util.HashMap;
 
 import org.newdawn.slick.Image;
@@ -11,8 +15,9 @@ public class Item
 	public HashMap<String, Integer> data = new HashMap<String, Integer>();
 	public HashMap<String, String> sdata = new HashMap<String, String>();
 	
-	public static int WEAPON = 1;
 	
+	public boolean CANUSE;
+	public boolean CANEQUIP;
 	
 	
 	public Item clone()
@@ -55,13 +60,11 @@ public class Item
 	}
 
 	public int getX() {
-		// TODO Auto-generated method stub
 		return get("X");
 	}
 
 	public int getY() {
-		// TODO Auto-generated method stub
-		 return get("X");
+		 return get("Y");
 	}
 
 	public Image getSprite() {
@@ -73,9 +76,10 @@ public class Item
 	
 	public String save()
 	{
-	String ret = "<ITEM>";
+	String ret = "<ITEM>\n";
+	ret = ret + "<TYPE>"+this.sGet("NAME")+"</TYPE>";
 	ret = ret + saveAttributes();
-	return ret +"</ITEM>";	
+	return ret +"</ITEM>\n";	
 	}
 	
 	private String saveAttributes() {
@@ -99,9 +103,57 @@ public class Item
 
 	public void load(String istring)
 	{
+		String atr = Utilities.substring("ATR", istring);
+		String satr = Utilities.substring("sATR", istring);
+
+		String[] aS = atr.split("[\r\n]+");
+		String[] SaS = satr.split("[\r\n]+");
+
+		for (String i : aS)
+		{
+			if (i.length() > 3)
+			 this.set(i.split("::")[0],Integer.parseInt(i.split("::")[1]));
+		}
+			
+		for (String i : SaS)
+		{
+			if (i.length() > 3)
+			 this.sSet(i.split("::")[0],i.split("::")[1]);
+		}
+
+	}
+	
+	public boolean onEquip(Entity e)
+	{
+		
+		return true;
+	}
+	
+	public boolean onRemove(Entity e)
+	{
+		return true;
+
 		
 	}
 	
+	public void onPickup(Entity e)
+	{
+		
+		
 	}
+	
+	public void onDrop(Entity e)
+	{
+		
+		
+	}
+	public void onUse(Entity e)
+	{
+		
+		
+	}
+
+	
+}
 
 

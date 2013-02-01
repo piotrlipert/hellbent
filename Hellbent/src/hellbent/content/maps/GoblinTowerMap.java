@@ -1,6 +1,8 @@
 package hellbent.content.maps;
 
+import hellbent.content.items.Axe;
 import hellbent.content.items.Scimitar;
+import hellbent.content.items.Spear;
 import hellbent.content.monsters.GiantRat;
 import hellbent.world.Map;
 
@@ -24,13 +26,34 @@ public class GoblinTowerMap extends Map {
 	
 	public void init()
 	{
+		
+		for(int x = 0;x<10;x++)
+		{
 		Scimitar a = new Scimitar();
 		
 		a.set("X",20);
 		a.set("Y",20);
 		
 		items.add(a);
+		}
+		for(int x = 0;x<10;x++)
+		{
+		Axe a = new Axe();
 		
+		a.set("X",20);
+		a.set("Y",20);
+		
+		items.add(a);
+		}
+		for(int x = 0;x<10;x++)
+		{
+		Spear a = new Spear();
+		
+		a.set("X",20);
+		a.set("Y",20);
+		
+		items.add(a);
+		}
 	}
 	
 	public GoblinTowerMap clone()

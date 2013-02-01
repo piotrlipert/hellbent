@@ -1,10 +1,14 @@
 package hellbent.content.actions;
 
+import java.util.Vector;
+
 import hellbent.concepts.Action;
 import hellbent.concepts.Background;
 import hellbent.concepts.Formulas;
+import hellbent.concepts.Item;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
+import hellbent.util.Utilities;
 import hellbent.world.Map;
 
 public class Move extends Action 
@@ -64,7 +68,6 @@ public class Move extends Action
 			
 			if (x < 0 || x > m.getSizeX() -1  || y < 0 || y > m.getSizeX() -1 )
 			{
-				System.out.println("Exit");
 				m.Exit(x,y,en);
 				return;
 			}
@@ -84,6 +87,19 @@ public class Move extends Action
 				if (en.getType() == "Player")
 				{
 					m.discover(en);
+					Vector<Item> items = Utilities.getItemsAtCoord(m, x, y);
+					
+					if (items.size() > 1)
+					{
+						en.addMessage("There are some items lying here.");
+
+					}
+					
+					if (items.size() == 1)
+					{
+						en.addMessage("There is a "+items.get(0).sGet("NAME")+ "lying here.");
+					}
+					
 				}
 				
 			}

@@ -1,17 +1,24 @@
 package hellbent.util;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import org.newdawn.slick.Input;
 
 import hellbent.HellbentGame;
+import hellbent.concepts.Item;
+import hellbent.content.actions.Pickup;
+import hellbent.entity.Player;
 import hellbent.states.GameplayState;
+import hellbent.world.Map;
 
 public class GameplayControl {
 
 	private GameplayState gs;
 	HellbentGame hg;
 	static int SAVE_KEY;
+	static int SKILL_KEY;
+	
 	static int N_1;
 	static int N_2;
 	static int N_3;
@@ -23,6 +30,7 @@ public class GameplayControl {
 	static int N_9;
 	static int N_0;
 	static int INVENTORY_KEY;
+	static int PICKUP_KEY;
 
 	public GameplayControl(HellbentGame hg) {
 		this.hg = hg;
@@ -42,6 +50,8 @@ public class GameplayControl {
 		N_9 = Input.KEY_NUMPAD9;
 		N_0 = Input.KEY_NUMPAD0;
 		INVENTORY_KEY = Input.KEY_I;
+		PICKUP_KEY = Input.KEY_COMMA;
+		SKILL_KEY = Input.KEY_S;
 
 	}
 
@@ -60,20 +70,46 @@ public class GameplayControl {
 
 	public void keyPressed(int key, char c) {
 
+		if (key == SKILL_KEY && !hg.in.isKeyDown(Input.KEY_LSHIFT) ) 
+		{
+			gs.statechange = HellbentGame.SKILLSTATE;
+
+		}
+
+		if (key == PICKUP_KEY) 
+		{
+			
+
+			Player tmp = hg.ge.pl;
+			Map m = tmp.getMap();
+			Vector<Item> items = Utilities.getItemsAtCoord(m, tmp.getX(), tmp.getY());
+			if(items.size()> 0)
+			{
+				tmp.setAction(new Pickup(tmp, items.get(0)));
+				((GameplayState) (gs)).inputACTION = 1;
+
+				
+			}
+			else
+			{
+				tmp.addMessage("There is nothing here to pick up!");
+			}
+			
+		}
+
+		
 		if (key == INVENTORY_KEY) {
-			System.out.println("HEJHP");
 			gs.statechange = HellbentGame.INVENTORYSTATE;
 		}
 
 		if (key == SAVE_KEY) {
 			if (hg.in.isKeyDown(Input.KEY_LSHIFT)) {
-				System.out.println("SAVING");
 				try {
 					hg.svg.saveGame("saves/" + hg.ge.pl.getName() + ".svg");
 					hg.ge.pl.addMessage("Game saved.");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					System.out.println(e.toString());
+					System.out.println("DUPA");
 				}
 			}
 

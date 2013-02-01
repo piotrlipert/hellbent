@@ -57,7 +57,7 @@ public class SaveLoader {
 		{
 			String name = Utilities.substring("MAPNAME", i);
 			Map newmap = h.mal.getMap(name);
-			newmap.load(i,h.mol);
+			newmap.load(i,h);
 			h.ge.w.addMap(newmap);
 			
 		}
@@ -75,7 +75,7 @@ public class SaveLoader {
 		Player p = new Player();
 		p.setName(typeName[0]);
 		p.setMapID(typeName[2]);
-		p.load(savestr);
+		p.load(savestr,h);
 		
 		try {
 			p.setSprite(new Image(p.sGet("SPRITEPATH")));

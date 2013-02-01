@@ -4,8 +4,10 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import hellbent.concepts.Damage;
 import hellbent.concepts.Formulas;
 import hellbent.concepts.Weapon;
+import hellbent.entity.Entity;
 
 public class Scimitar extends Weapon  {
 
@@ -17,7 +19,7 @@ public class Scimitar extends Weapon  {
 	{
 		super();
 		try {
-			setSprite(new Image("resources/graphics/items/sword.png",Color.white));
+			setSprite(new Image("resources/graphics/items/sword.bmp",Color.white));
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -27,8 +29,11 @@ public class Scimitar extends Weapon  {
 		set("WEIGHT",50);
 		set("EQUIP_SLOT",Formulas.HAND);
 		set("RARITY",1);
-		set("DAMAGE_TYPE",Formulas.PHYSICAL);
-		
+		set("DAMAGE_TYPE",Formulas.SLASH);
+		set("D_WALLS",6);
+		set("D_COUNT",1);
+		set("D_MOD",0);
+
 		
 	}
 
@@ -47,6 +52,8 @@ public class Scimitar extends Weapon  {
 
 
 
+	
+	
 	public Image getSprite() {
 		return sprite;
 	}

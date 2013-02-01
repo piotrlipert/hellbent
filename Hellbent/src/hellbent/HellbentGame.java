@@ -15,8 +15,10 @@ import hellbent.states.GameMenuState;
 import hellbent.states.GameplayState;
 import hellbent.states.InventoryState;
 import hellbent.states.LoadGameState;
+import hellbent.states.SkillState;
 import hellbent.util.GameplayControl;
 import hellbent.util.InventoryControl;
+import hellbent.util.SkillControl;
 import hellbent.loaders.ClassLoader;
 
 
@@ -24,7 +26,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -46,6 +47,7 @@ public class HellbentGame extends StateBasedGame
 	public static final int CHARGENSTATE = 2;
 	public static final int LOADGAMESTATE = 3;
 	public static final int INVENTORYSTATE = 4;
+	public static final int SKILLSTATE = 5;
 
 	public int TILESIZE;
 	public int XWINDOW;
@@ -59,11 +61,11 @@ public class HellbentGame extends StateBasedGame
 	public Input in;
 	public GameplayControl keyctrl;
 	public InventoryControl invkeyctrl;
+	public SkillControl skillctrl;
     
 
 	public HellbentGame() throws SlickException {
 		super("Hellbent");
-		  ge = new GameEngine();
 		
 	}
 
@@ -75,6 +77,7 @@ public class HellbentGame extends StateBasedGame
         this.addState(new CharGenState(CHARGENSTATE,this));
         this.addState(new LoadGameState(LOADGAMESTATE,this));
         this.addState(new InventoryState(INVENTORYSTATE,this));
+        this.addState(new SkillState(SKILLSTATE,this));
 
         
         
@@ -92,6 +95,12 @@ public class HellbentGame extends StateBasedGame
 	{
 		GameState gs = this.getCurrentState();
 		gs.mouseClicked(button, x, y, count);
+	}
+	
+	public void mousePressed(int button, int x,int y)
+	{
+		GameState gs = this.getCurrentState();
+		gs.mousePressed(button, x, y);
 	}
 	public void mouseReleased(int button, int x, int y)
 	{

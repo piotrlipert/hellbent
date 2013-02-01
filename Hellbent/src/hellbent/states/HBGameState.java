@@ -28,7 +28,6 @@ public class HBGameState extends BasicGameState {
 	{
 		if (this.statechange != -1)
 		{
-			System.out.println("ads");
 
 			s.enterState(this.statechange);
 			this.statechange = -1;
@@ -92,5 +91,9 @@ public class HBGameState extends BasicGameState {
 	public int getID() {
 		// TODO Auto-generated method stub
 		return stateID;
+	}
+
+	public void mousePressed(int button, int x, int y, int count) {
+		
 	}
 }

@@ -13,4 +13,9 @@ public class Monster extends Entity {
 	{
 		return new Monster();
 	}
+
+	public void addMessage()
+	{
+		
+	}
 }

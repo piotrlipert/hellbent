@@ -16,7 +16,6 @@ public class Attack extends hellbent.concepts.Action {
 
 	public void process(Map m)
 	{
-		System.out.println("DSADASDAS");
 		String Reason = "";
 		boolean hit = false;
 		if (Formulas.hit(en,victim))
@@ -28,10 +27,10 @@ public class Attack extends hellbent.concepts.Action {
 			String attacked = victim.sGet("NAME");
 			if(hit)
 			{
-				en.addMessage("You hit "+ attacked + ".");
 				victim.addMessage(en.sGet("NAME") + " hits you!");
 				int damage = Formulas.damage(en,victim);
-				
+				en.addMessage("You hit "+ attacked + " for "+Integer.toString(damage)+".");
+
 				victim.sub("CURR_HP", damage);
 
 				if (victim.get("CURR_HP") <= 0)

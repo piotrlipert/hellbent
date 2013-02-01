@@ -1,4 +1,5 @@
 package hellbent.concepts;
+import hellbent.HellbentGame;
 import hellbent.content.actions.Wait;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
@@ -7,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import hellbent.states.GameplayState;
 import hellbent.world.*;
 public class GameEngine {
 	
@@ -17,7 +19,14 @@ public class GameEngine {
 	public int turncount = 0;
 	public World w = new World();
 	public Player pl;
+	public GameplayState gs;
+	public HellbentGame hg;
 
+	public GameEngine(GameplayState g, HellbentGame h)
+	{
+		hg = h;
+		gs = g;
+	}
 
 	public World getWorld() {
 		return w;
@@ -40,75 +49,105 @@ public class GameEngine {
 		
 	}
 	
+	
+	public void processEvents()
+	{
+		Player tmp = getPlayer();
+		Map current = tmp.getMap();
+	
+		for (Entity i : current.entities)
+		{
+			for (Effect ef : i.effects)
+			{
+				
+				int dur = ef.getDuration();
+				int freq = ef.getFrequency();
+				int freqH = ef.getFreqHELP();
 
+				freqH = freqH - ENERGYQUANT;
+				dur = dur - ENERGYQUANT;
+
+				if (dur > 0)
+				{
+					if (freqH <= 0)
+				{
+					freqH = freq;
+					ef.process(i);
+					
+				}
+				
+				}
+				else
+				{
+					ef.setToDelete(true);
+				}
+				
+			}
+		
+			
+			Iterator<Effect> it = i.effects.iterator();
+			
+			while(it.hasNext())
+			{
+				Effect ef = it.next();
+				
+				if (ef.getToDelete() == true)
+						{
+						it.remove();
+						}
+			}
+		
+		}
+	}
+
+	
+	public void WorldTurn()
+	{
+		
+	}
 	@SuppressWarnings("unchecked")
 	public void TURN()
 	{
-		
 		Vector<Action> ActionQHelp = new Vector<Action>();
 		pl.resetMessage();
 		turncount++;
-		if (turncount % 100 == 0)
+		if (turncount % Formulas.WORLDTURNCOUNT == 0)
 		{
-			
+			WorldTurn();
 		}
+		
+		if (turncount % Formulas.CHECKTURNCOUNT == 0)
+		{
+			CheckTurn();
+		}
+		
 		Player tmp = getPlayer();
 		Map current = tmp.getMap();
 		
 	
-		
 		ActionQ.add(pl.getAction());
-		if (pl.getAction().isInstant())
-		{
-			int actiontime = pl.getAction().time;
-			pl.getAction().process(current);
-			pl.setAction(new Wait(actiontime, pl));
-		}
+
 		
 	while (pl.getAction() != null)
 	{
 
+		boolean PLAYER_ACTION_PROCESSED = false;
+		if (pl.getAction().isInstant())
+		{
+			int actiontime = pl.getAction().time;
+			pl.getAction().process(current);
+			ActionQ.remove(pl.getAction());
+
+			pl.popAction();
+			pl.setAction(new Wait(actiontime, pl));
+			ActionQ.add(pl.getAction());
+
+		}
+		
+		processEvents();
+		
 			for (Entity i : current.entities)
 			{
-				for (Effect ef : i.effects)
-				{
-					
-					int dur = ef.getDuration();
-					int freq = ef.getFrequency();
-					int freqH = ef.getFreqHELP();
-
-					freqH = freqH - ENERGYQUANT;
-					dur = dur - ENERGYQUANT;
-
-					if (dur > 0)
-					{
-						if (freqH <= 0)
-					{
-						freqH = freq;
-						ef.process(i);
-						
-					}
-					
-					}
-					else
-					{
-						ef.setToDelete(true);
-					}
-					
-				}
-			
-				
-				Iterator<Effect> it = i.effects.iterator();
-				
-				while(it.hasNext())
-				{
-					Effect ef = it.next();
-					
-					if (ef.getToDelete() == true)
-							{
-							it.remove();
-							}
-				}
 				
 				if (i.isAwake() && i.getAction() == null && i != pl)
 				{
@@ -123,17 +162,21 @@ public class GameEngine {
 		for (Action a : ActionQ)
 		{
 			
-			if (a.time < 0)
+			if (a.time <= 0)
 			{	
 			
 			a.setProcessed(1);
+			if(a.isAnimated())
+			{
+				
+			}
 			a.process(current);
-			a.en.setAction(null);
 			
-				if (a.en == this.pl)
-				{
-				break;
-				}
+			a.en.popAction();
+			if (a.en == pl)
+			{
+				PLAYER_ACTION_PROCESSED = true;
+			}
 			}
 			else
 			{
@@ -152,16 +195,21 @@ public class GameEngine {
 
 		ActionQ = (Vector<Action>) ActionQHelp.clone();
 		ActionQHelp.clear();
-
+		
+		if (pl.getAction() != null && PLAYER_ACTION_PROCESSED )
+			ActionQ.add(pl.getAction());
 		
 
 	}
+	// END OF WHILE LOOP
+		
+	
 		
 		
-		// Do player action
-		
-		// Purge processed actions
-		
+	}
+
+	private void CheckTurn() {
+		// TODO Auto-generated method stub
 		
 	}
 	

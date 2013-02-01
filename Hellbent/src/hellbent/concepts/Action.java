@@ -9,6 +9,8 @@ public abstract class Action {
 	public Entity en;
 	private int processed = 0;
 	private boolean instant = false;
+	private boolean animated = false;
+	public String name = "ACTION";
 
 	public Action(Entity e)
 	{
@@ -36,6 +38,14 @@ public abstract class Action {
 
 	public void setInstant(boolean instant) {
 		this.instant = instant;
+	}
+
+	public boolean isAnimated() {
+		return animated;
+	}
+
+	public void setAnimated(boolean animated) {
+		this.animated = animated;
 	}
 	
 

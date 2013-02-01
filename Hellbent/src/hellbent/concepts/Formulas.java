@@ -15,6 +15,20 @@ public class Formulas
 public static final int MALE = 1000;
 public static final int FEMALE = 1001;
 
+public static final int ALL = 0;
+public static final int WEAPONS = 1;
+public static final int ARMOR = 2;
+public static final int TRINKET = 3;
+public static final int AMULETS = 4;
+public static final int POTIONS = 5;
+public static final int SCROLLS = 6;
+public static final int OTHER = 7;
+public static final int TOOLS = 8;
+public static final int MISSILE = 9;
+public static final int MISSILE_WEAPONS = 10;
+public static final int UNIDENTIFIED = 11;
+
+
 public static final int RIGHT_HAND = 10101;
 public static final int LEFT_HAND = 10102;
 public static final int TORSO = 10103;
@@ -22,21 +36,56 @@ public static final int BOOTS = 10104;
 public static final int LEGS = 10105;
 public static final int HEAD = 10106;
 public static final int NECK = 10107;
-public static final int RING_1 = 10108;
-public static final int RING_2 = 10109;
+public static final int TRINKET_1 = 10108;
+public static final int TRINKET_2 = 10109;
 public static final int TOOL = 10110;
-public static final int MISSILE = 10111;
+public static final int MISSILES = 10111;
 public static final int MISSILE_WEAPON = 10112;
 public static final int CLOAK = 10113;
 public static final int TAIL = 10114;
 public static final int HANDS = 10115;
 public static final int HAND = 10116;
 // Damage
-public static final int PHYSICAL = 1;
+public static final int PHYSICAL = 10;
+public static final int SLASH = 11;
+public static final int SMASH = 12;
+public static final int PIERCE = 13;
+public static final int FIRE = 14;
+public static final int COLD = 15;
+public static final int SUFFOCATION = 15;
+public static final int POISON = 15;
+
+
+
+public static final int MAGICAL = 20;
+public static final int HELLFIRE = 21;
+public static final int FROST = 22;
+public static final int THUNDER = 23;
+public static final int ARCANE = 24;
+public static final int SPIRIT = 25;
+public static final int PAIN = 26;
+public static final int VENOM = 27;
+
+
+
+
+
+
+public static final int WORLDTURNCOUNT = 100;
+public static final int CHECKTURNCOUNT = 1;
 
 
 public static Random r = new Random();
 
+
+public static boolean IsDamagePhysical(int dam)
+{
+	if (dam - 20 < 0)
+	{
+		return true;
+	}
+	return false;
+}
 
 	static int calculateToHit(Entity e)
 	{
@@ -65,7 +114,39 @@ public static Random r = new Random();
 	
 	public static int damage(Entity hitting, Entity hit)
 	{
-		return 1;
+		Damage d = hitting.getDamage();
+		int ret = 0;
+		
+		for (int i : d.dam.keySet())
+		{
+			if(IsDamagePhysical(i))
+			{
+				double resistance = hit.get("RESISTANCE"+Integer.toString(i));
+				double damage = d.getDamage(i);
+				resistance = (100 - resistance)/100;
+				damage = damage * resistance;
+				damage = damage - hit.get("ARMOR");
+				ret = ret + (int) damage;
+			}
+			else
+			{
+				double resistance = hit.get("RESISTANCE"+Integer.toString(i));
+				double damage = d.getDamage(i);
+				resistance = (100 - resistance)/100;
+				damage = damage * resistance;
+				damage = damage - hit.get("AURA");
+
+				ret = ret + (int) damage;
+			}
+			
+		}
+		
+		for(Effect e : d.getEffects())
+		{
+			e.apply(hit);
+		}
+		
+		return ret;
 	}
 	
 
@@ -75,8 +156,23 @@ public static Random r = new Random();
 		recalculateHP(e);
 		recalculateMP(e);
 		recalculateSightRange(e);
+		recalculateCapacity(e);
 	}
 
+	private void recalculateCapacity(Entity e) {
+
+		e.set("MAX_CAPACITY",1000);
+		int weight = 0;
+		if(e.getType() == "Player")
+		{
+			for (Item i : e.inventory)
+			{
+				weight += i.get("WEIGHT");
+			}
+		}
+		e.set("CAPACITY", weight);
+		
+	}
 	void recalculateSpeed(Entity e)
 	{
 		
@@ -262,6 +358,18 @@ public static Random r = new Random();
 	public static boolean canSee(Entity tmp, Item e) {
 		// TODO Auto-generated method stub
 		return true;
+	}
+	public static boolean slotCheck(int equipslotid, int slotid) {
+		if (equipslotid == slotid)
+			return true;
+		if (equipslotid == Formulas.HAND && (slotid == Formulas.RIGHT_HAND || slotid== Formulas.LEFT_HAND))
+			return true;
+		
+		if (equipslotid == Formulas.HANDS && (slotid == Formulas.RIGHT_HAND || slotid== Formulas.LEFT_HAND))
+			return true;
+		
+		
+		return false;
 	}
 	
 	

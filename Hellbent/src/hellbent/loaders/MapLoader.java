@@ -17,7 +17,6 @@ public class MapLoader {
 			try {
 				maps.put("GoblinTower", new GoblinTowerMap());
 			} catch (Exception e) {
-				System.out.println("ZLE");
 				e.printStackTrace();
 			}
 		

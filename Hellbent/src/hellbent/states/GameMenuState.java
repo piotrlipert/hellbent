@@ -10,6 +10,7 @@ import hellbent.loaders.SaveLoader;
 import hellbent.loaders.Saver;
 import hellbent.util.GameplayControl;
 import hellbent.util.InventoryControl;
+import hellbent.util.SkillControl;
 import hellbent.util.StateButton;
 import hellbent.HellbentGame;
 
@@ -58,17 +59,27 @@ public class GameMenuState extends HBGameState {
 		  hg.in = hg.getContainer().getInput();
 		  hg.keyctrl = new GameplayControl(hg);
 		  hg.invkeyctrl = new InventoryControl(hg);
-
+		  hg.skillctrl = new SkillControl(hg);
 		  
-		Image menubutton = new Image("resources/graphics/menus/mainmenubutton.jpg");
-		StateButton charGen = new StateButton(500,60,200,50,2,s,menubutton);
+		Image menubutton = new Image("resources/graphics/menus/mainmenubutton.png");
+		StateButton charGen = new StateButton(700,100,200,50,2,s,menubutton);
 		charGen.setText("Generate new character");
 		buttons.add(charGen);
 		
-		StateButton load = new StateButton(100,100,200,50,3,s,menubutton);
+		StateButton load = new StateButton(700,200,200,50,3,s,menubutton);
 		load.setText("Load game");
 		buttons.add(load);
-		background = new Image("resources/graphics/menus/mainmenu.jpg");
+		
+		StateButton options = new StateButton(700,300,200,50,3,s,menubutton);
+		options.setText("Options");
+		buttons.add(options);
+		
+		StateButton exit = new StateButton(700,400,200,50,3,s,menubutton);
+		exit.setText("exit");
+		buttons.add(exit);
+		
+		
+		background = new Image("resources/graphics/menus/mainmenu.png");
 		
 		
 		
@@ -103,8 +114,8 @@ public class GameMenuState extends HBGameState {
 		b.getButtonImage().draw(b.x,b.y);
 		}
 	
-		fontDAY.drawString(300, 300, "FONTY kurcze");
-		fontNITE.drawString(500, 500, "LOL rotflmao");
+		//fontDAY.drawString(300, 300, "FONTY kurcze");
+		//fontNITE.drawString(500, 500, "LOL rotflmao");
 		
 	}
 
@@ -116,13 +127,7 @@ public class GameMenuState extends HBGameState {
 		 
         int mouseX = input.getMouseX();
         int mouseY = input.getMouseY();
-       /* for(StateButton b:buttons)
-        	if (b.isInBox(mouseX, mouseY))
-        		System.out.println("Myszka jest tu");
-        	else
-        		System.out.println("Myszka jest tam");
-		*/
-		// TODO Auto-generated method stub
+       
 		
 	}
 

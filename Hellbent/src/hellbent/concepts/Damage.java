@@ -1,27 +1,34 @@
 package hellbent.concepts;
 
-import hellbent.entity.Entity;
+import java.util.HashMap;
+import java.util.Vector;
 
 public class Damage {
-	
-	private int amount;
-	private String type;
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public int getAmount() {
-		return amount;
-	}
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
-	
-	void addEffect(Entity e)
-	{
-		
-	}
+	public HashMap<Integer,Integer> dam = new HashMap<Integer,Integer>();
+	public Vector<Effect> eff = new  Vector<Effect>();
 
+	
+	public int getDamage(int type)
+	{
+		if(dam.keySet().contains(type))
+			return dam.get(type);
+		return 0;
+	}
+	public void setDamage(int type, int amount)
+	{
+		dam.put(type,amount);
+	}
+	
+	
+	public void addEffect(Effect e)
+	{
+		eff.add(e);
+	}
+	public Vector<Effect> getEffects()
+	{
+		return eff;
+	}
+	
+	
+	
 }

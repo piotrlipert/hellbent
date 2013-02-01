@@ -111,6 +111,45 @@ public class Utilities {
 		
 	}
 	
+	public static boolean isIn2DVector(int[] c, Vector<int[]> v)
+	{
+		for (int[] k : v)
+		{
+			if (k[0] == c[0] && k[1] == c[1])
+				return true;
+		}
+	return false;	
+	}
+	
+	
+	public static Vector<int[]> getVisibleTiles(Entity tmp)
+	{
+		Vector<int[]> tiles = new Vector<int[]>();
+		Map m = tmp.getMap();
+		int x = tmp.getX();
+		int y = tmp.getY();
+		int r = tmp.get("SIGHT");
+		
+		for(int i=x-r;i<x+r;i++)
+		{
+			for(int j=y-r;j<y+r;j++)
+			{
+				if (!(i<0 || i>m.getSizeX()-1 || j<0 || j>m.getSizeY()-1))
+				{
+					if (!Utilities.isObstructed(i, j, x, y, m) && Utilities.distance(i, j, tmp.getX(), tmp.getY()) < tmp.get("SIGHT"))
+					{
+						int[] h = new int[2];
+						h[0] = i;
+						h[1] = j;
+						tiles.add(h);
+					}
+				}
+			}
+		}
+		return tiles;
+		
+		
+	}
 	
 	public static Vector<int[]> getObstacles(Entity tmp)
 	{
@@ -140,6 +179,17 @@ public class Utilities {
 		return obstacles;
 	}
 
+	
+	public static Vector<Item> getItemsAtCoord(Map m,int x, int y)
+	{
+		Vector<Item> ret = new Vector<Item>();
+		for(Item i : m.items)
+		{
+			if (i.getX() == x && i.getY() == y)
+				ret.add(i);
+		}
+		return ret;
+	}
 	public static Vector<Entity> getVisibleEntities(Entity tmp) 
 	{
 		Vector<Entity> ent = new Vector<Entity>();

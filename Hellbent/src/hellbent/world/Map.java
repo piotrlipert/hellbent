@@ -2,6 +2,7 @@ package hellbent.world;
 import java.util.Random;
 import java.util.Vector;
 
+import hellbent.HellbentGame;
 import hellbent.concepts.Background;
 import hellbent.concepts.Formulas;
 import hellbent.concepts.Item;
@@ -196,8 +197,13 @@ public class Map {
 	}
 
 	private String saveItems() {
-		// TODO Auto-generated method stub
-		return "<ITEMS></ITEMS>";
+		String ret = "<MAPITEMS>\n";
+			for(Item i : items)
+			{
+				ret = ret + i.save();
+			}
+		
+		return ret +"</MAPITEMS>\n";
 	}
 
 	private String saveSpecial() {
@@ -240,13 +246,13 @@ public class Map {
 	}
 	
 	
-	public void load(String savestring,MonsterLoader m)
+	public void load(String savestring,HellbentGame hg)
 	{
 		loadBackground(savestring);
 		loadDiscovered(savestring);
-		loadEntities(savestring,m);
+		loadEntities(savestring,hg);
 		loadAttributes(savestring);
-		loadItems(savestring);
+		loadItems(savestring,hg);
 		loadSpecial(savestring);
 		
 	}
@@ -293,7 +299,7 @@ public class Map {
 	
 	}
 
-	private void loadEntities(String savestring, MonsterLoader m) 
+	private void loadEntities(String savestring, HellbentGame hg) 
 	{
 		savestring = Utilities.substring("ENTITIES", savestring);
 		String[] entities = savestring.split("</ENTITY>");
@@ -303,8 +309,8 @@ public class Map {
 			if (i.indexOf("<TYPE>")!= -1)
 			{
 			String type = Utilities.substring("TYPE", i);
-			Entity e = m.getMonster(type);
-			e.load(i);
+			Entity e = hg.mol.getMonster(type);
+			e.load(i,hg);
 			e.setMap(this);
 			this.entities.add(e);
 			}
@@ -321,9 +327,26 @@ public class Map {
 		
 	}
 
-	private void loadItems(String savestring) {
-		// TODO Auto-generated method stub
-		
+	private void loadItems(String savestr, HellbentGame hg) 
+	{
+		{
+			String it = Utilities.substring("MAPITEMS", savestr);
+			String[] item = it.split("</ITEM>");
+			
+			for (String s : item)
+			{
+				if (s.length() > 10)
+				{
+
+			String type = Utilities.substring("TYPE", s);
+			Item i = hg.itl.getItem(type);
+			i.load(s);
+			items.add(i);
+				}
+				}
+
+			}
+		System.out.println(items.size());
 	}
 
 	public String getName() {

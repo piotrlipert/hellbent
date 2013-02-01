@@ -1,13 +1,17 @@
 package hellbent.entity;
+import hellbent.HellbentGame;
 import hellbent.concepts.Action;
+import hellbent.concepts.Damage;
 import hellbent.concepts.Effect;
 import hellbent.concepts.Formulas;
 import hellbent.concepts.Item;
 import hellbent.concepts.Profession;
+import hellbent.concepts.Weapon;
 import hellbent.content.actions.Wait;
 import hellbent.util.Utilities;
 import hellbent.world.Map;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -15,24 +19,21 @@ import org.newdawn.slick.Image;
 public class Entity {
 	public HashMap<String, Integer> data = new HashMap<String, Integer>();
 	public HashMap<String, String> sdata = new HashMap<String, String>();
+	public Vector<Action> actions = new Vector<Action>();
 	
+	public HashMap<Integer,Item> slots = new HashMap<Integer,Item>(); 
 	
 	public Vector<Effect> effects = new Vector<Effect>();
-	private Vector<Item> inventory = new Vector<Item>();
+	public Vector<Item> inventory = new Vector<Item>();
 
-	private int x;
-	private int y;
 	private String mapID;
 	private Image sprite;
 	public Map map = null;
 	private boolean awake;
-	private Action action = null;
 	private String type;
 	private Profession profession;
-	private String message;
-	private boolean newmess;
+	private String message = "";
 	private String name;
-	
 	
 	
 	
@@ -43,14 +44,12 @@ public class Entity {
 	public void resetMessage()
 	{
 		this.message = "";
-		this.newmess = false;
 	}
 	
 	public void addMessage(String message) {
 		if (this.getType() == "Player")
 			{
 		this.message = this.message + " "+message;
-		this.newmess = true;
 			}
 	}
 	
@@ -148,10 +147,22 @@ public Action AI(Map m)
 	return a;
 }
 public Action getAction() {
-	return action;
+	if (actions.size() > 0)
+	{
+		return actions.get(0);
+		
+	}
+	else
+		return null;
 }
+
+public void popAction() {
+	if (actions.size() > 0)
+		actions.remove(0);		
+}
+
 public void setAction(Action action) {
-	this.action = action;
+	this.actions.add(action);
 }
 public String getType() {
 	return type;
@@ -203,8 +214,13 @@ public String save()
 
 
 protected String saveItems() {
-	// TODO Auto-generated method stub
-	return "";
+	String ret = "<ENTITEMS>\n";
+	
+	for (Item i : inventory)
+	{
+		ret = ret + i.save();
+	}
+	return ret + "</ENTITEMS>\n";
 }
 
 protected String saveEffects() {
@@ -243,22 +259,45 @@ protected String saveTypeAndName() {
 	return ret;
 }
 
-public void load(String savestr)
+public void load(String savestr,HellbentGame hg)
 {
 	this.loadAttributes(savestr);
-	this.loadItems(savestr);
+	this.loadItems(savestr, hg);
 	this.loadEffects(savestr);
 	
 }
 
-private void loadEffects(String savestr) {
-	// TODO Auto-generated method stub
-	
+private void loadEffects(String savestr) 
+
+{
+	/*String effects = Utilities.substring("EFFECTS", savestr);
+	String[] eff = effects.split("</EFF>");
+
+	for (String s : eff)
+	{
+		
+	}
+	*/
 }
 
-private void loadItems(String savestr) {
-	// TODO Auto-generated method stub
+private void loadItems(String savestr, HellbentGame hg) 
+{
+String items = Utilities.substring("ENTITEMS", savestr);
+String[] item = items.split("</ITEM>");
+for (String s : item)
+{
+	if (s.length() > 10)
+	{
+String type = Utilities.substring("TYPE", s);
+Item i = hg.itl.getItem(type);
+i.load(s);
+if (i.get("EQUIPPED") == 1)
+	setItemAtSlot(i, i.get("EQUIPPED_SLOT"));
 	
+inventory.add(i);
+	}
+	}
+
 }
 
 private void loadAttributes(String savestr) 
@@ -301,6 +340,83 @@ public boolean hasItem(Item e, boolean take)
 	}
 	return false;
 	
+}
+
+public Item getItemAtSlot(int equipslotid) 
+{	
+	return slots.get(equipslotid);
+}
+
+public void setItemAtSlot(Item i, int equipslot) 
+{		
+	slots.put(equipslot,i);
+}
+
+public Vector<Weapon> getWeapon() 
+{
+	
+	Vector<Weapon> w = new Vector<Weapon>();
+	for(Item i : inventory)
+	{
+		if(i.get("TYPE") == Formulas.WEAPONS)
+		{
+			if (i.get("EQUIPPED") == 1)
+			{
+				w.add((Weapon) i);
+			}
+		}
+			
+	}
+	return w;
+}
+
+public Damage getDamage() 
+{
+Damage ret = new Damage();
+Vector<Weapon> w = getWeapon();
+if(w.size() > 0)
+{
+	Collections.shuffle(w);
+
+	if (w.size() == 1)
+	{
+		ret = w.get(0).getDamage(this);
+	}
+	else
+	{
+		for(Weapon i : w)
+		{
+			if (i.get("LAST") == 0)
+			{
+				ret = i.getDamage(this);
+				i.set("LAST", 1);
+				break;
+			}
+			else
+			{
+				i.set("LAST",0);
+			}
+		}
+		
+	}
+}
+else
+{
+	ret = naturalDamage();
+}
+
+return ret;
+}
+
+private Damage naturalDamage() {
+
+	Damage ret = new Damage();
+	ret.setDamage(Formulas.SMASH,1);
+	return ret;
+}
+
+public int weaponSkillMod(Weapon weapon) {
+	return 0;
 }
 
 }

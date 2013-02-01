@@ -34,7 +34,7 @@ public class CharGenState extends HBGameState {
 	public void init(GameContainer arg0, StateBasedGame s)
 			throws SlickException {
 		background = new Image("resources/graphics/menus/chargen.jpg");
-		Image button = new Image("resources/graphics/menus/mainmenubutton.jpg");
+		Image button = new Image("resources/graphics/menus/mainmenubutton.png");
 		StateButton charGen = new StateButton(500,60,200,50,1,hg,button);
 		buttons.add(charGen);
 		Player tmp = new Player();
@@ -44,10 +44,11 @@ public class CharGenState extends HBGameState {
 		tmp.setY(10);
 		tmp.set("SIGHT",5);
 		tmp.set("Speed",500);
+		tmp.set("MAX_CAPACITY",1000);
 		tmp.setSprite(new Image("resources/graphics/entities/goblin.png"));
 		tmp.sSet("SPRITEPATH","resources/graphics/entities/goblin.png");
 		ge.setPlayer(tmp);
-
+		
 		Map i = hg.mal.getMap("GoblinTower");
 		tmp.setMap(i);
 		hg.ge.w.addMap(i);
@@ -64,6 +65,7 @@ public class CharGenState extends HBGameState {
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
 		background.draw(0, 0);
+		buttons.get(0).getButtonImage().draw(500,60);
 		// TODO Auto-generated method stub
 		
 	}
@@ -102,7 +104,6 @@ public class CharGenState extends HBGameState {
 			if (b.isInBox(x, y))
 			{
 				this.statechange = b.stateID;
-				System.out.println(this.statechange);
 			}
 			}
 		}
@@ -119,14 +120,12 @@ public class CharGenState extends HBGameState {
 		{
 		Player tmp = ge.getPlayer();
 		int i = tmp.get("cos");
-		tmp.set("cos",i+1);
 		}
 	
 		if (c == 'z')
 		{
 		Player tmp = ge.getPlayer();
 		int i = tmp.get("cos");
-		System.out.println(i);
 		}
 	
 	

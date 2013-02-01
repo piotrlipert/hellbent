@@ -1,29 +1,22 @@
 package hellbent.states;
 
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Vector;
 
 import hellbent.HellbentGame;
-import hellbent.concepts.Background;
 import hellbent.concepts.GameEngine;
 import hellbent.concepts.Item;
 import hellbent.content.actions.Move;
 import hellbent.content.actions.Wait;
-import hellbent.content.maps.GoblinTowerMap;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import hellbent.util.Utilities;
 import hellbent.world.Map;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class GameplayState extends HBGameState {
@@ -33,6 +26,9 @@ public class GameplayState extends HBGameState {
 	public int moving = 0;
     HellbentGame hg = null;
     GameEngine ge = null;
+	public int inputACTION = 0;
+	boolean activePrompt = false;
+	boolean activeTargetting = false;
     long oldtime = 0;
     Image background;
     Random rnd = new Random();
@@ -52,17 +48,22 @@ public GameplayState(int gameplaystate,HellbentGame s) {
 	// TODO Auto-generated constructor stub
 	  this.stateID = gameplaystate;
 	  this.hg = s;
+	  hg.ge = new GameEngine(this,hg);
 	  
 }
 
 @Override
 public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-	hg = (HellbentGame) arg1;
+	
+
 	ge = hg.ge;
+
 	background = new Image("resources/graphics/backgrounds/back.png");
 	hg.keyctrl.setGs(this);
 	
 }
+
+
 
 
 public void drawOnScreen(int x, int y, Image z)
@@ -96,7 +97,7 @@ public void rendermessage(HellbentGame hg)
 	
 }
 
-public void renderMAP(HellbentGame hg, Map m)
+public void renderMAP(HellbentGame hg, Map m) throws SlickException
 {	
 	
 	Player tmp = hg.ge.getPlayer();
@@ -106,6 +107,8 @@ public void renderMAP(HellbentGame hg, Map m)
 	boolean r = false;
 	int xx = 0;
 	Vector<Image> i;
+	Vector<int[]> vis = Utilities.getVisibleTiles(tmp);
+	System.out.println(vis.size());
 	int yy = 0;
 	for(int x=centerX-13;x<centerX+14;x++)
 	{
@@ -129,16 +132,35 @@ public void renderMAP(HellbentGame hg, Map m)
 			}
 			Image d = i.get(0);
 			
-			
 			if (!r)
 			{
-				if (m.visited[x][y] == 1)
-					d.draw(LEFTBORDER + xx*TILESIZE,UPBORDER + yy*TILESIZE);
-		
+				
+				int[] h = new int[2];
+				h[0] = x;
+				h[1] = y;
+				double distance = Utilities.Ddistance(tmp.getX(), tmp.getY(), x, y);
+				float brightness = (float) (1 - 0.05 * (distance - tmp.get("SIGHT")) - Math.signum(distance - tmp.get("SIGHT"))* 0.04); 
+				//float brightness = 0.5F;
+				
+			if (m.visited[x][y] == 1)
+				{
+				Image ic = d.copy();
+				
+				if (!Utilities.isIn2DVector(h, vis))
+				{
+					ic.setColor(0, brightness,brightness,brightness, brightness);
+					ic.setColor(1, brightness,brightness,brightness, brightness);
+					ic.setColor(2, brightness,brightness,brightness, brightness);
+					ic.setColor(3, brightness,brightness,brightness, brightness);
+				
+					
+				}
+				ic.draw(LEFTBORDER + xx*TILESIZE,UPBORDER + yy*TILESIZE);
+				}
 			}
 			else
 			{
-				d.draw(LEFTBORDER + xx*TILESIZE,UPBORDER + yy*TILESIZE);
+				//d.draw(LEFTBORDER + xx*TILESIZE,UPBORDER + yy*TILESIZE);
 
 			}
 				
@@ -207,6 +229,11 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 	renderPlayer(hg);
 
 	rendermessage(hg);
+	
+	if (activePrompt)
+	{
+		renderPrompt();
+	}
 	/* TEST
 	 * renderlines(hg,arg2);
 	 */
@@ -217,13 +244,18 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 
 
 
+private void renderPrompt() {
+	// TODO Auto-generated method stub
+	
+}
+
 @Override
 public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 		throws SlickException {
 	this.statechange(arg1);
-	int inputACTION = 0;
 	Player tmp = ge.getPlayer();
 	this.message = tmp.getMessage();
+	
 	if (moving != 0)
 	{
 	long now = System.currentTimeMillis();
@@ -234,24 +266,27 @@ public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 		if (this.moveflag != 0 && this.moveflag != 5)
 		{
 			tmp.setAction(new Move(tmp,moveflag));
-			inputACTION = 1;
+
+			this.inputACTION = 1;
 		}
 		if (this.moveflag == 5)
 		{
 			tmp.setAction(new Wait(1000,tmp));
-			inputACTION = 1;
+			this.inputACTION = 1;
 		}
 		oldtime = now;
 	
 		}
 		
-
-	if (inputACTION == 1)
+	}
+	if (this.inputACTION == 1)
 			{
+		
+		this.inputACTION = 0;
 		ge.TURN();
 
 			}
-	}
+	
 }
 
 @Override
