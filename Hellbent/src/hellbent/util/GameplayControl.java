@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.util.Vector;
 
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
 
 import hellbent.HellbentGame;
+import hellbent.concepts.Formulas;
 import hellbent.concepts.Item;
 import hellbent.content.actions.Pickup;
+import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import hellbent.states.GameplayState;
 import hellbent.world.Map;
@@ -16,6 +19,7 @@ public class GameplayControl {
 
 	private GameplayState gs;
 	HellbentGame hg;
+	static int TALK_KEY;
 	static int SAVE_KEY;
 	static int SKILL_KEY;
 	
@@ -52,6 +56,8 @@ public class GameplayControl {
 		INVENTORY_KEY = Input.KEY_I;
 		PICKUP_KEY = Input.KEY_COMMA;
 		SKILL_KEY = Input.KEY_S;
+		TALK_KEY = Input.KEY_C;
+
 
 	}
 
@@ -70,12 +76,24 @@ public class GameplayControl {
 
 	public void keyPressed(int key, char c) {
 
+		if (gs.activePrompt != null)
+		{
+			gs.activePrompt.keyPressed(key, c);
+			return;
+		}
+		
 		if (key == SKILL_KEY && !hg.in.isKeyDown(Input.KEY_LSHIFT) ) 
 		{
 			gs.statechange = HellbentGame.SKILLSTATE;
+			gs.moving = 0;
 
 		}
 
+		if (key == TALK_KEY)
+		{
+			initTalk();
+		}
+		
 		if (key == PICKUP_KEY) 
 		{
 			
@@ -100,11 +118,15 @@ public class GameplayControl {
 		
 		if (key == INVENTORY_KEY) {
 			gs.statechange = HellbentGame.INVENTORYSTATE;
+			gs.moving = 0;
+
 		}
 
 		if (key == SAVE_KEY) {
 			if (hg.in.isKeyDown(Input.KEY_LSHIFT)) {
 				try {
+					gs.moving = 0;
+
 					hg.svg.saveGame("saves/" + hg.ge.pl.getName() + ".svg");
 					hg.ge.pl.addMessage("Game saved.");
 				} catch (IOException e) {
@@ -165,8 +187,54 @@ public class GameplayControl {
 		}
 	}
 
+	private void initTalk() 
+	{
+	// TODO dodaæ celowanie!
+	Player tmp = hg.ge.pl;
+	
+	for(Entity e : hg.ge.pl.getMap().entities)
+	{
+		if (e.getType() == "Player")
+			continue;
+		if(Utilities.distance(e.getX(), e.getY(), tmp.getX(), tmp.getY()) < 2)
+		{
+			if(e.isTalkable())
+			{
+			Talk(e);			
+			break;
+		
+			
+		
+			}
+		}
+	}
+	
+	
+	}
+
+	private void Talk(Entity e) 
+	{
+
+	TalkPrompt t = null;
+	try {
+		t = new TalkPrompt(Formulas.MIDPROMPT,e.getTalkstate(),hg,e);
+	} catch (SlickException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	gs.setPrompt(t);
+	
+	
+	}
+
 	public void keyReleased(int key, char c) {
 
+		if (gs.activePrompt != null)
+		{
+			gs.activePrompt.keyReleased(key, c);
+			return;
+		}
+		
 		if (key == N_1) {
 			gs.moving--;
 
@@ -210,6 +278,25 @@ public class GameplayControl {
 
 	public void setGs(GameplayState gs) {
 		this.gs = gs;
+	}
+
+	public void mouseReleased(int button, int x, int y) 
+	{
+		if (gs.activePrompt != null)
+		{
+			gs.activePrompt.mouseReleased(button, x, y);
+			return;
+		}
+		
+	}
+
+	public void mousePressed(int button, int x, int y) {
+		if (gs.activePrompt != null)
+		{
+			gs.activePrompt.mousePressed(button, x, y);
+			return;
+		}
+		
 	}
 
 }

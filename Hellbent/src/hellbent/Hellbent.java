@@ -18,6 +18,7 @@ public class Hellbent {
 	{
 	    AppGameContainer app = new AppGameContainer(new HellbentGame());
         app.setDisplayMode(1024, 768, true);
+        app.setShowFPS(false);
         app.setTargetFrameRate(120);
         app.start();
 	}

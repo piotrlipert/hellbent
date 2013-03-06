@@ -3,6 +3,7 @@ package hellbent.states;
 import java.util.Vector;
 
 import hellbent.HellbentGame;
+import hellbent.concepts.Formulas;
 import hellbent.concepts.GameEngine;
 import hellbent.entity.Player;
 import hellbent.util.StateButton;
@@ -37,24 +38,33 @@ public class CharGenState extends HBGameState {
 		Image button = new Image("resources/graphics/menus/mainmenubutton.png");
 		StateButton charGen = new StateButton(500,60,200,50,1,hg,button);
 		buttons.add(charGen);
-		Player tmp = new Player();
+		Player tmp = new Player(hg);
 		
-		tmp.setMapID("GoblinTower");
+		tmp.setMapID("SlaveMine");
 		tmp.setX(10);
 		tmp.setY(10);
 		tmp.set("SIGHT",5);
 		tmp.set("Speed",500);
 		tmp.set("MAX_CAPACITY",1000);
-		tmp.setSprite(new Image("resources/graphics/entities/goblin.png"));
-		tmp.sSet("SPRITEPATH","resources/graphics/entities/goblin.png");
+		tmp.setSprite(new Image("resources/graphics/entities/goblinrobotnik1.png"));
+		tmp.sSet("SPRITEPATH","resources/graphics/entities/goblinrobotnik1.png");
 		ge.setPlayer(tmp);
+		tmp.set("SlashWeapons_SKILL",5);
 		
+		
+		tmp.skills = Formulas.getSkills(tmp);
+		/*
 		Map i = hg.mal.getMap("GoblinTower");
 		tmp.setMap(i);
 		hg.ge.w.addMap(i);
 		
 		hg.ge.w.getMap("GoblinTower").entities.add(tmp);
-
+		*/
+		Map i = hg.mal.getMap("SlaveMine");
+		tmp.setMap(i);
+		hg.ge.w.addMap(i);
+		
+		hg.ge.w.getMap("SlaveMine").entities.add(tmp);
 		
 		
 		

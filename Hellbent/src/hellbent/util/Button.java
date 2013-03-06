@@ -1,7 +1,5 @@
 package hellbent.util;
 
-import java.io.FileNotFoundException;
-
 import org.newdawn.slick.Image;
 
 public class Button {
@@ -36,6 +34,8 @@ public class Button {
 	public Image getButtonImage() {
 		return buttonImage;
 	}
+	
+	
 	public void setButtonImage(Image buttonImage) {
 		this.buttonImage = buttonImage;
 	}

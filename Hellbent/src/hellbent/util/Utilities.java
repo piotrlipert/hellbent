@@ -17,7 +17,33 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Vector;
 
+import org.newdawn.slick.Image;
+
 public class Utilities {
+	
+	
+
+	public static int[] getDrawCoordForBigImages(Image i, int x, int y)
+	{
+		int coord[] = new int[2];
+		coord[0] = 0;
+		coord[1] = 0;
+		int imx = i.getWidth();
+		int imy = i.getHeight();
+		
+		imx = (imx/2) - 16;
+		
+		if (imx < 0 || imy - 32 < 0)
+			return coord;
+		
+		coord[0] = x - imx;
+		coord[1] = y - (imy - 32);
+		
+		
+		
+		
+		return coord;
+	}
 	
 	
 	public static Vector<int[]> linePath(int xx, int yy, int x, int y)
@@ -67,8 +93,11 @@ public class Utilities {
 		
 		for(int[] point : p)
 		{
+			
 			if (!Background.IsSeeThrough(m.background[point[0]][point[1]]))
-				return true;
+					return true;
+			if (m.featuremap[point[0]][point[1]] != null)
+					return true;
 		}
 		return false;
 	}
@@ -96,6 +125,15 @@ public class Utilities {
 	{
 		if (x >= 0 && x<sizeX)
 			if (y>=0 && y<sizeY)
+				return true;
+		return false;
+	}
+	
+	public static boolean isInRect(int clickx,int clicky,int sizeX, int sizeY, int rectX, int rectY)
+
+	{
+		if (clickx >= rectX && clickx<rectX+sizeX)
+			if (clicky>=rectY && clicky<rectY+sizeY)
 				return true;
 		return false;
 	}
@@ -281,7 +319,315 @@ public class Utilities {
 	
 	}
 
-	
-	
 
+	public static Vector<int[]> getSlime(Map m, int x, int y, int size) 
+	{
+		
+		int i = x;
+		int j = y;
+		Vector<int[]> slime = new Vector<int[]>();
+		int move = 0;
+		int d = 1;
+		int ii,jj = 0;
+		
+		
+		while(distance(x,y,i,j) < size)
+		{
+		
+		ii = i;
+		jj = j;
+			if(move%4 == 0)				
+				i = i + d;
+			if(move%4 == 1)			
+				j = j - d;
+
+			if(move%4 == 2)			
+				i = i - d;
+
+			if(move%4 == 3)			
+				j = j + d;
+
+					
+		
+		move++;
+
+		if (move%2 == 0)
+			d++;
+		int[] k = new int[2];
+
+		k[0] = i;
+		k[1] = j;
+		if(k[0]<m.getSizeX() && k[0] > 0)
+		{
+			if(k[1]<m.getSizeY() && k[1] > 0)
+			{
+				
+				for(int[] p : Utilities.linePath(i, j, ii, jj))
+					slime.add(p);
+				slime.add(k);
+			}
+		}
+		}
+		
+	
+		return slime;
+	}
+
+	
+	static Vector<int[]> neighborhoodTiles(int x, int y, Map m)
+	{
+		
+		Vector<int[]> v = new Vector<int[]>();
+		
+		for(int i=y-1;i<y+2;i++)
+		{
+			for(int j=x-1;j<x+2;j++)
+			{
+				if (i > 0 && j > 0 && i<m.getSizeX() && j<m.getSizeY())
+				{
+					int[] k = new int[2];
+					
+					
+					k[0] = j;
+					k[1] = i;
+					
+					
+					v.add(k);
+					
+				}
+				else
+				{
+					int[] k = new int[2];
+
+					k[0] = -1;
+					k[1] = -1;
+					v.add(k);
+				}
+			}
+		}
+		return v;
+		
+	}
+
+	public static int hasNeighborhoodTiles(int x, int y, Map m, int tile)
+	{
+		
+		int sum = 0;
+		Vector<int[]> v = neighborhoodTiles(x,y,m);
+		for(int[] k : v)
+		{
+			if (k[0] != -1 && k[1] != -1)
+			{	
+			if (m.background[k[0]][k[1]] == tile)
+				sum++;
+		
+			}
+		}
+		return sum;
+	}
+
+
+	public static int transformEdges(Vector<int[]> v, Map m, int tile) 
+	{
+	int[] ne = new int[9];
+	int x = 0;
+	int sum = 0;
+	for(int[] p : v)
+	{
+		if(p[0] != -1 && p[1] != -1)
+		{
+		if (m.background[p[0]][p[1]] == tile)
+			{
+			ne[x] = 1;
+			sum++;
+			}
+		}
+		x++;
+		
+	}
+		
+	if (sum == 1)
+	{
+		if (ne[8] == 1)
+			return 1;
+		if (ne[6] == 1)
+			return 3;
+		if (ne[2] == 1)
+			return 6;
+		if (ne[0] == 1)
+			return 8;
+		if (ne[1] == 1)
+			return 7;
+		if (ne[3] == 1)
+			return 5;
+		if (ne[5] == 1)
+			return 4;
+		if (ne[7] == 1)
+			return 2;
+		
+	}
+	if (sum == 2)
+	{
+	if ((ne[8] == 1 || ne[6] == 1) && ne[7] == 1)	
+		return 2;
+	if ((ne[0] == 1 || ne[2] == 1) && ne[1] == 1)	
+		return 7;
+	if ((ne[0] == 1 || ne[6] == 1) && ne[3] == 1)	
+		return 5;
+	if ((ne[2] == 1 || ne[8] == 1) && ne[5] == 1)	
+		return 4;
+	
+	if(ne[0] == 1 && ne[2] == 1)
+		return 16;
+	if(ne[0] == 1 && ne[6] == 1)
+		return 15;
+	if(ne[2] == 1 && ne[8] == 1)
+		return 17;
+	if(ne[6] == 1 && ne[8] == 1)
+		return 18;
+	
+	if (ne[1] == 1 && ne[5] == 1)
+		return 10;
+	if (ne[1]==1 && ne[3] == 1)
+		return 9;
+	if (ne[3]==1 && ne[7] == 1)
+		return 11;
+	if (ne[5]==1 && ne[7] == 1)
+		return 12;
+	
+	if (ne[7] == 1)	
+		return 2;
+	if (ne[1] == 1)	
+		return 7;
+	if (ne[3] == 1)	
+		return 5;
+	if (ne[5] == 1)	
+		return 4;
+	
+	
+	}
+	if(sum == 3)
+	{	
+		if ((ne[8] == 1 && ne[6] == 1) && ne[7] == 1)	
+			return 2;
+		if ((ne[0] == 1 && ne[2] == 1) && ne[1] == 1)	
+			return 7;
+		if ((ne[0] == 1 && ne[6] == 1) && ne[3] == 1)	
+			return 5;
+		if ((ne[2] == 1 && ne[8] == 1) && ne[5] == 1)	
+			return 4;
+	
+		
+		if (ne[1] == 1 && ne[5] == 1)
+			return 10;
+		if (ne[1]==1 && ne[3] == 1)
+			return 9;
+		if (ne[3]==1 && ne[7] == 1)
+			return 11;
+		if (ne[5]==1 && ne[7] == 1)
+			return 12;
+		
+		if ((ne[8] == 1 || ne[6] == 1) && ne[7] == 1)	
+			return 2;
+		if ((ne[0] == 1 || ne[2] == 1) && ne[1] == 1)	
+			return 7;
+		if ((ne[0] == 1 || ne[6] == 1) && ne[3] == 1)	
+			return 5;
+		if ((ne[2] == 1 || ne[8] == 1) && ne[5] == 1)	
+			return 4;
+	
+	}
+	
+	
+	
+	if( sum == 4)
+	{
+	if(ne[3] == 1 && ne[1] == 1 && ne[5] == 1)
+		return 21;
+	
+	if(ne[0] == 1 && ne[1] == 1 && ne[3] == 1)
+		return 9;
+	
+	if(ne[1] == 1 && ne[2] == 1 && ne[5] == 1)
+		return 10;
+	if(ne[5] == 1 && ne[7] == 1 && ne[8] == 1)
+		return 12;
+	if(ne[7] == 1 && ne[6] == 1 && ne[3] == 1)
+		return 11;
+	
+	
+	if (ne[1] == 1 && ne[5] == 1)
+		return 10;
+	if (ne[1]==1 && ne[3] == 1)
+		return 9;
+	if (ne[3]==1 && ne[7] == 1)
+		return 11;
+	if (ne[5]==1 && ne[7] == 1)
+		return 12;
+	
+	if ((ne[8] == 1 || ne[6] == 1) && ne[7] == 1)	
+		return 2;
+	if ((ne[0] == 1 || ne[2] == 1) && ne[1] == 1)	
+		return 7;
+	if ((ne[0] == 1 || ne[6] == 1) && ne[3] == 1)	
+		return 5;
+	if ((ne[2] == 1 || ne[8] == 1) && ne[5] == 1)	
+		return 4;
+	
+	
+	}
+	
+	if (sum == 5)
+	{
+		
+		if (ne[0] == 0 && ne[1] == 0 && ne[2] == 0)
+			return 20;
+		if (ne[8] == 0 && ne[7] == 0 && ne[6] == 0)
+			return 21;
+		if (ne[0] == 0 && ne[3] == 0 && ne[6] == 0)
+			return 22;
+		if (ne[2] == 0 && ne[5] == 0 && ne[8] == 0)
+			return 23;
+		
+		
+		if (ne[1] == 1 && ne[5] == 1)
+			return 10;
+		if (ne[1]==1 && ne[3] == 1)
+			return 9;
+		if (ne[3]==1 && ne[7] == 1)
+			return 11;
+		if (ne[5]==1 && ne[7] == 1)
+			return 12;
+		
+		
+		if (ne[1] == 0)
+			return 20;
+		if (ne[7] == 0)
+			return 21;
+		if (ne[3] == 0)
+			return 22;
+		if (ne[5] == 0)
+			return 23;
+		
+		
+		
+	}
+	
+	if (sum > 5)
+	{
+		if (ne[1] == 0)
+			return 20;
+		if (ne[3] == 0)
+			return 22;
+		if (ne[5] == 0)
+			return 23;
+		if (ne[7] == 0)
+			return 21;
+
+		
+		
+		return 19;
+	}
+	return 0;
+	}
 }

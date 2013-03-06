@@ -1,12 +1,13 @@
 package hellbent.entity;
 
+import hellbent.HellbentGame;
 import hellbent.concepts.Item;
 
 public class Player extends Entity {
 	
 	
-	public Player()
-	{
+	public Player(HellbentGame h) {
+		super(h);
 	this.setAwake(true);
 	this.setType("Player");
 	this.setName("ZIUTAS");

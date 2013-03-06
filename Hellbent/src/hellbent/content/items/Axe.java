@@ -23,6 +23,7 @@ public class Axe extends Weapon  {
 			e.printStackTrace();
 		}
 		sSet("NAME","G_AXE");
+		sSet("WeaponType","SlashWeapon");
 
 		set("WEIGHT",50);
 		set("EQUIP_SLOT",Formulas.HAND);

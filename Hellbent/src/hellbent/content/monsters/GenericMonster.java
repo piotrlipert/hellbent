@@ -1,5 +1,6 @@
 package hellbent.content.monsters;
 
+import hellbent.HellbentGame;
 import hellbent.concepts.Action;
 import hellbent.concepts.Formulas;
 import hellbent.content.actions.Move;
@@ -14,11 +15,11 @@ import java.util.Vector;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-class GenericMonster extends Monster
+public class GenericMonster extends Monster
 {
 	
-	public GenericMonster() throws SlickException
-	{
+	GenericMonster(HellbentGame h) {
+		super(h);
 		set("AFFINITY",Affinity.HOSTILE);
 		set("SIGHT",10);
 

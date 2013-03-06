@@ -23,6 +23,7 @@ public class Spear extends Weapon  {
 			e.printStackTrace();
 		}
 		sSet("NAME","G_SPEAR");
+		sSet("WeaponType","PolearmWeapon");
 
 		set("WEIGHT",50);
 		set("EQUIP_SLOT",Formulas.HANDS);

@@ -2,10 +2,15 @@ package hellbent.content.actions;
 
 import java.util.Vector;
 
+import org.newdawn.slick.SlickException;
+
 import hellbent.concepts.Action;
 import hellbent.concepts.Background;
+import hellbent.concepts.Event;
+import hellbent.concepts.Feature;
 import hellbent.concepts.Formulas;
 import hellbent.concepts.Item;
+import hellbent.concepts.Trap;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import hellbent.util.Utilities;
@@ -76,17 +81,38 @@ public class Move extends Action
 			attacked = m.entityAtCoord(x, y);
 			if (attacked!= null && attacked != this.en)
 			{
-			
-					en.addMessage("You bump into someone");
-				
+					en.addMessage("You bump into someone");	
 			}
 			else
 			{
-				en.setPos(x, y);
-
+				Feature f = m.getFeatureAt(x,y);
+				if (f == null || f.get("WALKABLE") == 1)
+				{
+					en.setPos(x, y);
+					if (f!=null)
+						f.perform(en);
+				}
+				
+				
 				if (en.getType() == "Player")
 				{
-					m.discover(en);
+					for(Event i : m.events)
+					{
+						if (i.get("X") == x && i.get("Y") == y)
+							i.perform(en);
+					}
+					
+					for(Trap i : m.traps)
+					{
+						if (i.get("X") == x && i.get("Y") == y)
+							i.perform(en);
+					}
+					
+					
+					
+					
+					if(en.getType() == "Player")
+						m.discover(en);
 					Vector<Item> items = Utilities.getItemsAtCoord(m, x, y);
 					
 					if (items.size() > 1)
@@ -119,4 +145,6 @@ public class Move extends Action
 	}
 	}
 
+	
+	
 }

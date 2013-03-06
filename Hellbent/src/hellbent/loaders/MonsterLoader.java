@@ -1,6 +1,8 @@
 package hellbent.loaders;
 
+import hellbent.HellbentGame;
 import hellbent.content.monsters.GiantRat;
+import hellbent.content.npc.GoblinMiner;
 import hellbent.entity.Entity;
 import hellbent.entity.Monster;
 
@@ -12,10 +14,11 @@ public class MonsterLoader {
 	public HashMap<String,Monster> monsters = new HashMap<String,Monster>();
 
 	
-	public MonsterLoader() throws SlickException
+	public MonsterLoader(HellbentGame hg) throws SlickException
 	{
-		monsters.put("GIANT_RAT",new GiantRat());
-		
+		monsters.put("GIANT_RAT",new GiantRat(hg));
+		monsters.put("GOBLIN_MINER",new GoblinMiner(hg));
+
 		
 	}
 

@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.newdawn.slick.SlickException;
+
 import hellbent.states.GameplayState;
 import hellbent.world.*;
 public class GameEngine {
@@ -106,13 +108,14 @@ public class GameEngine {
 		
 	}
 	@SuppressWarnings("unchecked")
-	public void TURN()
+	public void TURN() 
 	{
 		Vector<Action> ActionQHelp = new Vector<Action>();
 		pl.resetMessage();
 		turncount++;
 		if (turncount % Formulas.WORLDTURNCOUNT == 0)
 		{
+			
 			WorldTurn();
 		}
 		
@@ -154,6 +157,7 @@ public class GameEngine {
 					Action n = i.AI(current);
 					i.setAction(n);
 					ActionQ.add(n);
+
 				}
 			
 			

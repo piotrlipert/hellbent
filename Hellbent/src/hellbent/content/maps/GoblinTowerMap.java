@@ -1,19 +1,30 @@
 package hellbent.content.maps;
 
+import java.util.Random;
+
+import org.newdawn.slick.SlickException;
+
+import hellbent.HellbentGame;
+import hellbent.concepts.Background;
+import hellbent.content.events.TestEvent;
+import hellbent.content.features.OakTree;
 import hellbent.content.items.Axe;
+import hellbent.content.items.Boots;
 import hellbent.content.items.Scimitar;
 import hellbent.content.items.Spear;
 import hellbent.content.monsters.GiantRat;
+import hellbent.content.npc.GoblinMiner;
 import hellbent.world.Map;
 
 public class GoblinTowerMap extends Map {
 
-	public GoblinTowerMap() throws Exception {
-		super(100, 100, false, 0);
+	public GoblinTowerMap(HellbentGame hg) throws Exception {
+		super(100, 100, Background.GRASS, 0, hg);
 		setName("GoblinTower");
-		for(int x=0;x<60;x++)
+		events.add(new TestEvent());
+		for(int x=0;x<30;x++)
 		{
-			GiantRat test = new GiantRat();
+			GiantRat test = new GiantRat(hg);
 			test.setPos(30+x, 20);
 			test.setMap(this);
 			entities.add(test);
@@ -24,9 +35,33 @@ public class GoblinTowerMap extends Map {
 		
 	}
 	
-	public void init()
+	public void init() throws SlickException
 	{
 		
+		
+		
+		
+		GoblinMiner test = new GoblinMiner(hg);
+		test.setPos(40, 40);
+		test.setMap(this);
+		entities.add(test);
+		
+		Random r = new Random();
+		
+		
+		Boots b = new Boots();
+		b.set("X",21);
+		b.set("Y",21);
+		items.add(b);
+		for(int i=0;i<100;i++)
+		{
+		OakTree o = new OakTree();
+		o.set("X",r.nextInt(90));
+		o.set("Y",r.nextInt(90));
+		o.set("WALKABLE",0);
+		
+		addFeature(o);
+		}
 		for(int x = 0;x<10;x++)
 		{
 		Scimitar a = new Scimitar();
@@ -59,7 +94,7 @@ public class GoblinTowerMap extends Map {
 	public GoblinTowerMap clone()
 	{
 		try {
-			return new GoblinTowerMap();
+			return new GoblinTowerMap(hg);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

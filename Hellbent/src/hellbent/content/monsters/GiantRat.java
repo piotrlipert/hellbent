@@ -3,13 +3,14 @@ package hellbent.content.monsters;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import hellbent.HellbentGame;
 import hellbent.concepts.Formulas;
 
 public class GiantRat extends GenericMonster {
 	
-	public GiantRat() throws SlickException
+	public GiantRat(HellbentGame h) throws SlickException
 	{
-		super();
+		super(h);
 		this.setSprite(new Image("resources/graphics/entities/rat.png"));
 		this.setAwake(true);
 		this.setName("giant rat");
@@ -40,7 +41,7 @@ public class GiantRat extends GenericMonster {
 	public GiantRat clone()
 	{
 		try {
-			return new GiantRat();
+			return new GiantRat(hg);
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

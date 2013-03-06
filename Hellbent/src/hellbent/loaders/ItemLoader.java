@@ -1,7 +1,9 @@
 package hellbent.loaders;
 
+import hellbent.HellbentGame;
 import hellbent.concepts.Item;
 import hellbent.content.items.Axe;
+import hellbent.content.items.Boots;
 import hellbent.content.items.Scimitar;
 import hellbent.content.items.Spear;
 import hellbent.entity.Entity;
@@ -12,12 +14,13 @@ import java.util.HashMap;
 public class ItemLoader {
 	public HashMap<String,Item> items = new HashMap<String,Item>();
 
-	public ItemLoader()
+	public ItemLoader(HellbentGame hg)
 	{
 		
 		items.put("G_SCIMITAR", new Scimitar());
 		items.put("G_AXE", new Axe());
 		items.put("G_SPEAR", new Spear());
+		items.put("G_BOOTS", new Boots());
 
 		
 		

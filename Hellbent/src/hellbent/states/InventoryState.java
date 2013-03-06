@@ -65,6 +65,7 @@ public class InventoryState extends HBGameState {
 			throws SlickException {
 		background.draw(0,0);
 		iw.renderItems(hg);
+		iw.renderDescription(hg);
 		
 	
 	}

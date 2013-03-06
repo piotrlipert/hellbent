@@ -71,9 +71,21 @@ public class SkillControl {
 		this.gs = skillState;
 	}
 
-	public void mousePressed(int button, int x, int y) {
-		// TODO Auto-generated method stub
-		
+	public void mousePressed(int button, int x, int y) 
+	{		
+		if(button == Input.MOUSE_LEFT_BUTTON)
+		{
+			if(gs.sw.isClickInCategories(x,y))
+			{
+				gs.sw.focusedCategory = gs.sw.getActiveCategory(x,y);
+			}
+			
+			if (gs.sw.isClickInSkills(x,y))
+			{
+				gs.sw.focusedSkill = gs.sw.getSkillAt(x, y);
+			}
+			
+		}
 	}
 
 	public void mouseReleased(int button, int x, int y) {

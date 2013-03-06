@@ -4,12 +4,15 @@ package hellbent;
 import hellbent.concepts.Formulas;
 import hellbent.concepts.GameEngine;
 import hellbent.loaders.BackgroundLoader;
+import hellbent.loaders.EventLoader;
+import hellbent.loaders.FeatureLoader;
 import hellbent.loaders.ItemLoader;
 import hellbent.loaders.MapLoader;
 import hellbent.loaders.MonsterLoader;
 import hellbent.loaders.RaceLoader;
 import hellbent.loaders.SaveLoader;
 import hellbent.loaders.Saver;
+import hellbent.loaders.TrapLoader;
 import hellbent.states.CharGenState;
 import hellbent.states.GameMenuState;
 import hellbent.states.GameplayState;
@@ -55,6 +58,11 @@ public class HellbentGame extends StateBasedGame
 	
 	public UnicodeFont fontNITE;
     public UnicodeFont fontDAY;
+    public UnicodeFont fontTalk;
+    public UnicodeFont fontCommon;
+
+    public UnicodeFont fontSpecial;
+
     UnicodeFont fontNORM;
 	public SaveLoader load;
 	public Saver svg;
@@ -62,6 +70,9 @@ public class HellbentGame extends StateBasedGame
 	public GameplayControl keyctrl;
 	public InventoryControl invkeyctrl;
 	public SkillControl skillctrl;
+	public TrapLoader trl;
+	public EventLoader evl;
+	public FeatureLoader ftl;
     
 
 	public HellbentGame() throws SlickException {

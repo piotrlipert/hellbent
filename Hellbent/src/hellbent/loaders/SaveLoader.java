@@ -72,7 +72,7 @@ public class SaveLoader {
 		String player = Utilities.substring("PLAYER",savestr);
 		
 		String typeName[] = EntityloadTypeAndName(player);
-		Player p = new Player();
+		Player p = new Player(h);
 		p.setName(typeName[0]);
 		p.setMapID(typeName[2]);
 		p.load(savestr,h);

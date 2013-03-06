@@ -1,6 +1,7 @@
 package hellbent.content.actions;
 
 import hellbent.concepts.Formulas;
+import hellbent.concepts.Weapon;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import hellbent.world.Map;
@@ -18,7 +19,8 @@ public class Attack extends hellbent.concepts.Action {
 	{
 		String Reason = "";
 		boolean hit = false;
-		if (Formulas.hit(en,victim))
+		Weapon w = en.chooseWeapon(en.getWeapon());
+		if (Formulas.hit(en,victim,w))
 			hit = true;
 		else
 			Reason = Formulas.missReason(victim);
@@ -28,7 +30,7 @@ public class Attack extends hellbent.concepts.Action {
 			if(hit)
 			{
 				victim.addMessage(en.sGet("NAME") + " hits you!");
-				int damage = Formulas.damage(en,victim);
+				int damage = Formulas.damage(en,victim,w);
 				en.addMessage("You hit "+ attacked + " for "+Integer.toString(damage)+".");
 
 				victim.sub("CURR_HP", damage);

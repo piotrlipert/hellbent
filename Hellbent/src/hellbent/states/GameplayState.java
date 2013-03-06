@@ -1,18 +1,24 @@
 package hellbent.states;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.Vector;
 
 import hellbent.HellbentGame;
+import hellbent.concepts.Feature;
 import hellbent.concepts.GameEngine;
 import hellbent.concepts.Item;
 import hellbent.content.actions.Move;
 import hellbent.content.actions.Wait;
 import hellbent.entity.Entity;
 import hellbent.entity.Player;
+import hellbent.util.Prompt;
 import hellbent.util.Utilities;
 import hellbent.world.Map;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -27,7 +33,6 @@ public class GameplayState extends HBGameState {
     HellbentGame hg = null;
     GameEngine ge = null;
 	public int inputACTION = 0;
-	boolean activePrompt = false;
 	boolean activeTargetting = false;
     long oldtime = 0;
     Image background;
@@ -36,15 +41,25 @@ public class GameplayState extends HBGameState {
     int centerY;
     boolean stillcenter = true;
     public String message = " ";
-    public static final int LEFTBORDER = 35;
-    public static final int UPBORDER = 30;
+    public static final int LEFTBORDER = 0;
+    public static final int UPBORDER = 0;
     public static final int MIDDLEX = 13;
     public static final int MIDDLEY = 10;
     public static final int TILESIZE = 32;
-    
+    public Prompt activePrompt = null;
     
 
-public GameplayState(int gameplaystate,HellbentGame s) {
+    public void stopMoving()
+    {
+    	moving = 0;
+    	
+    	
+    }
+
+    
+    
+    
+ public GameplayState(int gameplaystate,HellbentGame s) {
 	// TODO Auto-generated constructor stub
 	  this.stateID = gameplaystate;
 	  this.hg = s;
@@ -71,12 +86,14 @@ public void drawOnScreen(int x, int y, Image z)
 	z.draw(LEFTBORDER+TILESIZE*(x+MIDDLEX),UPBORDER + TILESIZE * (y+MIDDLEY));
 }
 
-public int[] translateCoord(int x, int y,int centerx, int centery)
+public int[] translateCoord(int x, int y)
 {
+	Player tmp = ge.pl;
+	
 	int coord[] = new int[2];
 	
-	coord[0] = (x+MIDDLEX-centerx)*TILESIZE + LEFTBORDER;
-	coord[1] = (y+MIDDLEY-centery)*TILESIZE + UPBORDER;
+	coord[0] = (x+MIDDLEX)*TILESIZE + LEFTBORDER;
+	coord[1] = (y+MIDDLEY)*TILESIZE + UPBORDER;
 		
 			return coord;
 	
@@ -93,8 +110,9 @@ public void rendermessage(HellbentGame hg)
 	Player tmp = hg.ge.pl;
 	String mess = tmp.getMessage();
 	if (mess != null)
-		hg.fontDAY.drawString(30, 30, mess);
-	
+	{
+		hg.fontCommon.drawString(30, 30, mess,Color.red);
+	}
 }
 
 public void renderMAP(HellbentGame hg, Map m) throws SlickException
@@ -106,9 +124,9 @@ public void renderMAP(HellbentGame hg, Map m) throws SlickException
 	centerY = tmp.getY();
 	boolean r = false;
 	int xx = 0;
-	Vector<Image> i;
+	ArrayList<Image> i;
+	Image d = null;
 	Vector<int[]> vis = Utilities.getVisibleTiles(tmp);
-	System.out.println(vis.size());
 	int yy = 0;
 	for(int x=centerX-13;x<centerX+14;x++)
 	{
@@ -121,16 +139,21 @@ public void renderMAP(HellbentGame hg, Map m) throws SlickException
 				r = true;
 			if (!r)
 			{
-				i = (hg.bal.BackgroundTiles.get(m.background[x][y]));
+				i = hg.bal.BackgroundTiles.get((m.background[x][y]/100) * 100);
+				d = i.get(m.background[x][y]%((m.background[x][y]/100) * 100));
 
 			}
 			else
 			{
 			
 			 i = (hg.bal.BackgroundTiles.get(m.background[0][0]));
+			 
+			 	
+				//d = i.get(m.background[0][0]%((m.background[0][0]/100) * 100));
 
 			}
-			Image d = i.get(0);
+			
+			
 			
 			if (!r)
 			{
@@ -141,7 +164,8 @@ public void renderMAP(HellbentGame hg, Map m) throws SlickException
 				double distance = Utilities.Ddistance(tmp.getX(), tmp.getY(), x, y);
 				float brightness = (float) (1 - 0.05 * (distance - tmp.get("SIGHT")) - Math.signum(distance - tmp.get("SIGHT"))* 0.04); 
 				//float brightness = 0.5F;
-				
+				if(tmp.sight[x][y] == 0)
+					brightness = brightness * 0.8F;
 			if (m.visited[x][y] == 1)
 				{
 				Image ic = d.copy();
@@ -227,14 +251,13 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 	renderEntities(hg);
 
 	renderPlayer(hg);
+	renderSpecial(hg);
 
 	rendermessage(hg);
 	
-	if (activePrompt)
-	{
-		renderPrompt();
-	}
-	/* TEST
+	
+	renderPrompt();
+		/* TEST
 	 * renderlines(hg,arg2);
 	 */
 	
@@ -243,10 +266,127 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 }
 
 
+private void drawFeature(Feature f)
+{
+	int x = f.get("X");
+	int y = f.get("Y");
+	int xx = hg.ge.pl.getX();
+	int yy = hg.ge.pl.getY();
+	float distance = Utilities.distance(xx, yy, x, y);
+	
+		int tra[] = translateCoord(x-xx, y-yy);
+			
+		int[] translated = Utilities.getDrawCoordForBigImages(f.getImage(), tra[0], tra[1]);
+		if(tra[0]+f.getImage().getWidth()/2<TILESIZE*MIDDLEX*2 && tra[1]+f.getImage().getHeight()/2<TILESIZE*MIDDLEY*2)
+		{
+			float brightness = 1;
+
+			if(distance >= hg.ge.pl.get("SIGHT"))
+				{
+			    brightness =  (brightness - ((float)(distance) - (float) (hg.ge.pl.get("SIGHT")))*0.08F);
+				}
+			if (f.get("OBSTRUCT") == 1)
+				brightness = brightness/2;
+			
+			Image ic = f.getImage().copy();
+			ic.setColor(0, brightness,brightness,brightness, brightness);
+				ic.setColor(1, brightness,brightness,brightness, brightness);
+				ic.setColor(2, brightness,brightness,brightness, brightness);
+				ic.setColor(3, brightness,brightness,brightness, brightness);
+			ic.draw(translated[0],translated[1]);
+				
+			
+		
+		
+		}
+			
+	}
+	
+
+
+
+private void renderSpecial(HellbentGame hg2) 
+{
+Map m = hg.ge.w.getMap(hg.ge.pl.getMapID());
+Vector<Feature> featureList = new Vector<Feature>();
+int xx = hg.ge.pl.getX();
+int yy = hg.ge.pl.getY();
+for(int i=xx-15;i<xx+15;i++)
+{
+	for(int j=yy-15;j<yy+15;j++)
+	{
+		if (!(i < 0 | i >= m.getSizeX() || j < 0 || j >= m.getSizeY()))
+				{
+				Feature f = m.featuremap[i][j];
+				if (f == null)
+					continue;
+				int x = f.get("X");
+				int y = f.get("Y");
+				float distance = Utilities.distance(xx, yy, x, y);
+				boolean isObstruct = Utilities.isObstructed(x, y, xx, yy, hg.ge.pl.getMap());
+				if(distance <= 30)
+				{
+				if((!isObstruct && (int) distance <= hg.ge.pl.get("SIGHT")) || f.get("DISCOVERED") == 1 )
+					featureList.add(f);
+					{
+						if(isObstruct)
+						{
+							f.set("OBSTRUCT",1);
+						}
+						else
+						{
+							f.set("OBSTRUCT",0);
+				
+						}
+
+			 }
+				
+				}
+		
+	}
+	}
+}
+
+Collections.sort(featureList, new FeatureComparator());
+for(Feature fe : featureList)
+{
+	drawFeature(fe);
+}
+
+
+}
+
+
+class FeatureComparator implements Comparator<Feature>
+{
+    public int compare(Feature a, Feature b)
+    {
+    int ay = a.get("Y");
+	int by = b.get("Y");
+	int ax = a.get("X");
+	int bx = b.get("X");
+	
+	if (ay < by)
+		return -1;
+	if (ay == by)
+		if (ax < bx)
+			return -1;
+		else
+			return 1;
+	if (ay > by)
+		return 1;
+	
+	return 0;
+}
+    
+}
 
 private void renderPrompt() {
-	// TODO Auto-generated method stub
-	
+
+	if (activePrompt != null)
+	{
+		activePrompt.renderPrompt();
+	}
 }
 
 @Override
@@ -261,7 +401,7 @@ public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 	long now = System.currentTimeMillis();
 	long diff = now - oldtime;
 
-	if (diff > 100)
+	if (diff > 50)
 	{
 		if (this.moveflag != 0 && this.moveflag != 5)
 		{
@@ -306,7 +446,15 @@ public void mouseClicked(int button, int x,int y, int count)
 }
 public void mouseReleased(int button, int x, int y)
 {
+	hg.keyctrl.mouseReleased( button,  x,  y);
+
 	
+}
+
+public void mousePressed(int button, int x, int y)
+{
+	hg.keyctrl.mousePressed( button,  x,  y);
+
 	
 }
 
@@ -323,6 +471,14 @@ public void keyReleased(int key, char c)
 	hg.keyctrl.keyReleased(key, c);
 
 
+}
+
+public void setPrompt(Prompt p) {
+
+	moving = 0;
+	activePrompt = p;
+	if(p!=null)
+		p.hg = hg;
 }
 
 }

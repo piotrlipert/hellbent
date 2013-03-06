@@ -2,12 +2,15 @@ package hellbent.states;
 
 import hellbent.loaders.BackgroundLoader;
 import hellbent.loaders.ClassLoader;
+import hellbent.loaders.EventLoader;
+import hellbent.loaders.FeatureLoader;
 import hellbent.loaders.ItemLoader;
 import hellbent.loaders.MapLoader;
 import hellbent.loaders.MonsterLoader;
 import hellbent.loaders.RaceLoader;
 import hellbent.loaders.SaveLoader;
 import hellbent.loaders.Saver;
+import hellbent.loaders.TrapLoader;
 import hellbent.util.GameplayControl;
 import hellbent.util.InventoryControl;
 import hellbent.util.SkillControl;
@@ -23,6 +26,8 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
 
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -48,12 +53,18 @@ public class GameMenuState extends HBGameState {
 
 		HellbentGame hg = (HellbentGame) arg1;
 			
-		  hg.cll = new ClassLoader();
-		  hg.itl = new ItemLoader();
-		  hg.mal = new MapLoader();
-		  hg.mol = new MonsterLoader();
-		  hg.ral = new RaceLoader();
-		  hg.bal= new BackgroundLoader();
+		  hg.cll = new ClassLoader(hg);
+		  hg.itl = new ItemLoader(hg);
+		  hg.mol = new MonsterLoader(hg);
+		  hg.ral = new RaceLoader(hg);
+		  hg.bal = new BackgroundLoader(hg);
+
+		  hg.mal = new MapLoader(hg);
+
+		  hg.ftl = new FeatureLoader(hg);
+		  hg.trl = new TrapLoader(hg);
+		  hg.evl = new EventLoader(hg);
+		  
 		  hg.svg = new Saver(hg);
 		  hg.load = new SaveLoader(hg);
 		  hg.in = hg.getContainer().getInput();
@@ -83,18 +94,36 @@ public class GameMenuState extends HBGameState {
 		
 		
 		
-		  fontNITE = new UnicodeFont("resources/graphics/NITEMARE.ttf",24, false, false);
-		  fontDAY = new UnicodeFont("resources/graphics/dc_s.ttf",24, false, false);
+		  fontNITE = new UnicodeFont("resources/graphics/NITEMARE.ttf",18, false, false);
+		  fontDAY = new UnicodeFont("resources/graphics/dc_s.ttf",18, false, false);
 
-		
+		  
+		  GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		  String []fontFamilies = ge.getAvailableFontFamilyNames();
+		  	for(String i : fontFamilies)
+		  	{
+		  		System.out.println(i);
+		  	}
+		  
+		  Font a = new Font("Palatino Linotype", 20, 1);
+		  hg.fontCommon = new UnicodeFont(a,20, false,false);
+		  hg.fontCommon.addAsciiGlyphs();   
+		  hg.fontCommon.addGlyphs(400, 600); 
+		  hg.fontCommon.getEffects().add(new ColorEffect(java.awt.Color.WHITE)); 
+		  hg.fontCommon.loadGlyphs(); 
+		  
 		 fontNITE.addAsciiGlyphs();   
 		 fontNITE.addGlyphs(400, 600); 
-		 fontNITE.getEffects().add(new ColorEffect(java.awt.Color.BLACK)); 
+		 fontNITE.getEffects().add(new ColorEffect(java.awt.Color.WHITE)); 
 		 fontNITE.loadGlyphs(); 
+		 
+		 Font f = new Font("Arial", 12, 12);
+		 
+		 hg.fontTalk = new UnicodeFont(f);
 
 		 fontDAY.addAsciiGlyphs();   
 		 fontDAY.addGlyphs(400, 600); 
-		 fontDAY.getEffects().add(new ColorEffect(java.awt.Color.BLACK)); 
+		 fontDAY.getEffects().add(new ColorEffect(java.awt.Color.WHITE)); 
 		 fontDAY.loadGlyphs(); 
 		// TODO Auto-generated method stub
 		hg.fontNITE = fontNITE;

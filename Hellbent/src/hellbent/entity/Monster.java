@@ -1,17 +1,21 @@
 package hellbent.entity;
 
+import hellbent.HellbentGame;
+
 public class Monster extends Entity {
 
-	public Monster()
-	{
+
+	
+	
+	protected Monster(HellbentGame h) {
+		super(h);
 		this.setType("Monster");
-		
+
 	}
-	
-	
+
 	public Monster clone()
 	{
-		return new Monster();
+		return new Monster(hg);
 	}
 
 	public void addMessage()

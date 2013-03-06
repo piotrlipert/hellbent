@@ -25,6 +25,7 @@ public class Scimitar extends Weapon  {
 			e.printStackTrace();
 		}
 		sSet("NAME","G_SCIMITAR");
+		sSet("WeaponType","SlashWeapons");
 
 		set("WEIGHT",50);
 		set("EQUIP_SLOT",Formulas.HAND);

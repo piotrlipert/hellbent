@@ -1,5 +1,7 @@
 package hellbent.concepts;
 
+import org.newdawn.slick.SlickException;
+
 import hellbent.entity.Entity;
 import hellbent.world.Map;
 

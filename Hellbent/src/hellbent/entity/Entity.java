@@ -1,11 +1,16 @@
 package hellbent.entity;
 import hellbent.HellbentGame;
+import hellbent.concepts.Ability;
 import hellbent.concepts.Action;
+import hellbent.concepts.Attributable;
 import hellbent.concepts.Damage;
 import hellbent.concepts.Effect;
 import hellbent.concepts.Formulas;
 import hellbent.concepts.Item;
 import hellbent.concepts.Profession;
+import hellbent.concepts.Skill;
+import hellbent.concepts.StateChangeListener;
+import hellbent.concepts.TalkState;
 import hellbent.concepts.Weapon;
 import hellbent.content.actions.Wait;
 import hellbent.util.Utilities;
@@ -16,16 +21,18 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import org.newdawn.slick.Image;
-public class Entity {
-	public HashMap<String, Integer> data = new HashMap<String, Integer>();
-	public HashMap<String, String> sdata = new HashMap<String, String>();
+public class Entity extends Attributable {
+	
 	public Vector<Action> actions = new Vector<Action>();
 	
 	public HashMap<Integer,Item> slots = new HashMap<Integer,Item>(); 
+	public HashMap<String,Skill> skills = new HashMap<String,Skill>(); 
+	public HashMap<String,Ability> abilities = new HashMap<String,Ability>(); 
+
 	
 	public Vector<Effect> effects = new Vector<Effect>();
 	public Vector<Item> inventory = new Vector<Item>();
-
+	public Vector<StateChangeListener> statelisten = new Vector<StateChangeListener>();
 	private String mapID;
 	private Image sprite;
 	public Map map = null;
@@ -34,9 +41,18 @@ public class Entity {
 	private Profession profession;
 	private String message = "";
 	private String name;
+	public HellbentGame hg;
+
+	public int[][] sight;
+
+	private HashMap<String, TalkState> talkstate = new HashMap<String, TalkState>();
 	
 	
 	
+	protected Entity(HellbentGame h)
+	{
+		hg = h;
+	}
 	public String getMessage() {
 		return message;
 	}
@@ -54,57 +70,26 @@ public class Entity {
 	}
 	
 	
-	public void sSet(String name, String value) 
-	{
-	sdata.put(name,value);
-	}
-	public String sGet(String name)
-	{
-
-		if (sdata.get(name) == null)
-				return "";
-		else
-			return sdata.get(name);
-	
-	}
-	
-	public void set(String name, int value) 
-	{
-	if (name.indexOf("_OLD") == -1)
-	data.put(name+"_OLD",this.get(name));
-	data.put(name,value);
-	}
-	public int get(String name)
-	{
-		if (data.get(name) == null)
-				return 0;
-		else
-			return data.get(name);
-	
-	}
-	
-
-
-public void add(String name, int value)
-{
-	this.set(name, this.get(name)+value);
-}
-
-public void sub(String name, int value)
-{
-	this.set(name, this.get(name)-value);
-
-}
 public void setPos(int x,int y)
 {
 	this.setX(x);
 	this.setY(y);
 }
+public void setMap(Map m)
+{
+	setMapID(m.getName());
+	sight = new int[m.getSizeX()][m.getSizeY()];
+	this.map = m;
+
+}
+
 public String getMapID() {
 	return mapID;
 }
 public void setMapID(String mapID) {
+	
 	this.mapID = mapID;
+	
 }
 public int getY() {
 	return get("Y");
@@ -130,9 +115,7 @@ public void setSprite(Image sprite) {
 public Map getMap() {
 	return map;
 }
-public void setMap(Map map) {
-	this.map = map;
-}
+
 public boolean isAwake() {
 	return awake;
 }
@@ -262,6 +245,7 @@ protected String saveTypeAndName() {
 public void load(String savestr,HellbentGame hg)
 {
 	this.loadAttributes(savestr);
+	this.skills = Formulas.getSkills(this);
 	this.loadItems(savestr, hg);
 	this.loadEffects(savestr);
 	
@@ -300,7 +284,7 @@ inventory.add(i);
 
 }
 
-private void loadAttributes(String savestr) 
+public void loadAttributes(String savestr) 
 {
 String atr = Utilities.substring("ATR", savestr);
 String satr = Utilities.substring("sATR", savestr);
@@ -370,40 +354,48 @@ public Vector<Weapon> getWeapon()
 	return w;
 }
 
-public Damage getDamage() 
-{
-Damage ret = new Damage();
-Vector<Weapon> w = getWeapon();
-if(w.size() > 0)
-{
-	Collections.shuffle(w);
 
-	if (w.size() == 1)
+public Weapon chooseWeapon(Vector<Weapon> w)
+{
+	if(w.size() > 0)
 	{
-		ret = w.get(0).getDamage(this);
+		Collections.shuffle(w);
 	}
+	else
+	{
+		//TODO NATURAL WEAPONS?
+		return null;
+	}
+	if (w.size() == 1)
+		return w.get(0);
+	
 	else
 	{
 		for(Weapon i : w)
 		{
 			if (i.get("LAST") == 0)
 			{
-				ret = i.getDamage(this);
 				i.set("LAST", 1);
-				break;
+				return i;
 			}
 			else
 			{
 				i.set("LAST",0);
 			}
 		}
-		
 	}
+	return null;
 }
-else
+
+public Damage getDamage(Weapon w) 
 {
+Damage ret = new Damage();
+
+	
+if (w != null)
+	ret = w.getDamage(this);
+else
 	ret = naturalDamage();
-}
 
 return ret;
 }
@@ -417,6 +409,30 @@ private Damage naturalDamage() {
 
 public int weaponSkillMod(Weapon weapon) {
 	return 0;
+}
+
+public HashMap<String, TalkState> getTalkstate() {
+	return talkstate;
+}
+public void setTalkstate(HashMap<String, TalkState> talkstate) {
+	this.talkstate = talkstate;
+}
+
+public void addTalkstate(TalkState t,String s)
+{
+	talkstate.put(s,t);
+}
+
+public void removeTalkstate(TalkState t)
+{
+	talkstate.remove(t);
+}
+public boolean isTalkable() {
+	return false;
+}
+public Skill getSkill(String string) 
+{
+	return skills.get(string);
 }
 
 }

@@ -1,5 +1,6 @@
 package hellbent.loaders;
 
+import hellbent.HellbentGame;
 import hellbent.concepts.Profession;
 import hellbent.content.classes.BanditClass;
 
@@ -10,7 +11,7 @@ public class ClassLoader {
 	Vector<Profession> classes = new Vector<Profession>();
 	
 	
-	public ClassLoader()
+	public ClassLoader(HellbentGame hg)
 	{
 		classes.add(new BanditClass());
 	}

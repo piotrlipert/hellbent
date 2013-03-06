@@ -1,5 +1,6 @@
 package hellbent.concepts;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
@@ -9,6 +10,9 @@ import hellbent.entity.Entity;
 import hellbent.entity.Player;
 import hellbent.world.Map;
 import hellbent.concepts.Profession;
+import hellbent.content.skills.BluntWeapons;
+import hellbent.content.skills.PolearmsWeapons;
+import hellbent.content.skills.SlashWeapons;
 
 public class Formulas 
 {
@@ -73,6 +77,14 @@ public static final int VENOM = 27;
 
 public static final int WORLDTURNCOUNT = 100;
 public static final int CHECKTURNCOUNT = 1;
+public static final int LARGEPROMPT = 1;
+public static final int MIDPROMPT = 2;
+public static final int SMALLPROMPT = 3;
+public static final int RESX = 1024;
+public static final int RESY = 768;
+public static final int MAPRESX = 864;
+public static final int MAPRESY = 672;
+public static final int COMBAT = 0;
 
 
 public static Random r = new Random();
@@ -87,9 +99,24 @@ public static boolean IsDamagePhysical(int dam)
 	return false;
 }
 
-	static int calculateToHit(Entity e)
-	{
-		return e.get("TO_HIT");
+	static int calculateToHit(Entity e, Weapon w)
+	{	
+		int ret = e.get("TO_HIT");
+		if (e.getType() == "Player" ||e.getType() == "Hero")
+		{
+			if (w != null)
+			{
+				Skill s = getWeaponSkill(w,e);
+				if (s != null)
+					ret = ret + s.toHitMod(e);
+				ret = ret + w.get("TO_HIT_MOD");
+			}
+			else
+			{
+				// TODO unarmed
+			}
+		}	
+		return ret;
 		
 	}
 	static int calculateToEvade(Entity e)
@@ -97,26 +124,40 @@ public static boolean IsDamagePhysical(int dam)
 		return e.get("EVADE");
 		
 	}
-	public static boolean hit(Entity hitting, Entity hit)
+	public static boolean hit(Entity hitting, Entity hit, Weapon w)
 	{
 		
-		int toHit = calculateToHit(hitting);
+		int toHit = calculateToHit(hitting, w);
 		int toEvade = calculateToEvade(hit);
+		
+		for(StateChangeListener i : hit.statelisten)
+		{
+			toHit = i.modToHit(toHit);
+		}
 		
 		int roll = dice(1,100) + toHit - toEvade;
 		
 		
-		if (roll > 50)
+		if (roll > 1)
 			return true;
 		else
 			return false;
 	}
 	
-	public static int damage(Entity hitting, Entity hit)
+	public static int damage(Entity hitting, Entity hit, Weapon w)
 	{
-		Damage d = hitting.getDamage();
 		int ret = 0;
+		Damage d = hitting.getDamage(w);
+
+		Skill s = getWeaponSkill(w,hitting);
+			if (s != null)
+				d = s.modDam(hitting,d);
 		
+			for (StateChangeListener scl : hit.statelisten)
+		{
+			scl.onDamage(d);
+			
+		}
 		for (int i : d.dam.keySet())
 		{
 			if(IsDamagePhysical(i))
@@ -144,7 +185,13 @@ public static boolean IsDamagePhysical(int dam)
 		for(Effect e : d.getEffects())
 		{
 			e.apply(hit);
+			for (StateChangeListener scl : hit.statelisten)
+			{
+				scl.onEffect(e);
+				
+			}
 		}
+		
 		
 		return ret;
 	}
@@ -287,8 +334,8 @@ public static boolean IsDamagePhysical(int dam)
 		if (e.getType() == "Player" || e.getType() == "Hero")
 		{
 			int Lvld = diff(e,"LEVEL");
-			int Md = diff(e,"Mana");
-			int Rd = diff(e,"RESOLVE");
+			int Md = diff(e,"ATR_WILLPOWER");
+			int Rd = diff(e,"ATR_ATTUNAMENT");
 			 MPMax = e.get("MP_MAX");
 			int MPperLVL=  (e.getProfession()).MPperLevel();
 			int MPperM=  (e.getProfession()).MPperM();
@@ -371,9 +418,58 @@ public static boolean IsDamagePhysical(int dam)
 		
 		return false;
 	}
+
+	public static HashMap<String, Skill> getSkills(Entity entity) 
+	{
+		HashMap<String, Skill> skills = new HashMap<String, Skill>();
+		// TODO Auto-generated method stub
+		if(entity.get("BluntWeapons_SKILL") != 0)
+		{
+			BluntWeapons b = new BluntWeapons();
+			b.loadSkill(entity);
+			skills.put("BluntWeapons", b);
+		}
+		
+		if(entity.get("PolearmsWeapons_SKILL") != 0)
+		{
+			PolearmsWeapons b = new PolearmsWeapons();
+			b.loadSkill(entity);
+			skills.put("PolearmsWeapons", b);
+		}
+		
+		
+		if(entity.get("SlashWeapons_SKILL") != 0)
+		{
+			SlashWeapons b = new SlashWeapons();
+			b.loadSkill(entity);
+			skills.put("SlashWeapons", b);
+		}
+		
+		
+		
+		
+		
+		return skills;
+	
+	}
 	
 	
-	
+	static Skill getWeaponSkill(Weapon w, Entity e)
+	{
+		Skill s = null;
+		if (w != null)
+		{
+			String type = w.sGet("WeaponType");
+			if (type!=null)
+				s = e.getSkill(type);
+		}
+		
+		return s;
+		
+		
+				
+				
+	}
 	
 	
 }

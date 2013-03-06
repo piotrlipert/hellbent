@@ -19,13 +19,18 @@ public class SkillState extends HBGameState {
 	public SkillState(int inventorystate, HellbentGame hellbentGame) {
 		this.setStateID(inventorystate);
 		this.hg = hellbentGame;
-		sw = new SkillWidget(hg);
+		try {
+			sw = new SkillWidget(hg);
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		// TODO Auto-generated method stub
-		background = new Image("resources/graphics/menus/inventory.jpg");
+		background = new Image(1024,768);
 		hg.skillctrl.setGs(this);
 	
 	}
@@ -65,7 +70,15 @@ public class SkillState extends HBGameState {
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
 		background.draw(0,0);
-		sw.renderItems(hg);
+		
+		
+		sw.renderCategories(hg);
+		sw.renderSkills(hg);
+		sw.renderDescription(hg);
+		sw.renderSkillPoints(hg);
+		sw.renderAbilities(hg);
+		sw.renderScroller(hg);
+		
 		
 	
 	}
