@@ -18,6 +18,7 @@ import hellbent.util.Prompt;
 import hellbent.util.Utilities;
 import hellbent.world.Map;
 
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -33,20 +34,39 @@ public class GameplayState extends HBGameState {
     HellbentGame hg = null;
     GameEngine ge = null;
 	public int inputACTION = 0;
-	boolean activeTargetting = false;
-    long oldtime = 0;
+	public boolean activeTargetting = false;
+	long oldtime = 0;
     Image background;
     Random rnd = new Random();
     int centerX;
     int centerY;
     boolean stillcenter = true;
     public String message = " ";
+    
+    
+    
+
     public static final int LEFTBORDER = 0;
     public static final int UPBORDER = 0;
     public static final int MIDDLEX = 13;
     public static final int MIDDLEY = 10;
     public static final int TILESIZE = 32;
-    public Prompt activePrompt = null;
+	
+    
+    private static final int T_SIMPLE = 0;
+	private static final int T_LINE = 1;
+	private static final int T_AREA = 2;
+	private static final int HOW_MANY_TILES_X = 28;
+	private static final int HOW_MANY_TILES_Y = 22;
+    
+	
+	public Prompt activePrompt = null;
+	private int targetterType = 0;
+	
+	
+	public Vector<Entity> EntityTargets;
+	public Vector<Feature> FeatureTargets;
+	public Vector<int[]> TileTargets;
     
 
     public void stopMoving()
@@ -57,6 +77,8 @@ public class GameplayState extends HBGameState {
     }
 
     
+    
+ 
     
     
  public GameplayState(int gameplaystate,HellbentGame s) {
@@ -75,6 +97,8 @@ public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException 
 
 	background = new Image("resources/graphics/backgrounds/back.png");
 	hg.keyctrl.setGs(this);
+	hg.targetctrl.setGs(this);
+
 	
 }
 
@@ -128,9 +152,9 @@ public void renderMAP(HellbentGame hg, Map m) throws SlickException
 	Image d = null;
 	Vector<int[]> vis = Utilities.getVisibleTiles(tmp);
 	int yy = 0;
-	for(int x=centerX-13;x<centerX+14;x++)
+	for(int x=centerX-((HOW_MANY_TILES_X/2)-1);x<centerX+(HOW_MANY_TILES_X/2);x++)
 	{
-		for(int y=centerY-10;y<centerY+11;y++)
+		for(int y=centerY-((HOW_MANY_TILES_Y/2)-1);y<centerY+HOW_MANY_TILES_Y/2;y++)
 		{
 			r = false;
 			if (x < 0 || x > m.getSizeX()-1)
@@ -225,6 +249,29 @@ public void renderEntities(HellbentGame hg)
 	
 }
 
+
+public int[] getCoordAtMouseClick(int x, int y)
+{
+	int[] c = new int[2];
+	int centerX = hg.ge.pl.getX();
+	int centerY = hg.ge.pl.getY();
+	
+	
+	if (x > HOW_MANY_TILES_X * TILESIZE || y > HOW_MANY_TILES_Y * TILESIZE)
+	{
+		c[0] = -1;
+		c[1] = -1;
+		return c;
+	}
+	
+	
+	c[0] = centerX +(x/TILESIZE) - MIDDLEX;
+	c[1] = centerY + (y/TILESIZE) - MIDDLEY;
+	
+	
+	
+	return c;
+}
 public void renderItems(HellbentGame hg)
 {
 	Player tmp = hg.ge.getPlayer();
@@ -257,6 +304,11 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 	
 	
 	renderPrompt();
+	if(activeTargetting)
+	{
+		hg.targetctrl.renderTargetter();
+	
+	}
 		/* TEST
 	 * renderlines(hg,arg2);
 	 */
@@ -264,6 +316,13 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 	
 	
 }
+
+
+
+
+	
+	
+
 
 
 private void drawFeature(Feature f)
@@ -394,7 +453,13 @@ public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 		throws SlickException {
 	this.statechange(arg1);
 	Player tmp = ge.getPlayer();
+	Map m = tmp.getMap();
 	this.message = tmp.getMessage();
+	
+	if(activeTargetting)
+	{
+		hg.targetctrl.updateArea(m);
+	}
 	
 	if (moving != 0)
 	{
@@ -446,29 +511,38 @@ public void mouseClicked(int button, int x,int y, int count)
 }
 public void mouseReleased(int button, int x, int y)
 {
-	hg.keyctrl.mouseReleased( button,  x,  y);
-
+	if(!activeTargetting)
+		hg.keyctrl.mouseReleased( button,  x,  y);
+	else
+		hg.targetctrl.mouseReleased(button,x,y);
+		
 	
 }
 
 public void mousePressed(int button, int x, int y)
 {
-	hg.keyctrl.mousePressed( button,  x,  y);
+	if(!activeTargetting)
+		hg.keyctrl.mousePressed( button,  x,  y);
+	else
+		hg.targetctrl.mousePressed( button,  x,  y);
 
-	
 }
 
 public void keyPressed(int key, char c)
 {
-	
-	hg.keyctrl.keyPressed(key, c);
-	
+	if(!activeTargetting)
+		hg.keyctrl.keyPressed(key, c);
+	else
+		hg.targetctrl.keyPressed(key, c);
 
 }
 
 public void keyReleased(int key, char c)
 {
-	hg.keyctrl.keyReleased(key, c);
+	if(!activeTargetting)
+		hg.keyctrl.keyReleased(key, c);
+	else
+		hg.targetctrl.keyReleased(key, c);
 
 
 }

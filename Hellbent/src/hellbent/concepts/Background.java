@@ -4,12 +4,18 @@ public class Background {
 	
 	public static int ROCK = 0;
 	public static int GRASS = 100;
-	public static int GRASSA = 101;
-	public static int GRASSB = 102;
-	public static int GRASSC = 103;
 	public static int CAVEFLOOR = 200;
 	public static int CAVEWALL = 300;
+	
+	
+	
+	public static int WORLDMAPTILES_SWAMP = 1000;
+	public static int WORLDMAPTILES_FOREST = 1001;
+	public static int WORLDMAPTILES_HILLS = 1002;
+	public static int WORLDMAPTILES_DESERT = 1003;
 
+	
+	
 	
 	public static int WOODFLOOR = 5;
 	public static boolean IsWalkable(int i) 
@@ -22,6 +28,8 @@ public class Background {
 		if (i/100 == ROCK/100)
 			return false;
 		if (i/100 == GRASS/100)
+			return true;
+		if(i/100 == WORLDMAPTILES_SWAMP/100)
 			return true;
 		
 		return false;

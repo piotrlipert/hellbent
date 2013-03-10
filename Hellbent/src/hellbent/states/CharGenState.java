@@ -34,13 +34,12 @@ public class CharGenState extends HBGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame s)
 			throws SlickException {
-		background = new Image("resources/graphics/menus/chargen.jpg");
+		background = new Image("resources/graphics/menus/chargen.png");
 		Image button = new Image("resources/graphics/menus/mainmenubutton.png");
 		StateButton charGen = new StateButton(500,60,200,50,1,hg,button);
 		buttons.add(charGen);
 		Player tmp = new Player(hg);
 		
-		tmp.setMapID("SlaveMine");
 		tmp.setX(10);
 		tmp.setY(10);
 		tmp.set("SIGHT",5);
@@ -60,16 +59,37 @@ public class CharGenState extends HBGameState {
 		
 		hg.ge.w.getMap("GoblinTower").entities.add(tmp);
 		*/
-		Map i = hg.mal.getMap("SlaveMine");
-		tmp.setMap(i);
-		hg.ge.w.addMap(i);
-		
-		hg.ge.w.getMap("SlaveMine").entities.add(tmp);
+		initMaps();
+	
+		initStartingMap(tmp);
 		
 		
 		
 	}
 	
+
+	private void initMaps() 
+	{
+	Vector<Map> maps = hg.mal.getMaps();
+	for (Map m : maps)
+	{
+		m.initMap();
+		hg.ge.w.addMap(m);
+		
+		
+	}
+	
+	
+	}
+
+	
+	private void initStartingMap(Player tmp) 
+	{
+
+		tmp.setMap(hg.ge.w.getMap("WorldMap"));
+		tmp.setMapID("WorldMap");
+		hg.ge.w.getMap("WorldMap").entities.add(tmp);	
+	}
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)

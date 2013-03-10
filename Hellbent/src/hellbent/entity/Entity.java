@@ -434,6 +434,10 @@ public Skill getSkill(String string)
 {
 	return skills.get(string);
 }
+public Weapon getMissileWeapon() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }
 

@@ -22,6 +22,7 @@ import hellbent.states.SkillState;
 import hellbent.util.GameplayControl;
 import hellbent.util.InventoryControl;
 import hellbent.util.SkillControl;
+import hellbent.util.TargetControl;
 import hellbent.loaders.ClassLoader;
 
 
@@ -73,6 +74,7 @@ public class HellbentGame extends StateBasedGame
 	public TrapLoader trl;
 	public EventLoader evl;
 	public FeatureLoader ftl;
+	public TargetControl targetctrl;
     
 
 	public HellbentGame() throws SlickException {

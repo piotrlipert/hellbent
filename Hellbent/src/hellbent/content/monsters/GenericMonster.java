@@ -18,7 +18,7 @@ import org.newdawn.slick.SlickException;
 public class GenericMonster extends Monster
 {
 	
-	GenericMonster(HellbentGame h) {
+	protected GenericMonster(HellbentGame h) {
 		super(h);
 		set("AFFINITY",Affinity.HOSTILE);
 		set("SIGHT",10);

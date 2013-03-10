@@ -15,6 +15,7 @@ import hellbent.util.GameplayControl;
 import hellbent.util.InventoryControl;
 import hellbent.util.SkillControl;
 import hellbent.util.StateButton;
+import hellbent.util.TargetControl;
 import hellbent.HellbentGame;
 
 import org.newdawn.slick.GameContainer;
@@ -69,6 +70,7 @@ public class GameMenuState extends HBGameState {
 		  hg.load = new SaveLoader(hg);
 		  hg.in = hg.getContainer().getInput();
 		  hg.keyctrl = new GameplayControl(hg);
+		  hg.targetctrl = new TargetControl(hg);
 		  hg.invkeyctrl = new InventoryControl(hg);
 		  hg.skillctrl = new SkillControl(hg);
 		  

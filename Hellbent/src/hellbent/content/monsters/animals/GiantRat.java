@@ -1,10 +1,11 @@
-package hellbent.content.monsters;
+package hellbent.content.monsters.animals;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import hellbent.HellbentGame;
 import hellbent.concepts.Formulas;
+import hellbent.content.monsters.GenericMonster;
 
 public class GiantRat extends GenericMonster {
 	

@@ -22,6 +22,8 @@ public class GameplayControl {
 	static int TALK_KEY;
 	static int SAVE_KEY;
 	static int SKILL_KEY;
+	static int SHOOT_KEY;
+
 	
 	static int N_1;
 	static int N_2;
@@ -35,6 +37,7 @@ public class GameplayControl {
 	static int N_0;
 	static int INVENTORY_KEY;
 	static int PICKUP_KEY;
+	static int ENTER_KEY;
 
 	public GameplayControl(HellbentGame hg) {
 		this.hg = hg;
@@ -57,8 +60,8 @@ public class GameplayControl {
 		PICKUP_KEY = Input.KEY_COMMA;
 		SKILL_KEY = Input.KEY_S;
 		TALK_KEY = Input.KEY_C;
-
-
+		SHOOT_KEY = Input.KEY_T;
+		ENTER_KEY = Input.KEY_TAB;
 	}
 
 	public void loadKeyConfig() {
@@ -82,6 +85,27 @@ public class GameplayControl {
 			return;
 		}
 		
+		if (key == ENTER_KEY)
+		{
+			
+			Player tmp = hg.ge.pl;
+			Map m = tmp.getMap();
+			int x = tmp.getX();
+			int y = tmp.getY();
+			
+			m.Enter(x, y, tmp);
+			
+			
+
+			
+		}
+		
+		if (key == SHOOT_KEY)
+		{
+			hg.targetctrl.initTargetting(new Targetter(hg));
+			
+			
+		}
 		if (key == SKILL_KEY && !hg.in.isKeyDown(Input.KEY_LSHIFT) ) 
 		{
 			gs.statechange = HellbentGame.SKILLSTATE;

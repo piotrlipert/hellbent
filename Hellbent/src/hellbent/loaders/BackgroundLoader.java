@@ -57,6 +57,16 @@ public class BackgroundLoader {
 	CAVEWALL.add(new Image("resources/graphics/tiles/mine/22.png"));
 	CAVEWALL.add(new Image("resources/graphics/tiles/mine/23.png"));
 
+	
+	
+	ArrayList<Image> WORLDTILES = new ArrayList<Image>();
+	WORLDTILES.add(new Image("resources/graphics/tiles/worldtiles/bagno.png"));
+	WORLDTILES.add(new Image("resources/graphics/tiles/worldtiles/las.png"));
+	WORLDTILES.add(new Image("resources/graphics/tiles/worldtiles/wzgorza.png"));
+	WORLDTILES.add(new Image("resources/graphics/tiles/worldtiles/sand.png"));
+
+	
+	BackgroundTiles.put(Background.WORLDMAPTILES_SWAMP, WORLDTILES);
 	BackgroundTiles.put(Background.GRASS,Grass);
 
 

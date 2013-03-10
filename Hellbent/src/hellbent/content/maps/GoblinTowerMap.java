@@ -12,7 +12,7 @@ import hellbent.content.items.Axe;
 import hellbent.content.items.Boots;
 import hellbent.content.items.Scimitar;
 import hellbent.content.items.Spear;
-import hellbent.content.monsters.GiantRat;
+import hellbent.content.monsters.animals.GiantRat;
 import hellbent.content.npc.GoblinMiner;
 import hellbent.world.Map;
 

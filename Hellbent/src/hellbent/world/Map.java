@@ -155,6 +155,12 @@ public class Map extends Attributable {
 		
 	}
 
+	
+	public void Enter(int x, int y, Entity entity) 
+	{
+		entity.addMessage("There's nowhere to go from here.");
+	}
+
 
 	public void discover(Entity e) 
 	{
@@ -497,6 +503,13 @@ public class Map extends Attributable {
 				return featuremap[x][y];
 	
 		
+	}
+
+	public boolean isInBounds(int[] p) {
+		if (p[0] > 0 && p[0] < this.getSizeX())
+			if (p[1] > 0 && p[1] < this.getSizeY())
+				return true;
+		return false;
 	}
 
 
