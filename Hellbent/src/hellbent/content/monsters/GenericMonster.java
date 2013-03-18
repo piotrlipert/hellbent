@@ -36,7 +36,7 @@ public class GenericMonster extends Monster
 		for(Entity e : Seen)
 		{
 
-			if (e.getType() == "Player")
+			if (e.getType().equals( "Player"))
 			{
 
 				double distance = Utilities.Ddistance(e.getX(), e.getY(), x, y);

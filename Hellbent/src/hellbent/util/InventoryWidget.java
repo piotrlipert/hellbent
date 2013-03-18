@@ -283,7 +283,7 @@ public class InventoryWidget {
 		{
 			 
 	       
-			dragged.getSprite().draw(mouseX-10,mouseY-10);
+			hg.rel.getItemImage(dragged.getType()).draw(mouseX-10,mouseY-10);
 		}
 		int x = 0;
 		int y = 0;
@@ -292,8 +292,9 @@ public class InventoryWidget {
 			for (Item i : ground)
 			{
 			if(count >= scrollGround * 8)
-			{	
-			i.getSprite().draw(x*SLOT_DISTANCE_X+GROUND_X, y*SLOT_DISTANCE_Y+GROUND_Y);
+			{
+			Image ii = hg.rel.getItemImage(i.getType());
+			ii.draw(x*SLOT_DISTANCE_X+GROUND_X, y*SLOT_DISTANCE_Y+GROUND_Y);
 			x = x + 1;
 			if(x > 7)
 			{
@@ -317,7 +318,9 @@ public class InventoryWidget {
 			
 		if(count >= SLOT_PER_ROW * scrollBackPack)
 		{
-			i.getSprite().draw(x*SLOT_DISTANCE_X+SLOT_GRID_X, y*SLOT_DISTANCE_Y+SLOT_GRID_Y);
+			Image ii = hg.rel.getItemImage(i.getType());
+
+			ii.draw(x*SLOT_DISTANCE_X+SLOT_GRID_X, y*SLOT_DISTANCE_Y+SLOT_GRID_Y);
 			x = x + 1;
 
 		}	
@@ -344,7 +347,9 @@ public class InventoryWidget {
 			Item it = tmp.getItemAtSlot(i[2]);
 			if (it != null)
 			{
-				it.getSprite().draw(i[0],i[1]);
+				Image ii = hg.rel.getItemImage(it.getType());
+
+				ii.draw(i[0],i[1]);
 			}
 		}
 	}

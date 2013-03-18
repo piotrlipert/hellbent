@@ -63,7 +63,7 @@ public class Entity extends Attributable {
 	}
 	
 	public void addMessage(String message) {
-		if (this.getType() == "Player")
+		if (this.getType().equals( "Player"))
 			{
 		this.message = this.message + " "+message;
 			}
@@ -147,12 +147,7 @@ public void popAction() {
 public void setAction(Action action) {
 	this.actions.add(action);
 }
-public String getType() {
-	return type;
-}
-public void setType(String type) {
-	this.type = type;
-}
+
 public Profession getProfession() {
 	return profession;
 }

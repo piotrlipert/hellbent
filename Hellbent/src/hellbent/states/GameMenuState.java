@@ -8,6 +8,7 @@ import hellbent.loaders.ItemLoader;
 import hellbent.loaders.MapLoader;
 import hellbent.loaders.MonsterLoader;
 import hellbent.loaders.RaceLoader;
+import hellbent.loaders.ResourceLoader;
 import hellbent.loaders.SaveLoader;
 import hellbent.loaders.Saver;
 import hellbent.loaders.TrapLoader;
@@ -65,7 +66,7 @@ public class GameMenuState extends HBGameState {
 		  hg.ftl = new FeatureLoader(hg);
 		  hg.trl = new TrapLoader(hg);
 		  hg.evl = new EventLoader(hg);
-		  
+		  hg.rel = new ResourceLoader(hg);
 		  hg.svg = new Saver(hg);
 		  hg.load = new SaveLoader(hg);
 		  hg.in = hg.getContainer().getInput();

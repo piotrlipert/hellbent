@@ -74,6 +74,11 @@ public class SaveLoader {
 		String typeName[] = EntityloadTypeAndName(player);
 		Player p = new Player(h);
 		p.setName(typeName[0]);
+		System.out.println("TYPE");
+		
+		System.out.println(typeName[1]);
+		
+		p.setType(typeName[1]);
 		p.setMapID(typeName[2]);
 		p.load(savestr,h);
 		
@@ -85,6 +90,7 @@ public class SaveLoader {
 		}
 		
 		h.ge.pl = p;
+		System.out.println(h.ge.pl.getType());
 	}
 
 

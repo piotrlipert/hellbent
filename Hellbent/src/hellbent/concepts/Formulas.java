@@ -102,7 +102,7 @@ public static boolean IsDamagePhysical(int dam)
 	static int calculateToHit(Entity e, Weapon w)
 	{	
 		int ret = e.get("TO_HIT");
-		if (e.getType() == "Player" ||e.getType() == "Hero")
+		if (e.getType().equals( "Player")||e.getType().equals( "Hero"))
 		{
 			if (w != null)
 			{
@@ -210,7 +210,7 @@ public static boolean IsDamagePhysical(int dam)
 
 		e.set("MAX_CAPACITY",1000);
 		int weight = 0;
-		if(e.getType() == "Player")
+		if(e.getType().equals( "Player"))
 		{
 			for (Item i : e.inventory)
 			{
@@ -238,7 +238,7 @@ public static boolean IsDamagePhysical(int dam)
 	public static void recalculateHP(Entity e)
 	{
 		int HPMax = 0;
-		if (e.getType() == "Player" || e.getType() == "Hero")
+		if (e.getType().equals( "Player") || e.getType().equals( "Hero"))
 		{
 			int Lvld = diff(e,"LEVEL");
 			int Vd = diff(e,"VIGOR");
@@ -331,7 +331,7 @@ public static boolean IsDamagePhysical(int dam)
 	void recalculateMP(Entity e)
 	{
 		int MPMax;
-		if (e.getType() == "Player" || e.getType() == "Hero")
+		if (e.getType().equals( "Player") || e.getType().equals( "Hero"))
 		{
 			int Lvld = diff(e,"LEVEL");
 			int Md = diff(e,"ATR_WILLPOWER");

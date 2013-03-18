@@ -49,7 +49,7 @@ public class Item extends Attributable
 	public String save()
 	{
 	String ret = "<ITEM>\n";
-	ret = ret + "<TYPE>"+this.sGet("NAME")+"</TYPE>";
+	ret = ret + "<TYPE>"+this.sGet("TYPE")+"</TYPE>";
 	ret = ret + saveAttributes();
 	return ret +"</ITEM>\n";	
 	}

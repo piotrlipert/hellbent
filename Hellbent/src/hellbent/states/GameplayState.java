@@ -53,17 +53,11 @@ public class GameplayState extends HBGameState {
     public static final int TILESIZE = 32;
 	
     
-    private static final int T_SIMPLE = 0;
-	private static final int T_LINE = 1;
-	private static final int T_AREA = 2;
-	private static final int HOW_MANY_TILES_X = 28;
+    private static final int HOW_MANY_TILES_X = 28;
 	private static final int HOW_MANY_TILES_Y = 22;
     
 	
 	public Prompt activePrompt = null;
-	private int targetterType = 0;
-	
-	
 	public Vector<Entity> EntityTargets;
 	public Vector<Feature> FeatureTargets;
 	public Vector<int[]> TileTargets;
@@ -112,8 +106,6 @@ public void drawOnScreen(int x, int y, Image z)
 
 public int[] translateCoord(int x, int y)
 {
-	Player tmp = ge.pl;
-	
 	int coord[] = new int[2];
 	
 	coord[0] = (x+MIDDLEX)*TILESIZE + LEFTBORDER;
@@ -244,7 +236,16 @@ public void renderEntities(HellbentGame hg)
 	
 	for (Entity e : Utilities.getVisibleEntities(tmp))
 	{
-		drawOnScreen(e.getX()-centerX,e.getY()-centerY,e.getSprite());
+		Image fi = null;
+		int variety = e.get("IMAGE_VARIETY");
+		
+		if (variety != 0)
+			fi = hg.rel.getEntityImage(e.getType()+Integer.toString(variety));
+		else
+			fi = hg.rel.getEntityImage(e.getType());
+
+		
+		drawOnScreen(e.getX()-centerX,e.getY()-centerY,fi);
 	}
 	
 }
@@ -283,7 +284,7 @@ public void renderItems(HellbentGame hg)
 	
 	for (Item e : Utilities.getVisibleItems(tmp))
 	{
-		drawOnScreen(e.getX()-centerX,e.getY()-centerY,e.getSprite());
+		drawOnScreen(e.getX()-centerX,e.getY()-centerY,hg.rel.getItemImage(e.getType()));
 	}
 	
 }
@@ -331,12 +332,17 @@ private void drawFeature(Feature f)
 	int y = f.get("Y");
 	int xx = hg.ge.pl.getX();
 	int yy = hg.ge.pl.getY();
+	Image fi = null;
 	float distance = Utilities.distance(xx, yy, x, y);
-	
-		int tra[] = translateCoord(x-xx, y-yy);
+	int variety = f.get("IMAGE_VARIETY");
+	if (variety!=0)
+		fi = hg.rel.getFeatureImage(f.getType()+Integer.toString(variety));
+	else
+		fi = hg.rel.getFeatureImage(f.getType());
+	int tra[] = translateCoord(x-xx, y-yy);
 			
-		int[] translated = Utilities.getDrawCoordForBigImages(f.getImage(), tra[0], tra[1]);
-		if(tra[0]+f.getImage().getWidth()/2<TILESIZE*MIDDLEX*2 && tra[1]+f.getImage().getHeight()/2<TILESIZE*MIDDLEY*2)
+		int[] translated = Utilities.getDrawCoordForBigImages(fi, tra[0], tra[1]);
+		if(tra[0]+fi.getWidth()/2<TILESIZE*MIDDLEX*2 && tra[1]+fi.getHeight()/2<TILESIZE*MIDDLEY*2)
 		{
 			float brightness = 1;
 
@@ -347,7 +353,7 @@ private void drawFeature(Feature f)
 			if (f.get("OBSTRUCT") == 1)
 				brightness = brightness/2;
 			
-			Image ic = f.getImage().copy();
+			Image ic = fi.copy();
 			ic.setColor(0, brightness,brightness,brightness, brightness);
 				ic.setColor(1, brightness,brightness,brightness, brightness);
 				ic.setColor(2, brightness,brightness,brightness, brightness);

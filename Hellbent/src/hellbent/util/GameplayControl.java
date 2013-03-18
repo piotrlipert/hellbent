@@ -218,7 +218,7 @@ public class GameplayControl {
 	
 	for(Entity e : hg.ge.pl.getMap().entities)
 	{
-		if (e.getType() == "Player")
+		if (e.getType().equals( "Player"))
 			continue;
 		if(Utilities.distance(e.getX(), e.getY(), tmp.getX(), tmp.getY()) < 2)
 		{

@@ -61,6 +61,7 @@ public class Move extends Action
 	{
 	
 		
+
 		 if (attack && !moveonly)
 		 {
 			 Attack a = new Attack(this.en, attacked);
@@ -93,8 +94,8 @@ public class Move extends Action
 						f.perform(en);
 				}
 				
-				
-				if (en.getType() == "Player")
+
+				if (en.getType().equals("Player"))
 				{
 					for(Event i : m.events)
 					{
@@ -111,8 +112,10 @@ public class Move extends Action
 					
 					
 					
-					if(en.getType() == "Player")
+					if(en.getType().equals("Player"))
 						m.discover(en);
+
+					
 					Vector<Item> items = Utilities.getItemsAtCoord(m, x, y);
 					
 					if (items.size() > 1)

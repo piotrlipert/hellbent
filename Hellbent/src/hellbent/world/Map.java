@@ -289,7 +289,7 @@ public class Map extends Attributable {
 		
 		for(Entity i : entities)
 		{
-			if (i.getType()!="Player")
+			if (!i.getType().equals( "Player"))
 			{
 				savestr = savestr + i.save();
 			}

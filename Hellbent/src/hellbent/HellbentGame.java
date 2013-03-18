@@ -10,6 +10,7 @@ import hellbent.loaders.ItemLoader;
 import hellbent.loaders.MapLoader;
 import hellbent.loaders.MonsterLoader;
 import hellbent.loaders.RaceLoader;
+import hellbent.loaders.ResourceLoader;
 import hellbent.loaders.SaveLoader;
 import hellbent.loaders.Saver;
 import hellbent.loaders.TrapLoader;
@@ -75,6 +76,7 @@ public class HellbentGame extends StateBasedGame
 	public EventLoader evl;
 	public FeatureLoader ftl;
 	public TargetControl targetctrl;
+	public ResourceLoader rel;
     
 
 	public HellbentGame() throws SlickException {

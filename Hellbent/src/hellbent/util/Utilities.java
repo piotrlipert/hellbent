@@ -97,7 +97,11 @@ public class Utilities {
 			if (!Background.IsSeeThrough(m.background[point[0]][point[1]]))
 					return true;
 			if (m.featuremap[point[0]][point[1]] != null)
+				if (m.featuremap[point[0]][point[1]].get("TRANSPARENT") == 0)
 					return true;
+					
+			
+				
 		}
 		return false;
 	}
@@ -242,6 +246,7 @@ public class Utilities {
 			}
 		}
 		
+	ent.remove(tmp);
 	return ent;	
 		
 	}

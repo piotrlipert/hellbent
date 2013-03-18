@@ -45,8 +45,10 @@ public class CharGenState extends HBGameState {
 		tmp.set("SIGHT",5);
 		tmp.set("Speed",500);
 		tmp.set("MAX_CAPACITY",1000);
-		tmp.setSprite(new Image("resources/graphics/entities/goblinrobotnik1.png"));
-		tmp.sSet("SPRITEPATH","resources/graphics/entities/goblinrobotnik1.png");
+		tmp.setSprite(new Image("resources/graphics/entities/goblins/goblinworker1.png"));
+		tmp.sSet("SPRITEPATH","resources/graphics/entities/goblins/goblinworker1.png");
+
+		
 		ge.setPlayer(tmp);
 		tmp.set("SlashWeapons_SKILL",5);
 		

@@ -7,18 +7,15 @@ import org.newdawn.slick.SlickException;
 import hellbent.HellbentGame;
 import hellbent.concepts.Background;
 import hellbent.content.events.TestEvent;
-import hellbent.content.features.OakTree;
-import hellbent.content.items.Axe;
-import hellbent.content.items.Boots;
-import hellbent.content.items.Scimitar;
-import hellbent.content.items.Spear;
+import hellbent.content.features.forest.LeaveTree;
+import hellbent.content.items.armor.LeatherBoots;
 import hellbent.content.monsters.animals.GiantRat;
 import hellbent.content.npc.GoblinMiner;
 import hellbent.world.Map;
 
 public class GoblinTowerMap extends Map {
 
-	public GoblinTowerMap(HellbentGame hg) throws Exception {
+	public GoblinTowerMap(HellbentGame hg)  {
 		super(100, 100, Background.GRASS, 0, hg);
 		setName("GoblinTower");
 		events.add(new TestEvent());
@@ -35,7 +32,7 @@ public class GoblinTowerMap extends Map {
 		
 	}
 	
-	public void init() throws SlickException
+	public void init() 
 	{
 		
 		
@@ -49,46 +46,20 @@ public class GoblinTowerMap extends Map {
 		Random r = new Random();
 		
 		
-		Boots b = new Boots();
+		LeatherBoots b = new LeatherBoots();
 		b.set("X",21);
 		b.set("Y",21);
 		items.add(b);
 		for(int i=0;i<100;i++)
 		{
-		OakTree o = new OakTree();
+		LeaveTree o = new LeaveTree();
 		o.set("X",r.nextInt(90));
 		o.set("Y",r.nextInt(90));
 		o.set("WALKABLE",0);
 		
 		addFeature(o);
 		}
-		for(int x = 0;x<10;x++)
-		{
-		Scimitar a = new Scimitar();
 		
-		a.set("X",20);
-		a.set("Y",20);
-		
-		items.add(a);
-		}
-		for(int x = 0;x<10;x++)
-		{
-		Axe a = new Axe();
-		
-		a.set("X",20);
-		a.set("Y",20);
-		
-		items.add(a);
-		}
-		for(int x = 0;x<10;x++)
-		{
-		Spear a = new Spear();
-		
-		a.set("X",20);
-		a.set("Y",20);
-		
-		items.add(a);
-		}
 	}
 	
 	public GoblinTowerMap clone()

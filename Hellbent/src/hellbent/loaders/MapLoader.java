@@ -18,13 +18,10 @@ public class MapLoader {
 	
 	public MapLoader(HellbentGame hg)
 	{
-			try {
-				maps.put("GoblinTower", new GoblinTowerMap(hg));
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			
 		
+		
+			maps.put("GoblinTower", new GoblinTowerMap(hg));
 			maps.put("SlaveMine", new SlaveMine(hg));
 			maps.put("WorldMap", new WorldMap(hg));
 
