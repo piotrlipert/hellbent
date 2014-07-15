@@ -1,5 +1,6 @@
 package hellbent.util;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
@@ -79,7 +80,7 @@ public class Generation
 		// TODO Auto-generated method stub
 		Vector<int[]> corr = null;
 		
-		Vector<int[]> line = Utilities.linePath(j[0],j[1],k[0],k[1]);
+		ArrayList<int[]> line = Utilities.smoothLinePath(j[0],j[1],k[0],k[1]);
 		
 		for(int[] p : line)
 		{

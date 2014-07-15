@@ -44,6 +44,18 @@ public class GameplayState extends HBGameState {
     public String message = " ";
     
     
+    public static final int HPX = 135;
+    public static final int HPY = 705;
+    public static final int MPX = 840;
+    public static final int MPY = 705;
+    public static final int EFFX = 875;
+    public static final int EFFY = 138;
+    public static final int EFFXEND = 1010;
+    public static final int EFFYEND = 392;
+
+
+    
+    
     
 
     public static final int LEFTBORDER = 0;
@@ -296,13 +308,18 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 
 	renderMAP(hg,hg.ge.w.getMap(hg.ge.pl.getMapID()));
 	renderItems(hg);
+
+	
+	renderSpecialWalkable(hg);
 	renderEntities(hg);
 
 	renderPlayer(hg);
-	renderSpecial(hg);
+	
+	renderSpecialUnwalkable(hg);
 
 	rendermessage(hg);
-	
+	renderHPMP(hg);
+	renderEffects(hg);
 	
 	renderPrompt();
 	if(activeTargetting)
@@ -323,6 +340,59 @@ public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 
 	
 	
+
+
+
+private void renderEffects(HellbentGame hg2) {
+	// TODO Auto-generated method stub
+	
+}
+
+
+
+
+
+
+private void renderHPMP(HellbentGame hg2) 
+{
+int hp,hpMAX,mp,mpMAX;
+Player tmp = hg.ge.pl;
+hp = tmp.get("HP");
+hpMAX = tmp.get("HP_MAX");
+mp = tmp.get("MP");
+mpMAX = tmp.get("MP_MAX");
+
+String hptext = Integer.toString(hp) + "/"+Integer.toString(hpMAX);
+String mptext = Integer.toString(mp) + "/"+Integer.toString(mpMAX);
+
+hg2.fontCommon.drawString(HPX, HPY, hptext,Color.red);
+hg2.fontCommon.drawString(MPX, MPY, mptext,Color.blue);
+
+
+	
+}
+
+
+
+
+
+
+private void renderSpecialUnwalkable(HellbentGame hg2) {
+	renderSpecial(hg2,0);
+}
+
+
+
+
+
+
+private void renderSpecialWalkable(HellbentGame hg2) {
+	renderSpecial(hg2,1);
+	
+}
+
+
+
 
 
 
@@ -370,7 +440,7 @@ private void drawFeature(Feature f)
 
 
 
-private void renderSpecial(HellbentGame hg2) 
+private void renderSpecial(HellbentGame hg2,int walkable) 
 {
 Map m = hg.ge.w.getMap(hg.ge.pl.getMapID());
 Vector<Feature> featureList = new Vector<Feature>();
@@ -383,7 +453,7 @@ for(int i=xx-15;i<xx+15;i++)
 		if (!(i < 0 | i >= m.getSizeX() || j < 0 || j >= m.getSizeY()))
 				{
 				Feature f = m.featuremap[i][j];
-				if (f == null)
+				if (f == null || f.get("WALKABLE") != walkable)
 					continue;
 				int x = f.get("X");
 				int y = f.get("Y");

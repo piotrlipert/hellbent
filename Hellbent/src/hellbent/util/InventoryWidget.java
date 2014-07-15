@@ -177,6 +177,12 @@ public class InventoryWidget {
 	
 
 	
+	public void drawStack(HellbentGame hg,int x, int y,Item it)
+	{
+		hg.fontCommon.drawString(x, y, Integer.toString(it.get("STACK")));
+		
+	}
+	
 
 	
 	
@@ -188,6 +194,8 @@ public class InventoryWidget {
 		Map m = tmp.getMap();
 		inv = tmp.inventory;
 		Vector<Item>ground = Utilities.getItemsAtCoord(m, tmp.getX(),tmp.getY());
+		ground = Utilities.stackize(ground);
+		
 		int mouseX = hg.in.getMouseX();
 	    int mouseY = hg.in.getMouseY();
 		
@@ -238,6 +246,7 @@ public class InventoryWidget {
 			}
 			}
 		}
+		invDisplay = Utilities.stackize(invDisplay);
 		
 		
 		if(!isDragging())
@@ -295,6 +304,7 @@ public class InventoryWidget {
 			{
 			Image ii = hg.rel.getItemImage(i.getType());
 			ii.draw(x*SLOT_DISTANCE_X+GROUND_X, y*SLOT_DISTANCE_Y+GROUND_Y);
+			drawStack(hg, x*SLOT_DISTANCE_X+GROUND_X, y*SLOT_DISTANCE_Y+GROUND_Y, i);
 			x = x + 1;
 			if(x > 7)
 			{
@@ -321,6 +331,8 @@ public class InventoryWidget {
 			Image ii = hg.rel.getItemImage(i.getType());
 
 			ii.draw(x*SLOT_DISTANCE_X+SLOT_GRID_X, y*SLOT_DISTANCE_Y+SLOT_GRID_Y);
+			drawStack(hg, x*SLOT_DISTANCE_X+SLOT_GRID_X, y*SLOT_DISTANCE_Y+SLOT_GRID_Y, i);
+
 			x = x + 1;
 
 		}	

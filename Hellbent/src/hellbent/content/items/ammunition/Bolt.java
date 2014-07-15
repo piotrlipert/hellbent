@@ -17,8 +17,8 @@ public class Bolt extends Item  {
 	{
 		super();
 		
-		sSet("NAME","Arrows");
-		sSet("TYPE", "ARROW");
+		sSet("NAME","Belt");
+		sSet("TYPE", "BOLT");
 
 		set("WEIGHT",50);
 		set("EQUIP_SLOT",Formulas.HEAD);

@@ -20,8 +20,8 @@ public class ResourceLoader
 		
 		
 		
-	item_images.put("ARROW", new Image("resources/graphics/items/ammunition/bolt.png"));
-	item_images.put("BOLT", new Image("resources/graphics/items/ammunition/arrow.png"));
+	item_images.put("ARROW", new Image("resources/graphics/items/ammunition/arrow.png"));
+	item_images.put("BOLT", new Image("resources/graphics/items/ammunition/bolt.png"));
 
 	item_images.put("AXE", new Image("resources/graphics/items/weapons/axe.png"));
 	item_images.put("LONGSWORD", new Image("resources/graphics/items/weapons/longsword.png"));

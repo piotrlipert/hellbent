@@ -97,6 +97,13 @@ public class SlaveMine extends Map {
 			
 		}
 		
+		for(int x = 0;x<16;x++)
+		{
+		Item k = hg.itl.getItem("ARROW");
+		k.set("X", 10);
+		k.set("Y", 10);
+		this.items.add(k);
+		}
 	}
 	
 	public SlaveMine clone()

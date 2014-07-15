@@ -15,6 +15,8 @@ import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 
 import org.newdawn.slick.Image;
@@ -23,6 +25,52 @@ public class Utilities {
 	
 	
 
+	public static Vector<Item> stackize(Vector<Item> i)
+	{
+		Vector<Item> ret = new Vector<Item>();
+		int stack = 0;
+		
+		for(Item it : i)
+			it.set("COMPARED", 0);
+		
+		for(Item it : i)
+		{
+		 stack = 0;
+
+			if(it.get("UNIQUE") == 0 && it.get("COMPARED") == 0)
+			{
+				it.set("COMPARED", 1);
+
+				for(Item iz : i)
+				{
+				
+
+					if (Item.compare(iz, it) && iz.get("COMPARED") == 0)
+						{
+						System.out.println("HAHA");
+						iz.set("COMPARED", 1);
+						stack = stack + 1;
+					
+					
+						
+						}
+				
+				
+				}
+				it.set("STACK", stack+1);
+				ret.add(it);
+			}
+		
+		}
+		
+		
+		
+		
+		return ret;
+		
+	}
+	
+	
 	public static int[] getDrawCoordForBigImages(Image i, int x, int y)
 	{
 		int coord[] = new int[2];
@@ -86,10 +134,119 @@ public class Utilities {
 		
 	}
 	
+	public static ArrayList<int[]> smoothLinePath(int x1, int y1, int x2, int y2)
+	{
+		// xx,yy start
+		// x, y koniec
+		ArrayList<int[]> ret = new ArrayList<int[]>();
+		int d,dx,dy,ai,bi,xi,yi;
+		int z = 0;
+		int x = x1;
+		int y = y1;
+		int revflag = 0;
+		if (x2 < x1)
+		{
+			revflag = 1;
+			z = x1;
+			x1 = x2;
+			x2 = z;
+			x = x1;
+			z = y1;
+			y1 = y2;
+			y2 = z;
+			y = y1;
+		}
+		if (x2 > x1)
+		{
+			xi = 1;
+			dx = x2 - x1;
+		}
+			
+		else
+		{
+			xi = -1;
+			dx = x2 - x1;
+		}
+		if (y2 > y1)
+		{
+			yi = 1;
+			dy = y2 - y1;
+		}
+		else
+		{
+			yi = -1;
+			dy = y1 - y2;
+		}
+				
+		// pierwszy piksel
+		if (dx > dy)
+		{
+			ai = (dy - dx) * 2;
+			bi = dy * 2;
+			d = bi - dx;
+			while(x != x2)
+			{
+				if(d >= 0)
+				{
+					x += xi;
+					y += yi;
+					d += ai;	
+				}
+				else
+				{
+					d+= bi;
+					x+= xi;
+				}
+			int[] k = new int[2];
+			k[0] = x;
+			k[1] = y;
+			if (!(revflag == 1 && x == x2))
+				ret.add(k);
+			
+			}
+		}
+		else
+		{
+			ai = (dx - dy) * 2;
+			bi = dx * 2;
+			d = bi - dy;
+			while(y2 != y)
+			{
+				if(d >= 0)
+				{
+					x += xi;
+					y += yi;
+					d += ai;	
+				}
+				else
+				{
+					d+= bi;
+					y+= yi;
+				}
+			int[] k = new int[2];
+			k[0] = x;
+			k[1] = y;
+			if (!(revflag == 1 && y == y2))
+				ret.add(k);
+			}
+			
+		}
+		
+		if (revflag==1)
+		{
+			Collections.reverse(ret);
+			
+			
+		}
+		
+		return ret;
+	}
+	
+	
 	public static boolean isObstructed(int xx, int yy, int x, int y, Map m) 
 	{
 		
-		Vector<int[]> p = Utilities.linePath(xx,yy,x,y);
+		ArrayList<int[]> p = Utilities.smoothLinePath(xx,yy,x,y);
 		
 		for(int[] point : p)
 		{
@@ -437,6 +594,7 @@ public class Utilities {
 	int[] ne = new int[9];
 	int x = 0;
 	int sum = 0;
+	int sum_rev = 0;
 	for(int[] p : v)
 	{
 		if(p[0] != -1 && p[1] != -1)
@@ -447,20 +605,215 @@ public class Utilities {
 			sum++;
 			}
 		}
+		
+			
 		x++;
 		
 	}
+	sum_rev = 8 - sum;
+	
+		if(sum == 1)
+		{
+			if (ne[0] == 1)
+				return 8;
+			if (ne[1] == 1)
+				return 7;
+			if (ne[2] == 1)
+				return 6;
+			if (ne[3] == 1)
+				return 5;
+			if (ne[5] == 1)
+				return 4;
+			if (ne[6] == 1)
+				return 3;
+			if (ne[7] == 1)
+				return 2;
+			if (ne[8] == 1)
+				return 1;
+			
 		
-	if (sum == 1)
-	{
-		if (ne[8] == 1)
-			return 1;
-		if (ne[6] == 1)
-			return 3;
-		if (ne[2] == 1)
-			return 6;
-		if (ne[0] == 1)
-			return 8;
+		}
+		
+		
+		if(sum == 2)
+		{
+		// Skoœne 
+		if (ne[0] == 1 && ne[8] == 1)
+			return 14;
+		if (ne[2] == 1 && ne[6] == 1)
+			return 13;
+		// Proste 
+		if (ne[1] == 1 && ne[7] == 1)
+			return 24;
+		if (ne[5] == 1 && ne[3] == 1)
+			return 25;
+		// Dwa ko³o siebie skoœnie
+		if (ne[1] == 1 && ne[5] == 1)
+			return 10;
+		if (ne[3] == 1 && ne[7] == 1)
+			return 11;
+		if (ne[5] == 1 && ne[7] == 1)
+			return 12;
+		if (ne[3] == 1 && ne[1] == 1)
+			return 9;
+		
+		if (ne[1] == 1 && ne[5] == 1)
+			return 10;
+		if (ne[3] == 1 && ne[7] == 1)
+			return 11;
+		if (ne[5] == 1 && ne[7] == 1)
+			return 12;
+		if (ne[3] == 1 && ne[1] == 1)
+			return 9;
+
+		// Dwa ko³o siebie prosto
+		if (ne[3] == 1 && ne[6] == 1)
+			return 5;
+		if (ne[3] == 1 && ne[0] == 1)
+			return 5;
+		if (ne[0] == 1 && ne[1] == 1)
+			return 7;
+		if (ne[1] == 1 && ne[2] == 1)
+			return 7;
+		if (ne[2] == 1 && ne[5] == 1)
+			return 4;
+		if (ne[5] == 1 && ne[8] == 1)
+			return 4;
+		if (ne[8] == 1 && ne[7] == 1)
+			return 2;
+		if (ne[6] == 1 && ne[7] == 1)
+			return 2;
+		
+		
+		if (ne[5] == 1 && ne[6] == 1)
+			return 4;
+		if (ne[3] == 1 && ne[8] == 1)
+			return 5;
+		
+		if (ne[1] == 1 && ne[8] == 1)
+			return 7;
+		if (ne[7] == 1 && ne[2] == 1)
+			return 2;
+		if (ne[0] == 1 && ne[7] == 1)
+			return 2;
+		if (ne[6] == 1 && ne[1] == 1)
+			return 7;
+		
+		if (ne[0] == 1 && ne[5] == 1)
+			return 4;
+		if (ne[2] == 1 && ne[3] == 1)
+			return 5;
+		if (ne[8] == 1 && ne[3] == 1)
+			return 5;
+		if (ne[5] == 1 && ne[6] == 1)
+			return 4;
+		
+		if (ne[2] == 1 && ne[8] == 1)
+			return 17;
+		if (ne[0] == 1 && ne[6] == 1)
+			return 15;
+		if (ne[0] == 1 && ne[2] == 1)
+			return 16;
+		if (ne[6] == 1 && ne[8] == 1)
+			return 18;
+		
+		
+		
+		
+		
+		
+		}
+		
+		if(sum == 3)
+		{
+		if (ne[0] == 1 && ne[1] == 1 && ne[2] == 1)
+			return 7;
+		if (ne[2] == 1 && ne[5] == 1 && ne[8] == 1)
+			return 4;
+		if (ne[0] == 1 && ne[3] == 1 && ne[6] == 1)
+			return 5;
+		if (ne[6] == 1 && ne[7] == 1 && ne[8] == 1)
+			return 2;
+		
+		if (ne[3] == 1 && ne[7] == 1 && ne[8] == 1)
+			return 11;
+		if (ne[6] == 1 && ne[7] == 1 && ne[5] == 1)
+			return 12;
+		
+		if (ne[0] == 1 && ne[1] == 1 && ne[5] == 1)
+			return 10;
+		if (ne[1] == 1 && ne[2] == 1 && ne[3] == 1)
+			return 9;
+		
+		if (ne[3] == 1 && ne[0] == 1 && ne[1] == 1)
+			return 9;
+		if (ne[1] == 1 && ne[2] == 1 && ne[5] == 1)
+			return 10;
+		if (ne[8] == 1 && ne[7] == 1 && ne[5] == 1)
+			return 12;
+		if (ne[3] == 1 && ne[6] == 1 && ne[7] == 1)
+			return 11;
+		
+		if (ne[7] == 1 && ne[5] == 1 && ne[2] == 1)
+			return 12;
+		if (ne[1] == 1 && ne[5] == 1 && ne[8] == 1)
+			return 10;
+		if (ne[0] == 1 && ne[3] == 1 && ne[7] == 1)
+			return 11;
+		if (ne[6] == 1 && ne[3] == 1 && ne[1] == 1)
+			return 9;
+		
+		if (ne[1] == 1 && ne[2] == 1 && ne[8] == 1)
+			return 7;
+		if (ne[7] == 1 && ne[8] == 1 && ne[2] == 1)
+			return 2;
+		if (ne[1] == 1 && ne[0] == 1 && ne[6] == 1)
+			return 7;
+		if (ne[6] == 1 && ne[7] == 1 && ne[0] == 1)
+			return 2;
+		
+		
+		
+		if (ne[1] == 1 && ne[3] == 1 && ne[5] == 1)
+			return 21;
+		if (ne[3] == 1 && ne[7] == 1 && ne[5] == 1)
+			return 20;
+		if (ne[1] == 1 && ne[3] == 1 && ne[7] == 1)
+			return 23;
+		if (ne[3] == 1 && ne[5] == 1 && ne[7] == 1)
+			return 22;
+		
+		
+		if (ne[3] == 1 && ne[6] == 1 && ne[8] == 1)
+			return 5;
+		if (ne[5] == 1 && ne[8] == 1 && ne[6] == 1)
+			return 4;
+		if (ne[0] == 1 && ne[3] == 1 && ne[2] == 1)
+			return 5;
+		if (ne[2] == 1 && ne[5] == 1 && ne[0] == 1)
+			return 4;
+		
+		
+		
+	
+		
+		if (ne[1] == 1 && ne[5] == 1)
+			return 10;
+		
+		if (ne[1] == 1 && ne[3] == 1)
+			return 9;
+		if (ne[3] == 1 && ne[7] == 1)
+			return 11;
+		if (ne[7] == 1 && ne[5] == 1)
+			return 12;
+		
+		if (ne[1] == 1 && ne[7] == 1)
+			return 25;
+		if (ne[5] == 1 && ne[3] == 1)
+			return 24;
+		
+		
+		
 		if (ne[1] == 1)
 			return 7;
 		if (ne[3] == 1)
@@ -470,169 +823,247 @@ public class Utilities {
 		if (ne[7] == 1)
 			return 2;
 		
-	}
-	if (sum == 2)
-	{
-	if ((ne[8] == 1 || ne[6] == 1) && ne[7] == 1)	
-		return 2;
-	if ((ne[0] == 1 || ne[2] == 1) && ne[1] == 1)	
-		return 7;
-	if ((ne[0] == 1 || ne[6] == 1) && ne[3] == 1)	
-		return 5;
-	if ((ne[2] == 1 || ne[8] == 1) && ne[5] == 1)	
-		return 4;
-	
-	if(ne[0] == 1 && ne[2] == 1)
-		return 16;
-	if(ne[0] == 1 && ne[6] == 1)
-		return 15;
-	if(ne[2] == 1 && ne[8] == 1)
-		return 17;
-	if(ne[6] == 1 && ne[8] == 1)
-		return 18;
-	
-	if (ne[1] == 1 && ne[5] == 1)
-		return 10;
-	if (ne[1]==1 && ne[3] == 1)
-		return 9;
-	if (ne[3]==1 && ne[7] == 1)
-		return 11;
-	if (ne[5]==1 && ne[7] == 1)
-		return 12;
-	
-	if (ne[7] == 1)	
-		return 2;
-	if (ne[1] == 1)	
-		return 7;
-	if (ne[3] == 1)	
-		return 5;
-	if (ne[5] == 1)	
-		return 4;
-	
-	
-	}
-	if(sum == 3)
-	{	
-		if ((ne[8] == 1 && ne[6] == 1) && ne[7] == 1)	
-			return 2;
-		if ((ne[0] == 1 && ne[2] == 1) && ne[1] == 1)	
-			return 7;
-		if ((ne[0] == 1 && ne[6] == 1) && ne[3] == 1)	
-			return 5;
-		if ((ne[2] == 1 && ne[8] == 1) && ne[5] == 1)	
-			return 4;
-	
+		}
 		
-		if (ne[1] == 1 && ne[5] == 1)
+		if (sum == 4)
+		{
+		if(ne[0] == 1 && ne[1] == 1 && ne[2] == 1 && ne[5] == 1)	
 			return 10;
-		if (ne[1]==1 && ne[3] == 1)
+		if(ne[0] == 1 && ne[1] == 1 && ne[2] == 1 && ne[3] == 1)	
 			return 9;
-		if (ne[3]==1 && ne[7] == 1)
+		if(ne[6] == 1 && ne[7] == 1 && ne[8] == 1 && ne[3] == 1)	
 			return 11;
-		if (ne[5]==1 && ne[7] == 1)
+		if(ne[6] == 1 && ne[7] == 1 && ne[8] == 1 && ne[5] == 1)	
 			return 12;
 		
-		if ((ne[8] == 1 || ne[6] == 1) && ne[7] == 1)	
-			return 2;
-		if ((ne[0] == 1 || ne[2] == 1) && ne[1] == 1)	
-			return 7;
-		if ((ne[0] == 1 || ne[6] == 1) && ne[3] == 1)	
-			return 5;
-		if ((ne[2] == 1 || ne[8] == 1) && ne[5] == 1)	
-			return 4;
-	
-	}
-	
-	
-	
-	if( sum == 4)
-	{
-	if(ne[3] == 1 && ne[1] == 1 && ne[5] == 1)
-		return 21;
-	
-	if(ne[0] == 1 && ne[1] == 1 && ne[3] == 1)
-		return 9;
-	
-	if(ne[1] == 1 && ne[2] == 1 && ne[5] == 1)
-		return 10;
-	if(ne[5] == 1 && ne[7] == 1 && ne[8] == 1)
-		return 12;
-	if(ne[7] == 1 && ne[6] == 1 && ne[3] == 1)
-		return 11;
-	
-	
-	if (ne[1] == 1 && ne[5] == 1)
-		return 10;
-	if (ne[1]==1 && ne[3] == 1)
-		return 9;
-	if (ne[3]==1 && ne[7] == 1)
-		return 11;
-	if (ne[5]==1 && ne[7] == 1)
-		return 12;
-	
-	if ((ne[8] == 1 || ne[6] == 1) && ne[7] == 1)	
-		return 2;
-	if ((ne[0] == 1 || ne[2] == 1) && ne[1] == 1)	
-		return 7;
-	if ((ne[0] == 1 || ne[6] == 1) && ne[3] == 1)	
-		return 5;
-	if ((ne[2] == 1 || ne[8] == 1) && ne[5] == 1)	
-		return 4;
-	
-	
-	}
-	
-	if (sum == 5)
-	{
-		
-		if (ne[0] == 0 && ne[1] == 0 && ne[2] == 0)
-			return 20;
-		if (ne[8] == 0 && ne[7] == 0 && ne[6] == 0)
-			return 21;
-		if (ne[0] == 0 && ne[3] == 0 && ne[6] == 0)
-			return 22;
-		if (ne[2] == 0 && ne[5] == 0 && ne[8] == 0)
-			return 23;
-		
-		
-		if (ne[1] == 1 && ne[5] == 1)
-			return 10;
-		if (ne[1]==1 && ne[3] == 1)
-			return 9;
-		if (ne[3]==1 && ne[7] == 1)
+		if(ne[0] == 1 && ne[3] == 1 && ne[6] == 1 && ne[7] == 1)	
 			return 11;
-		if (ne[5]==1 && ne[7] == 1)
+		if(ne[0] == 1 && ne[3] == 1 && ne[6] == 1 && ne[1] == 1)	
+			return 9;
+		if(ne[2] == 1 && ne[5] == 1 && ne[8] == 1 && ne[1] == 1)	
+			return 10;
+		if(ne[2] == 1 && ne[5] == 1 && ne[8] == 1 && ne[7] == 1)	
 			return 12;
 		
+		if(ne[1] == 1 && ne[2] == 1 && ne[7] == 1 && ne[8] == 1)	
+			return 25;
+		if(ne[7] == 1 && ne[6] == 1 && ne[1] == 1 && ne[0] == 1)	
+			return 25;
+		if(ne[0] == 1 && ne[3] == 1 && ne[2] == 1 && ne[5] == 1)	
+			return 24;
+		if(ne[6] == 1 && ne[3] == 1 && ne[5] == 1 && ne[8] == 1)	
+			return 24;
 		
-		if (ne[1] == 0)
-			return 20;
-		if (ne[7] == 0)
-			return 21;
-		if (ne[3] == 0)
-			return 22;
-		if (ne[5] == 0)
+		if(ne[1] == 1 && ne[3] == 1 && ne[6] == 1 && ne[7] == 1)	
 			return 23;
-		
-		
-		
-	}
-	
-	if (sum > 5)
-	{
-		if (ne[1] == 0)
-			return 20;
-		if (ne[3] == 0)
+		if(ne[1] == 1 && ne[7] == 1 && ne[8] == 1 && ne[5] == 1)	
 			return 22;
-		if (ne[5] == 0)
+		if(ne[7] == 1 && ne[3] == 1 && ne[0] == 1 && ne[1] == 1)	
 			return 23;
-		if (ne[7] == 0)
+		if(ne[7] == 1 && ne[1] == 1 && ne[2] == 1 && ne[5] == 1)	
+			return 22;
+		
+		if(ne[3] == 1 && ne[1] == 1 && ne[2] == 1 && ne[5] == 1)	
 			return 21;
+		if(ne[5] == 1 && ne[3] == 1 && ne[0] == 1 && ne[1] == 1)	
+			return 21;
+		if(ne[3] == 1 && ne[5] == 1 && ne[7] == 1 && ne[8] == 1)	
+			return 20;
+		if(ne[5] == 1 && ne[3] == 1 && ne[6] == 1 && ne[7] == 1)	
+			return 20;
+		
+		if(ne[1] == 1 && ne[5] == 1 && ne[3] == 1 && ne[7] == 1)	
+			return 19;
+		
+		if(ne[2] == 1 && ne[5] == 1 && ne[6] == 1 && ne[7] == 1)	
+			return 12;
+		if(ne[1] == 1 && ne[2] == 1 && ne[3] == 1 && ne[6] == 1)	
+			return 9;
+		if(ne[0] == 1 && ne[1] == 1 && ne[5] == 1 && ne[8] == 1)	
+			return 10;
+		if(ne[0] == 1 && ne[3] == 1 && ne[7] == 1 && ne[8] == 1)	
+			return 11;
+		
+		if(ne[0] == 1 && ne[3] == 1 && ne[6] == 1)	
+			return 5;
+		if(ne[2] == 1 && ne[5] == 1 && ne[8] == 1)	
+			return 4;
+		if(ne[0] == 1 && ne[1] == 1 && ne[2] == 1)	
+			return 7;
+		if(ne[6] == 1 && ne[7] == 1 && ne[8] == 1)	
+			return 2;
+		
 
+		if (ne[3] == 1 && ne[0] == 1 && ne[1] == 1)
+			return 9;
+		if (ne[1] == 1 && ne[2] == 1 && ne[5] == 1)
+			return 10;
+		if (ne[8] == 1 && ne[7] == 1 && ne[5] == 1)
+			return 12;
+		if (ne[3] == 1 && ne[6] == 1 && ne[7] == 1)
+			return 11;
 		
 		
-		return 19;
-	}
+		if(ne[1] == 1 && ne[3] == 1 && ne[5] == 1 && ne[6] == 1)
+			return 21;
+		if(ne[3] == 1 && ne[1] == 1 && ne[5] == 1 && ne[8] == 1)
+			return 21;
+		
+		if (ne[1] == 1 && ne[5] == 1)
+			return 10;
+		
+		if (ne[1] == 1 && ne[3] == 1)
+			return 9;
+		if (ne[3] == 1 && ne[7] == 1)
+			return 11;
+		if (ne[7] == 1 && ne[5] == 1)
+			return 12;
+		
+		
+		if (ne[1] == 1 && ne[7] == 1)
+			return 25;
+		if (ne[5] == 1 && ne[3] == 1)
+			return 24;
+		}
+		
+		
+		
+		
+		if (sum == 5)
+		{
+			if(ne[0] == 0 && ne[1] == 0 && ne[2] == 0)
+				return 20;
+			if(ne[0] == 0 && ne[3] == 0 && ne[6] == 0)
+				return 22;
+			if(ne[2] == 0 && ne[5] == 0 && ne[8] == 0)
+				return 23;
+			if(ne[8] == 0 && ne[7] == 0 && ne[6] == 0)
+				return 21;
+			
+			if(ne[0] == 0 && ne[1] == 0 && ne[3] == 0)
+				return 12;
+			if(ne[1] == 0 && ne[2] == 0 && ne[5] == 0)
+				return 11;
+			if(ne[5] == 0 && ne[7] == 0 && ne[8] == 0)
+				return 9;
+			if(ne[3] == 0 && ne[6] == 0 && ne[7] == 0)
+				return 10;
+			
+			if(ne[6] == 0 && ne[7] == 0 && ne[2] == 0)
+				return 21;
+			if(ne[7] == 0 && ne[8] == 0 && ne[0] == 0)
+				return 21;
+			if(ne[0] == 0 && ne[1] == 0 && ne[8] == 0)
+				return 20;
+			if(ne[1] == 0 && ne[2] == 0 && ne[6] == 0)
+				return 20;
+			
+			if(ne[6] == 0 && ne[8] == 0 && ne[1] == 0)
+				return 20;
+			if(ne[0] == 0 && ne[2] == 0 && ne[7] == 0)
+				return 21;
+			if(ne[0] == 0 && ne[6] == 0 && ne[5] == 0)
+				return 23;
+			if(ne[2] == 0 && ne[8] == 0 && ne[3] == 0)
+				return 22;
+			
+			if(ne[3] == 0 && ne[5] == 0 && ne[7] == 0)
+				return 7;
+			
+			
+			if (ne[1] == 0 && ne[5] == 0)
+				return 11;
+			if (ne[3] == 0 && ne[1] == 0)
+				return 12;
+			if (ne[3] == 0 && ne[7] == 0)
+				return 10;
+			if (ne[7] == 0 && ne[5] == 0)
+				return 9;
+			
+			if (ne[1] == 0 && ne[7] == 0)
+				return 24;
+			if (ne[3] == 0 && ne[5] == 0)
+				return 25;
+		
+			if(ne[3] == 0 && ne[7] == 0)
+				return 11;
+			
+			if(ne[3] == 0 && ne[1] == 0)
+				return 12;
+			if(ne[7] == 0 && ne[5] == 0)
+				return 9;
+			if(ne[7] == 0 && ne[3] == 0)
+				return 10;
+			
+			
+			
+			if (ne[5] == 0)
+				return 23;
+			if (ne[1] == 0)
+				return 20;
+			if (ne[3] == 0)
+				return 22;
+			if (ne[7] == 0)
+				return 21;
+			
+			
+			return 19;
+			
+			
+		}
+		
+		if (sum == 6)
+		{
+			if(ne[1] == 0 && ne[7] == 0)
+				return 24;
+			if(ne[3] == 0 && ne[5] == 0)
+				return 25;
+			
+			
+			
+			if(ne[1] == 0)
+				return 20;
+			if(ne[7] == 0)
+				return 21;
+			if(ne[3] == 0)
+				return 22;
+			if(ne[5] == 0)
+				return 23;
+			
+			return 19;
+			
+			
+		}
+		
+		if (sum == 7)
+		{
+			if (ne[0] == 0)
+				return 19;
+			if (ne[2] == 0)
+				return 19;
+			if (ne[6] == 0)
+				return 19;
+			if (ne[8] == 0)
+				return 19;
+			
+			if (ne[1] == 0)
+				return 20;
+			if (ne[7] == 0)
+				return 21;
+			if (ne[3] == 0)
+				return 22;
+			if (ne[5] == 0)
+				return 23;
+			
+			
+		}
+		
+		
+		if (sum == 8)
+			return 19;
+		
+			
+		
 	return 0;
 	}
 }

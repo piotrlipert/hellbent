@@ -102,7 +102,7 @@ public class GameplayControl {
 		
 		if (key == SHOOT_KEY)
 		{
-			hg.targetctrl.initTargetting(new Targetter(hg));
+			hg.targetctrl.initTargetting(new LineTargetter(hg));
 			
 			
 		}

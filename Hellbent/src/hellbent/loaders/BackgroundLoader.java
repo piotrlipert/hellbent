@@ -56,6 +56,8 @@ public class BackgroundLoader {
 	CAVEWALL.add(new Image("resources/graphics/tiles/mine/21.png"));
 	CAVEWALL.add(new Image("resources/graphics/tiles/mine/22.png"));
 	CAVEWALL.add(new Image("resources/graphics/tiles/mine/23.png"));
+	CAVEWALL.add(new Image("resources/graphics/tiles/mine/24.png"));
+	CAVEWALL.add(new Image("resources/graphics/tiles/mine/25.png"));
 
 	
 	

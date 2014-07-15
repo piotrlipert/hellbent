@@ -3,6 +3,7 @@ package hellbent.concepts;
 import hellbent.util.Utilities;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class Attributable {
 	
@@ -10,6 +11,66 @@ public class Attributable {
 	public HashMap<String, String> sdata = new HashMap<String, String>();
 
 
+	
+	public static boolean compare(Attributable a, Attributable b)
+	{
+		
+		Set<String> as = a.data.keySet();
+		Set<String> bs = b.data.keySet();
+		
+ 		for(String s : as)
+ 		{
+ 		if (!(s.equals("STACK")) && !(s.equals("COMPARED")) && !(s.contains("_OLD")))
+ 			{
+ 			if (bs.contains(s))
+ 				{
+ 				if (!(a.data.get(s).equals(b.data.get(s))))
+ 					return false;
+ 				}
+ 			else
+ 				return false;
+ 			}
+ 		}
+
+		as = a.sdata.keySet();
+		bs = b.sdata.keySet();
+
+ 		for(String s : as)
+ 		{
+ 	 	if(a.sdata.get("TYPE").equals("ARROW"))
+ 	 	{
+ 		System.out.println("________________");
+ 		System.out.println(s);
+ 		System.out.println("A = " + a.sdata.get(s));
+
+ 		System.out.println("B = " + b.sdata.get(s));
+ 		System.out.println("________________");
+ 	 	}
+ 		
+ 		if (bs.contains(s))	
+ 		{
+ 			if (!(a.sdata.get(s).equals(b.sdata.get(s))))
+ 			{
+ 				return false;
+ 			}
+ 		}
+ 		else
+ 		{
+ 			return false;
+ 	 			
+ 		}
+ 			
+ 		}
+ 		System.out.println("TAK");
+ 		
+ 		return true;
+ 		
+ 		
+		
+		
+		
+		
+	}
 	
 	public String getType() {
 		return sGet("TYPE");
